@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:fragment="layout">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:fragment="${pageTitle}">Admin Dashboard</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/style/css/styles.css}">
+    <style>
+       
+    </style>
+</head>
+<body>
+  <div th:fragment="layout">
+    <header>
+      <div class="header-content">
+          <button class="btn btn-light d-md-none" id="sidebarCollapse">☰</button>
+          <h1>Admin Dashboard</h1>
+          <div>
+              <button class="btn btn-light">Logout</button>
+          </div>
+      </div>
+    </header>
+    <div class="row">
+      <div class="col-md-2">
+        <nav id="sidebar">
+            <div class="sidebar-header">
+                <h3>Admin Menu</h3>
+            </div>
+            <ul class="list-unstyled components">
+                <p>Product Management</p>
+                <li>
+                    <a href="#homeSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Products</a>
+                    <ul class="collapse list-unstyled" id="homeSubmenu">
+                        <li>
+                            <a href="#" th:href="@{/products/computers}">Computers</a>
+                        </li>
+                        <li>
+                            <a href="#" th:href="@{/products/mobile-phones}">Mobile Phones</a>
+                        </li>
+                        <li>
+                            <a href="#" th:href="@{/products/accessories}">Accessories</a>
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="#" th:href="@{/products/list}">Add New Product</a>
+                </li>
+            </ul>
+        </nav>
+      </div>
+      <div class="col-md-10">
+        <div id="content">
+          <!-- <div class="container" th:fragment="${content}"></div> -->
+          <div th:insert="~{::content}"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#sidebarCollapse').on('click', function () {
+                $('#sidebar, #content').toggleClass('active');
+            });
+        });
+    </script>
+</body>
+</html>
