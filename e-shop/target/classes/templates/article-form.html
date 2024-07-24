@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{layout :: layout}">
+<head>
+    <title>Article</title>
+</head>
+<body>
+    <div th:fragment="content">
+        <div class="container mt-5">
+            <div class="col-md-5">
+                <div class="col-md-12 text-dark" th:each="a : ${articles}">
+                    <!-- <p class="text-dark" th:text="${a.title}"></p> -->
+                        <div class="card mb-4">
+                            <img th:src="${a.imageUrl}" class="card-img-top" alt="Special Offer Image">
+                            <div class="card col-md-12">
+                                <div class="card-body">
+                                    <h5 class="card-title" th:text="${a.title}" style="color: #1b3351;"></h5>
+                                    <p class="card-text" th:text="${a.shortDescription}" style="color: blue"></p>
+                                    <a href="#" class="btn btn-success">Read More</a>
+                                </div>
+                            </div>
+                        </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

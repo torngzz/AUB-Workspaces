@@ -11,20 +11,15 @@ import com.aub.e_shop.repository.ProductRepository;
 
 @Service
 public class ProductService {
-    @Autowired private ProductRepository productRepository;
 
-    /**
-     * @return
-     */
+    @Autowired 
+    private ProductRepository productRepository;
+
     public List<Product> findAll()
     {
         return productRepository.findAll();
     }
 
-    /**
-     * @param id
-     * @return
-     */
     public Optional<Product> getById(Long id)
     {
         return productRepository.findById(id);

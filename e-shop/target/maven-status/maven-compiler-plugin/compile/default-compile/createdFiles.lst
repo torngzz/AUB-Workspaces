@@ -1,0 +1,17 @@
+com\aub\e_shop\repository\ProductRepository.class
+com\aub\e_shop\model\ProductModel.class
+com\aub\e_shop\service\ProductService.class
+com\aub\e_shop\repository\ArticleRepository.class
+com\aub\e_shop\controller\CategoryController.class
+com\aub\e_shop\controller\ProductModelController.class
+com\aub\e_shop\service\ArticleService.class
+com\aub\e_shop\controller\ProductController.class
+com\aub\e_shop\service\CategoryService.class
+com\aub\e_shop\model\Category.class
+com\aub\e_shop\model\Product.class
+com\aub\e_shop\controller\ArticleController.class
+com\aub\e_shop\repository\ProductModelRepository.class
+com\aub\e_shop\model\Article.class
+com\aub\e_shop\EShopApplication.class
+com\aub\e_shop\service\ProductModelService.class
+com\aub\e_shop\repository\CategoryRepository.class

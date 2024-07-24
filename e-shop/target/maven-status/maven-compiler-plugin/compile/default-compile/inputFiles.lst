@@ -1,5 +1,17 @@
-D:\ABC Training\Java Spring Boot\Web-AUB\e-shop\src\main\java\com\aub\e_shop\controller\ProductController.java
-D:\ABC Training\Java Spring Boot\Web-AUB\e-shop\src\main\java\com\aub\e_shop\EShopApplication.java
-D:\ABC Training\Java Spring Boot\Web-AUB\e-shop\src\main\java\com\aub\e_shop\model\Product.java
-D:\ABC Training\Java Spring Boot\Web-AUB\e-shop\src\main\java\com\aub\e_shop\repository\ProductRepository.java
-D:\ABC Training\Java Spring Boot\Web-AUB\e-shop\src\main\java\com\aub\e_shop\service\ProductService.java
+C:\Users\rithy\OneDrive\Desktop\E-Shop\AUB-Workspaces\e-shop\src\main\java\com\aub\e_shop\controller\ArticleController.java
+C:\Users\rithy\OneDrive\Desktop\E-Shop\AUB-Workspaces\e-shop\src\main\java\com\aub\e_shop\controller\CategoryController.java
+C:\Users\rithy\OneDrive\Desktop\E-Shop\AUB-Workspaces\e-shop\src\main\java\com\aub\e_shop\controller\ProductController.java
+C:\Users\rithy\OneDrive\Desktop\E-Shop\AUB-Workspaces\e-shop\src\main\java\com\aub\e_shop\controller\ProductModelController.java
+C:\Users\rithy\OneDrive\Desktop\E-Shop\AUB-Workspaces\e-shop\src\main\java\com\aub\e_shop\EShopApplication.java
+C:\Users\rithy\OneDrive\Desktop\E-Shop\AUB-Workspaces\e-shop\src\main\java\com\aub\e_shop\model\Article.java
+C:\Users\rithy\OneDrive\Desktop\E-Shop\AUB-Workspaces\e-shop\src\main\java\com\aub\e_shop\model\Category.java
+C:\Users\rithy\OneDrive\Desktop\E-Shop\AUB-Workspaces\e-shop\src\main\java\com\aub\e_shop\model\Product.java
+C:\Users\rithy\OneDrive\Desktop\E-Shop\AUB-Workspaces\e-shop\src\main\java\com\aub\e_shop\model\ProductModel.java
+C:\Users\rithy\OneDrive\Desktop\E-Shop\AUB-Workspaces\e-shop\src\main\java\com\aub\e_shop\repository\ArticleRepository.java
+C:\Users\rithy\OneDrive\Desktop\E-Shop\AUB-Workspaces\e-shop\src\main\java\com\aub\e_shop\repository\CategoryRepository.java
+C:\Users\rithy\OneDrive\Desktop\E-Shop\AUB-Workspaces\e-shop\src\main\java\com\aub\e_shop\repository\ProductModelRepository.java
+C:\Users\rithy\OneDrive\Desktop\E-Shop\AUB-Workspaces\e-shop\src\main\java\com\aub\e_shop\repository\ProductRepository.java
+C:\Users\rithy\OneDrive\Desktop\E-Shop\AUB-Workspaces\e-shop\src\main\java\com\aub\e_shop\service\ArticleService.java
+C:\Users\rithy\OneDrive\Desktop\E-Shop\AUB-Workspaces\e-shop\src\main\java\com\aub\e_shop\service\CategoryService.java
+C:\Users\rithy\OneDrive\Desktop\E-Shop\AUB-Workspaces\e-shop\src\main\java\com\aub\e_shop\service\ProductModelService.java
+C:\Users\rithy\OneDrive\Desktop\E-Shop\AUB-Workspaces\e-shop\src\main\java\com\aub\e_shop\service\ProductService.java
