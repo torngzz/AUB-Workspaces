@@ -1,5 +1,7 @@
 package com.aub.backend_aub_shop.model;
 
+import java.util.List;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -37,6 +39,10 @@ public class ProductList_Model {
     }
     public void setPrice(double price) {
         Price = price;
+    }
+    public void addAttribute(String string, ProductList_Model productList_Model) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'addAttribute'");
     }
 
 }
