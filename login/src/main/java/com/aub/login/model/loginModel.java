@@ -6,6 +6,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 
 @Entity
+// @Table(name = "TBL_USER")
 public class loginModel {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
