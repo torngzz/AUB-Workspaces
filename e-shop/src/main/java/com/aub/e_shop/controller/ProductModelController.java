@@ -14,11 +14,11 @@ import com.aub.e_shop.model.ProductModel;
 import com.aub.e_shop.service.ProductModelService;
 
 @Controller
-@RequestMapping("productmodel")
+@RequestMapping("/productmodel")
 public class ProductModelController {
     @Autowired ProductModelService productModelService;
 
-    @GetMapping(value={"","/"})
+    @GetMapping("getallmodel")
     public String getAllModel(Model m)
     {
         List<ProductModel> pro = productModelService.findAllModel();
