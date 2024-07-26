@@ -18,7 +18,7 @@ import com.aub.e_shop.service.ProductModelService;
 import com.aub.e_shop.service.ProductService;
 
 @Controller
-@RequestMapping("/products")
+@RequestMapping(value = {"", "/products"})
 public class ProductController {
     private static final Logger LOGGER = LoggerFactory.getLogger(ProductController.class);
     @Autowired 
@@ -32,7 +32,7 @@ public class ProductController {
 
     @GetMapping(value = {"", "/"})
     public String getAllProducts(Model model) {
-        List<oduct> products = productService.findAll();
+        List<Product> products = productService.findAll();
         LOGGER.info("This is my product." + products.toString());
         model.addAttribute("products", products);
         model.addAttribute("categories", categoryService.getAllCategories());
