@@ -18,7 +18,7 @@ import com.aub.backend_aub_shop.model.UserModel;
 import com.aub.backend_aub_shop.service.UserService;
 
 @Controller
-@RequestMapping("/users")
+@RequestMapping(value = {"", "/users"})
 public class UserController {
   @Autowired UserService userService;
 
@@ -32,7 +32,7 @@ public class UserController {
     //     return "UserManagement/user-list";
     // }
 
-    
+
     @GetMapping(value = {"", "/"})
     public String getAllUser(
         @RequestParam(name = "pageNumber", defaultValue = "0") int pageNumber,
