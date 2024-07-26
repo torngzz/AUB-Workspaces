@@ -1,12 +1,18 @@
 package com.aub.backend_aub_shop.service;
 
+import java.security.SecureRandom;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.Random;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import com.aub.backend_aub_shop.model.User_Model;
+import com.aub.backend_aub_shop.model.UserModel;
 import com.aub.backend_aub_shop.repository.UserRepository;
 
 @Service
@@ -14,29 +20,80 @@ public class UserService {
   @Autowired UserRepository userRepo;
 
   /**
-   * 
+   * Find all user but using pagination to sort
    * @return
    */
-  public List<User_Model> findAll(){
-    return userRepo.findAll();
+  public Page<UserModel> findAll(int pageNumber, int pageSize){
+    Pageable pageable = PageRequest.of(pageNumber, pageSize);    
+    return userRepo.findAll(pageable);
   }
 
-  public Optional<User_Model> findById(Long id){
+    /**
+   * Find all without using Pagination
+   * @return
+   */
+  public List<UserModel> findAll(){
+    return userRepo.findAll();
+  }
+  
+  /**
+   * 
+   * @param id
+   * @return
+   */
+  public Optional<UserModel> findById(Long id){
     return userRepo.findById(id);
   }
 
-  public User_Model create(User_Model user){
-    return userRepo.save(user);
+  /***
+   * 
+   * @param user
+   * @return
+   */
+  public UserModel create(UserModel user) {
+      user.setCreatedDate(new Date(System.currentTimeMillis()));
+      user.setUpdatedDate(new Date(System.currentTimeMillis()));
+      user.setPassword(generateRandomPassword(6));
+      return userRepo.save(user);
   }
 
+      /**
+     * Generates a random password of the specified length.
+     * 
+     * @param length
+     * @return
+     */
+    private String generateRandomPassword(int length) {
+        final String characters = "1234567890";
+        // final String characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()-_+=<>?";
+        Random random = new SecureRandom();
+        StringBuilder password = new StringBuilder(length);
+        
+        for (int i = 0; i < length; i++) {
+            password.append(characters.charAt(random.nextInt(characters.length())));
+        }
+        
+        return password.toString();
+    }
+
+  /**
+   * 
+   * @param id
+   */
   public void deleteById(Long id){
     userRepo.deleteById(id);
   }
 
-  public User_Model update(User_Model user, Long id){
-    Optional<User_Model> optionalUser = userRepo.findById(id);
+  /**
+   * 
+   * @param user
+   * @param id
+   * @return
+   */
+  public UserModel update(UserModel user, Long id){
+    Optional<UserModel> optionalUser = userRepo.findById(id);
     if(optionalUser.isPresent()){
-      User_Model userModel = optionalUser.get();
+      UserModel userModel = optionalUser.get();
       userModel.setUsername(userModel.getUsername());
       userModel.setPassword(userModel.getPassword());
       userModel.setRole(userModel.getRole());

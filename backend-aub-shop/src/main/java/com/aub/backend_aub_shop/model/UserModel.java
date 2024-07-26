@@ -2,13 +2,18 @@ package com.aub.backend_aub_shop.model;
 
 import java.util.Date;
 
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 
 @Entity
-public class User_Model {
+@Table(name = "TBL_USER")
+public class UserModel {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
@@ -18,8 +23,12 @@ public class User_Model {
   private String phone;
   private String email;
   private String createdBy;
+
+  @CreatedDate
   private Date createdDate;
   private String updatedBy;
+
+  @LastModifiedDate
   private Date updatedDate;
 
   public Long getId() {
