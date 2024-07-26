@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.aub.backend_aub_shop.model.ProductList_Model;
 import com.aub.backend_aub_shop.service.ProductService;
@@ -29,13 +30,15 @@ public class ProductController{
     @Autowired ProductService productService;
 
     @GetMapping(value = {"","/"})
-    public String getAllProducts(Model m){
-        List<ProductList_Model> products = productService.findAll(); 
+    public String getAllProducts(
+        @RequestParam(name="productName",required=false, defaultValue="") String productName,
+        Model m
+        ){
+        List<ProductList_Model> products = productService.findByNameContainingIgnoreCase(productName); 
         m.addAttribute("products",products);
-        return "product-list";
-      
+        m.addAttribute("productName",productName);
+        return "product-list"; 
     }
-
     @GetMapping("/addProduct")
     public String addProduct(Model m){
         m.addAttribute("product", new ProductList_Model());
@@ -65,7 +68,5 @@ public class ProductController{
     public String deleteStaff(@PathVariable Long id) {
         productService.deleteById(id);
         return "redirect:/products"; // Redirect to staff list after deletion
-    }
-    
-    
+    } 
 }

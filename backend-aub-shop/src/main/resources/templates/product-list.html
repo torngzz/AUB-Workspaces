@@ -5,12 +5,37 @@
 <head>
     <meta charset="UTF-8">
     <title th:replace="layout :: title">Product Management</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.5/font/bootstrap-icons.min.css">
 </head>
+<style>
+    .search-box {
+        margin-bottom: 15px;
+    }
+    .table-container {
+        margin-top: 20px;
+    }
+    .btn-primary, .btn-danger {
+        margin-right: 5px;
+    }
+    
+</style>
 <body>
 <div th:fragment="content" class="mt-5">
     <h2>Product Management</h2>
-    <a th:href="@{/products/addProduct}" class="btn btn-primary">Add Product</a>
+    <div class="search-box">
+        <form th:action="@{/products}" method="get">
+            <div class="row">
+                <div class="col-11 m-0 p-0">
+                    <input type="text" name="productName" class="form-control w-100" placeholder="Search product by name..."th:value="${productName}">
+                </div>
+                <div class="col-1 m-0 p-0">
+                    <button type="submit" class="btn btn-primary float-right w-100">Search</button>
+                </div>
+            </div>
+        </form>
+    </div>
     <div class="table-container">
+        
         <div class="table-responsive">
            
             <table class="table table-bordered">
@@ -39,6 +64,9 @@
             </table>
         </div>
     </div>
+    <a th:href="@{/products/addProduct}" class="btn btn-primary float-right">
+        <i class="bi bi-plus"></i> Add Product
+    </a>
 </div>
 </body>
 </html>

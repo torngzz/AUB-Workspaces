@@ -17,8 +17,20 @@ public class ProductService {
      * 
      * @return
      */
+   
     public List<ProductList_Model> findAll(){
         return productRepository.findAll();
+    }
+    
+    public List<ProductList_Model> searchProductsByName(String name) {
+        if (name == null || name.trim().isEmpty()) {
+            return findAll(); // Return all products if the search term is empty
+        }
+        return productRepository.findByNameContainingIgnoreCase(name);
+    }
+
+    public List<ProductList_Model> findByNameContainingIgnoreCase(String name){
+        return productRepository.findByNameContainingIgnoreCase(name);
     }
 
     /**

@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{layout :: layout}">   
+<head>
+    <meta charset="UTF-8">
+    <title th:replace="layout :: title">Category Management</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.5/font/bootstrap-icons.min.css">
+</head>
+<style>
+    .search-box {
+        margin-bottom: 15px;
+    }
+    .table-container {
+        margin-top: 20px;
+    }
+    .btn-primary, .btn-danger {
+        margin-right: 5px;
+    }
+    
+</style>
+<body>
+<div th:fragment="content" class="mt-5">
+    <h2>Categor Management</h2>
+    <div class="search-box">
+        <form th:action="@{/categorys}" method="get">
+            <div class="row">
+                <div class="col-11 m-0 p-0">
+                    <input type="text" th:name="categoryName" class="form-control w-100" placeholder="Search product by name..."th:value="${categoryName}">
+                </div>
+                <div class="col-1 m-0 p-0">
+                    <button type="submit" class="btn btn-primary float-right w-100">Search</button>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="mt-5">
+        <nav aria-label="Page navigation example">
+            <ul class="pagination">
+                <li th:class="${currentPage == 0} ? 'page-item disabled' : 'page-item'">
+                    <a class="page-link" href="#" th:onclick="'goToPage(' + (${currentPage} - 1) + ')'">Previous</a>
+                </li>
+                <li th:each="i : ${#numbers.sequence(0, totalPages - 1)}" th:class="${i == currentPage} ? 'page-item active' : 'page-item'">
+                    <a class="page-link" href="#" th:onclick="'goToPage(' + ${i} + ')'" th:text="${i + 1}"></a>
+                </li>
+                <li th:class="${currentPage == totalPages - 1} ? 'page-item disabled' : 'page-item'">
+                    <a class="page-link" href="#" th:onclick="'goToPage(' + (${currentPage} + 1) + ')'">Next</a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+    <div class="table-container">
+        
+        <div class="table-responsive">
+           
+            <table class="table table-bordered">
+                <thead style="text-align: center">
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>description</th>
+                        <th>created_date</th>
+                        <th>created_by</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody style="text-align: center">
+                    <tr th:each="c : ${category}">
+                        <td th:text="${c.id}"></td>
+                        <td th:text="${c.name}"></td>    
+                        <td th:text="${c.description}"></td>
+                        <td th:text="${c.created_date}"></td>
+                        <td th:text="${c.created_by}"></td>
+                        <td>
+                            <a th:href="@{/categorys/edit/{id}(id=${c.id})}" class="btn btn-primary">Edit</a>
+                            <!-- <a th:href="@{/categorys/delete/{id}(id=${c.id})}" class="btn btn-danger">Delete</a> -->
+                            <a th:href="@{/categorys/delete/{id}(id=${c.id})}" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this category?')">Delete</a> 
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <a th:href="@{/categorys/addCategory}" class="btn btn-primary float-right">
+        <i class="bi bi-plus"></i> Add Category
+    </a>
+</div>
+
+<script>
+   function goToPage(pageNumber) {
+        if (pageNumber < 0 || pageNumber >= totalPages) {
+            return; // Prevent invalid page numbers
+        }
+        const params = new URLSearchParams(window.location.search);
+        params.set('pageNumber', pageNumber);
+        params.set('pageSize', document.querySelector('select[name="pageSize"]') ? document.querySelector('select[name="pageSize"]').value : 10);
+        params.set('categoryName', document.querySelector('input[name="categoryName"]').value);
+        window.location.search = params.toString();
+    }
+
+    // Ensure totalPages is defined for validation within goToPage
+    const totalPages = /*[[${totalPages}]]*/ 1;
+</script>
+</body>
+</html>
