@@ -11,6 +11,7 @@ public class AdminController {
   @GetMapping("")
     public String GetAllProducts(Model m)
     {
+      
         System.out.println("WOWOOWWO");
         return "product-list";
         
