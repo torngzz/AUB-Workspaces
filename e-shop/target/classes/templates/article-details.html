@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{layout :: layout}">
+<head>
+    <title>Article Details</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+    <div th:fragment="content">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <h1 class="mb-4" th:text="${article.title}" style="color: #1b3351;"></h1>
+                </div>
+                <div class="col-md-6">
+                    <img th:src="${article.imageUrl}" class="img-fluid rounded mb-4" alt="Article Image">
+                </div>
+                <div class="col-md-6">
+                    <p class="text-dark" th:text="${article.longDescription}" style="color: blue;"></p>
+                    <a th:href="@{/Article/list}" class="btn btn-primary">Back to List</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
