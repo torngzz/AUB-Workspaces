@@ -57,7 +57,7 @@ public class ProductController {
             String[] detailImageUrls = product.getDetailImageUrl().split(",");
             
             // Add the array of image URLs to the model
-            model.addAttribute("product", product);
+            model.addAttribute("productdetail", product);
             model.addAttribute("detailImageUrls", detailImageUrls);
             
             return "Viewdetail"; // Thymeleaf template for product details

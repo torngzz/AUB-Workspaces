@@ -1,7 +1,10 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" th:replace="~{layout :: layout}">
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Product Details</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <style>
         .detail-image {
             border: 2px solid transparent;
@@ -19,25 +22,24 @@
     </style>
 </head>
 <body>
-    <div th:fragment="content">
+    <div class="content" th:fragment="detail">
         <h1>Product Details</h1>
         <div class="product-container">
-            <img class="product-image w-50" th:src="${product.image_url}" alt="Product Image">
+            <img class="product-image w-50" th:src="${productdetail.image_url}" alt="Product Image" id="main-product-image">
             <div class="product-details text-dark">
-                <h2 th:text="${product.pro_name}"></h2>
+                <h2 th:text="${productdetail.pro_name}"></h2>
                 <p class="fs-40">
                     <span>Category: </span>
-                    <span th:text="${product.category_id}"></span>
+                    <span th:text="${productdetail.category_id}"></span>
                 </p>
                 <p class="fs-40">
                     <span>Price: $</span>
-                    <span th:text="${product.sale_price}"></span>
+                    <span th:text="${productdetail.sale_price}"></span>
                 </p>
-                <p class="fs-40" th:text="${product.description}"></p>
+                <p class="fs-40" th:text="${productdetail.description}"></p>
                 <!-- Additional pictures -->
                 <div class="additional-pictures w-25">
-
-                    <img th:each="imageUrl : ${detailImageUrls}" class="product-image w-25 input group" th:src="${imageUrl}" alt="Additional Image" onclick="switchImage(this)">
+                    <img th:each="imageUrl : ${detailImageUrls}" class="product-image w-25 input group detail-image" th:src="${imageUrl}" alt="Additional Image" onclick="switchImage(this)">
                 </div>
                 <div class="col-6 col-md-6 add-item">
                     <div class="d-flex align-items-center">
@@ -73,15 +75,13 @@
             <a href="/products" class="btn btn-danger">Back to Product List</a>
         </div>
 
-        <!-- Display total price -->
-
         <script th:inline="javascript">
             /*<![CDATA[*/
             document.addEventListener('DOMContentLoaded', function() {
                 const qtyInput = document.getElementById('product-qty');
                 const decreaseButton = document.getElementById('decrease-product-qty');
                 const increaseButton = document.getElementById('increase-product-qty');
-                const salePrice = /*[[${product.sale_price}]]*/ 0.00; // Initialize with default value
+                const salePrice = /*[[${productdetail.sale_price}]]*/ 0.00; // Initialize with default value
 
                 // Function to update the quantity
                 function updateQuantity(change) {
@@ -121,9 +121,6 @@
                 var mainImage = document.getElementById('main-product-image');
                 mainImage.src = image.src;
             }
-
-
-            
             /*]]>*/
         </script>
     </div>
