@@ -7,11 +7,17 @@
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" th:href="@{/style/css/styles.css}">
     <style>
-       
+       #content{
+        z-index: 499;
+       }
+       #layout{
+        z-index: 500;
+        overflow: hidden;
+       }
     </style>
 </head>
 <body>
-  <div th:fragment="layout">
+  <div id="layout" th:fragment="layout">
     <header>
       <div class="header-content">
           <button class="btn btn-light d-md-none" id="sidebarCollapse">☰</button>
@@ -22,7 +28,7 @@
       </div>
     </header>
     <div class="row">
-      <div class="col-md-2">
+      <div class="col-2">
         <nav id="sidebar">
             <div class="sidebar-header">
                 <h3>Admin Menu</h3>
@@ -34,26 +40,15 @@
                 </li>
                 <p>Product Management</p>
                 <li>
-                    <a href="#homeSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Products</a>
-                    <ul class="collapse list-unstyled" id="homeSubmenu">
-                        <li>
-                            <a href="#" th:href="@{/products/computers}">Computers</a>
-                        </li>
-                        <li>
-                            <a href="#" th:href="@{/products/mobile-phones}">Mobile Phones</a>
-                        </li>
-                        <li>
-                            <a href="#" th:href="@{/products/accessories}">Accessories</a>
-                        </li>
-                    </ul>
+                    <a href="#" th:href="@{/products}">Product</a>
                 </li>
                 <li>
-                    <a href="#" th:href="@{/products}">Add New Product</a>
+                    <a href="#" th:href="@{/categorys}">Category</a>
                 </li>
             </ul>
         </nav>
       </div>
-      <div class="col-md-10">
+      <div class="col-10">
         <div id="content">
           <!-- <div class="container" th:fragment="${content}"></div> -->
           <div th:insert="~{::content}"></div>
