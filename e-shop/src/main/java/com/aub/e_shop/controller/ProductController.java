@@ -1,20 +1,20 @@
 package com.aub.e_shop.controller;
 
-import java.util.List;
 import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.aub.e_shop.model.Product;
 import com.aub.e_shop.service.CategoryService;
-import com.aub.e_shop.service.ProductModelService;
 import com.aub.e_shop.service.ProductService;
 
 @Controller
@@ -27,18 +27,26 @@ public class ProductController {
     @Autowired 
     private CategoryService categoryService;
     
-    @Autowired 
-    private ProductModelService productModelService;
+    // @Autowired 
+    // private ProductModelService productModelService;
 
-    @GetMapping(value = {"", "/"})
-    public String getAllProducts(Model model) {
-        List<Product> products = productService.findAll();
-        LOGGER.info("This is my product." + products.toString());
-        model.addAttribute("products", products);
+        @GetMapping(value = {"", "/"})
+    public String getAllProducts(
+        // List<Product> products = productService.findAll();
+        // LOGGER.info("This is my product." + products.toString());
+        // model.addAttribute("products", products);
+        // model.addAttribute("categories", categoryService.getAllCategories());
+        @RequestParam(name = "pageNumber", defaultValue = "0") int pageNumber,
+        @RequestParam(name = "pageSize", defaultValue = "8") int pageSize,
+        Model model
+        )
+    {
+        Page<Product> pro = productService.findAll(pageNumber, pageSize); 
+        LOGGER.info("This is my product." + pro.toString());
+        model.addAttribute("products", pro);
         model.addAttribute("categories", categoryService.getAllCategories());
         return "Interface";
     }
-
     @GetMapping("/details/{id}")
     public String getProductDetails(@PathVariable("id") Long id, Model model) {
         Optional<Product> productOptional = productService.getById(id);
@@ -56,7 +64,7 @@ public class ProductController {
         } else {
             return "redirect:/products/not-found"; // Redirect to not found page
         }
-    }git
+    }
 
     // @GetMapping("/categories")
     // public String getCategories(Model model) {
