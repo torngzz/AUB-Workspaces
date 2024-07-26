@@ -41,14 +41,22 @@ public class ProductController {
 
     @GetMapping("/details/{id}")
     public String getProductDetails(@PathVariable("id") Long id, Model model) {
-        Optional<Product> product = productService.getById(id);
-        if (product.isPresent()) {
-            model.addAttribute("product", product.get());
-            return "Viewdetail";
+        Optional<Product> productOptional = productService.getById(id);
+        if (productOptional.isPresent()) {
+            Product product = productOptional.get();
+            
+            // Split the DETAIL_IMAGE_URL into an array of image URLs
+            String[] detailImageUrls = product.getDetailImageUrl().split(",");
+            
+            // Add the array of image URLs to the model
+            model.addAttribute("product", product);
+            model.addAttribute("detailImageUrls", detailImageUrls);
+            
+            return "Viewdetail"; // Thymeleaf template for product details
         } else {
-            return "redirect:/products/not-found";
+            return "redirect:/products/not-found"; // Redirect to not found page
         }
-    }
+    }git
 
     // @GetMapping("/categories")
     // public String getCategories(Model model) {

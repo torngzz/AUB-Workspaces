@@ -40,7 +40,7 @@ public class Product {
 
     private String description;
 
-    private String detailImageUrl;
+    private String detail_ImageUrl;
 
 
     public Product()
@@ -48,11 +48,13 @@ public class Product {
 
     }
 
-    public Product(String name, double price, String category, String image) {
+    public Product(String name, double price, String category, String image, String description) {
+
         this.pro_name = name;
         this.sale_price = price;
         this.category_id = category;
-        this.detailImageUrl = image;
+        this.detail_ImageUrl = image;
+        this.description = description;
     }
 
     public String getProductDetails() {
@@ -66,11 +68,11 @@ public class Product {
     }
 
     public String getDetailImage() {
-        return detailImageUrl;
+        return detail_ImageUrl;
     }
     
     public void setDetailImage(String de) {
-        this.detailImageUrl = de;
+        this.detail_ImageUrl = de;
     }
     
 
@@ -145,14 +147,15 @@ public class Product {
     public void setPro_name(String pro_name) {
         this.pro_name = pro_name;
     }
-
-    @Override
-    public String toString() {
-        return "Product [product_id=" + product_id + ", pro_name=" + pro_name + ", original_price=" + original_price
-                + ", sale_price=" + sale_price + ", category_id=" + category_id + ", image_url=" + image_url
-                + ", created_date=" + created_date + ", created_by=" + created_by + ", description=" + description
-                + ", detailImageUrl=" + detailImageUrl + "]";
+    public String getDetailImageUrl() {
+        return detail_ImageUrl;
     }
+
+    public void setDetailImageUrl(String detail_ImageUrl) {
+        this.detail_ImageUrl = detail_ImageUrl;
+    }
+
+
 
     
  
