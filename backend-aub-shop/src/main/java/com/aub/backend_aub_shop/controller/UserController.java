@@ -32,6 +32,7 @@ public class UserController {
     //     return "UserManagement/user-list";
     // }
 
+    
     @GetMapping(value = {"", "/"})
     public String getAllUser(
         @RequestParam(name = "pageNumber", defaultValue = "0") int pageNumber,

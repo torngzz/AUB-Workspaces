@@ -39,9 +39,9 @@
                         <td th:text="${user.phone}"></td>
                         <td th:text="${user.role}"></td>
                         <td th:text="${user.createdBy}"></td>
-                        <td th:text="${user.createdDate}"></td>
+                        <td th:text="${#dates.format(user.createdDate, 'dd-MMM-yyyy hh:mm:ss')}"></td>
                         <td th:text="${user.updatedBy}"></td>
-                        <td th:text="${user.updatedDate}"></td>
+                        <td th:text="${#dates.format(user.updatedDate, 'dd-MMM-yyyy hh:mm:ss')}"></td>
                         <td>
                              <a th:href="@{/users/edit/{id}(id=${user.id})}" class="btn btn-primary">Edit</a>
                              <!-- <a th:href="@{/users/delete/{id}(id=${user.id})}" class="btn btn-danger">Delete</a> -->

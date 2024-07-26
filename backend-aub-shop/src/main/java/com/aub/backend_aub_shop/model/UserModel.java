@@ -24,6 +24,7 @@ public class UserModel {
   private String email;
   private String createdBy;
 
+  
   @CreatedDate
   private Date createdDate;
   private String updatedBy;
