@@ -32,7 +32,7 @@ public class ProductController {
 
     @GetMapping(value = {"", "/"})
     public String getAllProducts(Model model) {
-        List<oduct> products = productService.findAll();
+        List<Product> products = productService.findAll();
         LOGGER.info("This is my product." + products.toString());
         model.addAttribute("products", products);
         model.addAttribute("categories", categoryService.getAllCategories());
