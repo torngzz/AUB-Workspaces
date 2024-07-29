@@ -1,6 +1,7 @@
 package com.aub.backend_aub_shop.controller;
 
-import java.util.List;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,35 +23,62 @@ import com.aub.backend_aub_shop.service.CategoryService;
 public class CategoryController {
     @Autowired CategoryService categoryService;
 
-    @GetMapping(value = {"","/"})
-    public String getAllCategory(
-        // @RequestParam(name="pageNumber" , required=false, defaultValue="0") int pageNumber,
-        // @RequestParam(name="pageSize", required=false, defaultValue="10") int pageSize,
-        // @RequestParam(name="categoryName",required=false, defaultValue="") String categoryName,
-        // Model m
-        // ){
-        // Page<Category> category = categoryService.findAll (categoryName, pageNumber, pageSize); 
-        // m.addAttribute("category",category);
-        // m.addAttribute("categoryName",categoryName);
-        // return "/category/category-list";
+    //@GetMapping(value = {"","/"})
+    // public String getAllCategory(
+    //     // @RequestParam(name="pageNumber" , required=false, defaultValue="0") int pageNumber,
+    //     // @RequestParam(name="pageSize", required=false, defaultValue="10") int pageSize,
+    //     // @RequestParam(name="categoryName",required=false, defaultValue="") String categoryName,
+    //     // Model m
+    //     // ){
+    //     // Page<Category> category = categoryService.findAll (categoryName, pageNumber, pageSize); 
+    //     // m.addAttribute("category",category);
+    //     // m.addAttribute("categoryName",categoryName);
+    //     // return "/category/category-list";
 
-        @RequestParam(name="pageNumber", required=false, defaultValue="0") int pageNumber,
-        @RequestParam(name="pageSize", required=false, defaultValue="10") int pageSize,
-        @RequestParam(name="categoryName", required=false, defaultValue="") String categoryName,
-        Model m
-    ) {
-        Page<Category> categoryPage = categoryService.findAll(categoryName, pageNumber, pageSize);
-        m.addAttribute("categoryPage", categoryPage);
-        m.addAttribute("categoryName", categoryName);
-        m.addAttribute("currentPage", pageNumber);
-        m.addAttribute("pageSize", pageSize);
-        m.addAttribute("totalPages", categoryPage.getTotalPages());
-        return "/category/category-list";
+    //     @RequestParam(name="pageNumber", required=false, defaultValue="0") int pageNumber,
+    //     @RequestParam(name="pageSize", required=false, defaultValue="10") int pageSize,
+    //     @RequestParam(name="categoryName", required=false, defaultValue="") String categoryName,
+    //     Model m
+    // ) {
+    //     Page<Category> categoryPage = categoryService.findAll(categoryName, pageNumber, pageSize);
+    //     m.addAttribute("categoryPage", categoryPage);
+    //     m.addAttribute("categoryName", categoryName);
+    //     m.addAttribute("currentPage", pageNumber);
+    //     m.addAttribute("pageSize", pageSize);
+    //     m.addAttribute("totalPages", categoryPage.getTotalPages());
+    //     return "/category/category-list";
         
+    // }
+    
+    @GetMapping(value = {"", "/"})
+    public String getAllCategory(
+        // List<Product> products = productService.findAll();
+        // LOGGER.info("This is my product." + products.toString());
+        // model.addAttribute("products", products);
+        // model.addAttribute("categories", categoryService.getAllCategories());
+
+        @RequestParam(name = "pageNumber", defaultValue = "0") int pageNumber,
+        @RequestParam(name = "pageSize", defaultValue = "8") int pageSize,
+        @RequestParam(name=   "categoryName",required=false, defaultValue="") String categoryName,
+        Model model
+        )
+    {
+        Page<Category> categoryPage = categoryService.findAll(categoryName, pageNumber, pageSize);
+        model.addAttribute("categoryPage", categoryPage.toList());
+        model.addAttribute("categoryName", categoryName);
+        model.addAttribute("currentPage", pageNumber);
+        model.addAttribute("pageSize", pageSize);
+        model.addAttribute("totalPages", categoryPage.getTotalPages());        
+        
+        return "/category/category-list";
     }
 
     @GetMapping("/addCategory")
     public String addCategory(Model m){
+            // In your controller
+        LocalDate today = LocalDate.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        m.addAttribute("created_date", today.format(formatter));
         m.addAttribute("category",new Category());
         return "/category/add-category";
     }
