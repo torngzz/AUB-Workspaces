@@ -19,13 +19,19 @@ import com.aub.backend_aub_shop.repository.UserRepository;
 public class UserService {
   @Autowired UserRepository userRepo;
 
-  /**
-   * Find all user but using pagination to sort
+  /***
+   * 
+   * @param username
+   * @param pageNumber
+   * @param pageSize
    * @return
    */
-  public Page<UserModel> findAll(int pageNumber, int pageSize){
-    Pageable pageable = PageRequest.of(pageNumber, pageSize);    
-    return userRepo.findAll(pageable);
+  public Page<UserModel> findAll(String username, int pageNumber, int pageSize) {
+        Pageable pageable = PageRequest.of(pageNumber, pageSize);    
+        if (username == null || username.trim().isEmpty()) {
+            return userRepo.findAll(pageable);
+        }
+        return userRepo.findByUsername(username, pageable);
   }
 
     /**
@@ -94,15 +100,15 @@ public class UserService {
     Optional<UserModel> optionalUser = userRepo.findById(id);
     if(optionalUser.isPresent()){
       UserModel userModel = optionalUser.get();
-      userModel.setUsername(userModel.getUsername());
-      userModel.setPassword(userModel.getPassword());
-      userModel.setRole(userModel.getRole());
-      userModel.setPhone(userModel.getPhone());
-      userModel.setEmail(userModel.getEmail());
-      userModel.setCreatedBy(userModel.getCreatedBy());
-      userModel.setCreatedDate(userModel.getCreatedDate());
-      userModel.setUpdatedBy(userModel.getUpdatedBy());
-      userModel.setUpdatedBy(userModel.getUpdatedBy());
+      userModel.setUsername(user.getUsername());
+      //userModel.setPassword(user.getPassword());
+      userModel.setRole(user.getRole());
+      userModel.setPhone(user.getPhone());
+      userModel.setEmail(user.getEmail());
+      // userModel.setCreatedBy(user.getCreatedBy());
+      // userModel.setCreatedDate(user.getCreatedDate());
+      // userModel.setUpdatedBy(user.getUpdatedBy());
+      userModel.setUpdatedDate(new Date(System.currentTimeMillis()));
       return userRepo.save(userModel);
     }
     return null;
