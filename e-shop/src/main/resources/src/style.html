@@ -1,0 +1,59 @@
+
+<div th:fragment="css">
+
+    <style>
+      /* layout */
+        .row {
+          flex: 1;  /* Allow row to grow to fill available space */
+        }
+  
+        .navbar {
+          position: sticky;
+          top: 0;
+          z-index: 500;
+        }
+  
+        .nav-link:hover {
+          background-color: rgb(255, 255, 255);
+          color: #456AD8 !important;
+          font-weight: bold;
+          border-radius: 25px;
+        }
+        .dropdown-menu {
+          padding: 0%;
+          margin-top: 7px;
+        }
+        .dropdown:hover .dropdown-menu {
+          display: block;
+        }
+        #content {
+          z-index: 499;
+        }
+        a:hover {
+          text-decoration: none;
+        }
+        .dropdown-item:hover{
+          color: #456AD8;
+        }
+
+
+        /* product */
+        .myfont > p {
+          font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+          font-size: 10px !important;
+          font-weight: bold;
+        }
+             
+      
+        .pagenumber {
+            /* display: flex;
+            justify-content: center !important; */
+            text-align: center;
+            font-size: 30px !important;
+        }        
+
+
+
+
+      </style>
+</div>

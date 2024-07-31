@@ -95,8 +95,8 @@
             <a href="/aubshop/products" class="btn btn-danger">Back to Product List</a>
         </div>
     </div>
-
-   <script th:inline="javascript">
+    
+   <script th:fragment="scripts">
         document.addEventListener('DOMContentLoaded', function() {
             const qtyInput = document.getElementById('product-qty');
             const decreaseButton = document.getElementById('decrease-product-qty');
