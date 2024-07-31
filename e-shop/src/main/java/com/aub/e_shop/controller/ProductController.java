@@ -32,20 +32,23 @@ public class ProductController {
 public String getAllProducts(
     @RequestParam(name="cate_id", required=false, defaultValue = "0") Long category_id,
     @RequestParam(name = "pageNumber", defaultValue = "0") int pageNumber,
-    @RequestParam(name = "cate_name", required = false) String cateName,
     @RequestParam(name = "pageSize", defaultValue = "8") int pageSize,
     Model model       
 ) {
     pageNumber = pageNumber != 0 ? pageNumber : 1; // Set default to 1 if not provided
-    Page<Product> pro = productService.findAll(category_id, cateName, pageNumber, pageSize); 
+    Page<Product> pro = productService.findAll(category_id, pageNumber, pageSize); 
     int totalPages = pro.getTotalPages();
     // If totalPages is zero, we need to handle it
     if (totalPages == 0) {
         totalPages = 1; // Setting totalPages to 1 to handle empty pages scenario
     }
+    if( category_id != 0){
+        model.addAttribute("category", categoryService.getCategoryById(category_id).get());
+    }else{
+        model.addAttribute("category", null);
+    }
     model.addAttribute("products", pro.toList());
     model.addAttribute("categories", categoryService.getAllCategories());
-    model.addAttribute("cate_name", cateName);
     model.addAttribute("currentPage", pageNumber);
     model.addAttribute("pageSize", pageSize);
     model.addAttribute("totalPages", totalPages);

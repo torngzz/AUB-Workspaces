@@ -59,7 +59,7 @@
                   <!-- <a href="#cate_id" class="dropdown-item">All</a> -->
                   <a th:href="@{/products#cate_id}" class="dropdown-item" id="cate_id">All</a>
 
-                  <a th:each="category : ${categories}" th:href="@{/products?cate_id={category_id}&cate_name={cate_name}(category_id=${category.id}, cate_name=${category.cate_name})}" class="dropdown-item" th:text="${category.cate_name}"></a>
+                  <a th:each="category : ${categories}" th:href="@{/products?cate_id={category_id}(category_id=${category.id})}" class="dropdown-item" th:text="${category.cate_name}"></a>
                   <!-- <a th:each="category : ${categories}" th:href="@{/products?cate_id={category_id}(category_id=${category.id})}" class="dropdown-item" th:text="${category.cate_name}"></a> -->
               </div>
             </li>
@@ -103,14 +103,18 @@
     </div>
   </div>
 
-  <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-  <script src="https://kit.fontawesome.com/4000b889e3.js" crossorigin="anonymous"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
-  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+  <div th:fragment="script">
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://kit.fontawesome.com/4000b889e3.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  </div>
+
 </body>
 </html>
 
-<script>
+<!-- <script>
   $(document).ready(function() {
       $('.dropdown').hover(function() {
           $(this).find('.dropdown-menu').show();
@@ -118,4 +122,4 @@
           $(this).find('.dropdown-menu').hide();
       });
   });
-  </script>
+  </script> -->

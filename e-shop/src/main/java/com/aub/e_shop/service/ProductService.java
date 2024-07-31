@@ -27,7 +27,7 @@ public class ProductService {
     //     return productRepository.findByCategoryId(categoryId, pageable);
     // }
 
-    public Page<Product> findAll(Long category_id, String cate_name, int pageNumber, int pageSize) {
+    public Page<Product> findAll(Long category_id, int pageNumber, int pageSize) {
         Pageable pageable = PageRequest.of(pageNumber, pageSize);
         if(category_id == 0)
         {
