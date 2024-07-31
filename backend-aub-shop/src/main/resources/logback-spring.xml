@@ -7,7 +7,6 @@
 			</pattern>
 		</layout>
 	</appender>
-
 	<appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
 		<file>/aub/backend_aub_shop/backend_aub_shop.log</file>
 		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
@@ -17,6 +16,12 @@
 			<pattern>%-5level: %d - %msg%n</pattern>
 		</encoder>
 	</appender> 
+
+	<appender name="CONSOLE" class="ch.qos.logback.console.ConsoleAppender">
+			<encoder>
+					<pattern>%d{yyyy-MM-dd HH:mm:ss} %-5level %logger{36} - %msg%n</pattern>
+			</encoder>
+	</appender>
 
 	<logger name="com.aub.backend_aub_shop" level="info" additivity="true">
 		<appender-ref ref="FILE" />
@@ -28,5 +33,5 @@
 
 	<root level="info">
 	  <appender-ref ref="console" />
-	</root>
+	</root>    
 </configuration>
