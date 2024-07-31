@@ -2,6 +2,7 @@ package com.aub.e_shop.model;
 
 import java.util.Date;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -13,11 +14,15 @@ public class Article {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String title;
+    @Column(length = 5000)
     private String shortDescription;
+    @Column(length = 50000)
     private String longDescription;
     private String createdBy;
     private Date createdDate;
+    @Column(length = 20000)
     private String imageUrl;
+    private Long viewCount = 0L;
 
     // Getters and setters
     public Long getId() {
@@ -41,6 +46,7 @@ public class Article {
     public String getLongDescription() {
         return longDescription;
     }
+    
     public void setLongDescription(String longDescription) {
         this.longDescription = longDescription;
     }
@@ -61,5 +67,11 @@ public class Article {
     }
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
+    }
+    public Long getViewCount(){
+        return viewCount;
+    }
+    public void setViewCount(Long viewCount) {
+        this.viewCount = viewCount;
     }
 }

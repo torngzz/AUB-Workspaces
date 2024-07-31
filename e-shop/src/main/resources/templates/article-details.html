@@ -8,14 +8,13 @@
     <div th:fragment="content">
         <div class="container">
             <div class="row">
-                <div class="col-md-12">
-                    <h1 class="mb-4" th:text="${article.title}" style="color: #1b3351;"></h1>
+                <div class="col-md-4">
+                    <img th:src="@{${article.imageUrl}}" class="img-fluid rounded mb-4" alt="Article Image">
                 </div>
                 <div class="col-md-6">
-                    <img th:src="${article.imageUrl}" class="img-fluid rounded mb-4" alt="Article Image">
-                </div>
-                <div class="col-md-6">
-                    <p class="text-dark" th:text="${article.longDescription}" style="color: blue;"></p>
+                    <h1 class="mb-4" th:text="${article.title}"></h1>
+                    <p class="text-dark" th:text="${article.longDescription}"></p>
+                    <p>Views: <span th:text="${article.viewCount}"></span></p>
                     <a th:href="@{/Article/list}" class="btn btn-primary">Back to List</a>
                 </div>
             </div>

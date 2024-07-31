@@ -62,13 +62,9 @@
             </li>
 
             <li class="nav-item dropdown">
-              <a class="nav-link text-white dropdown-toggle" type="button" id="promotionDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" href="#">
+              <a th:href="@{/Article/list}" class="btn btn-primary">
                 PROMOTION
               </a>
-              <div class="dropdown-menu" aria-labelledby="promotionDropdown">
-                <a class="dropdown-item" href="#">Submenu Item 1</a>
-                <a class="dropdown-item" href="#">Submenu Item 2</a>
-              </div>
             </li>
             <li class="nav-item dropdown">
               <a class="nav-link text-white dropdown-toggle" type="button" id="shopDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" href="#">
@@ -93,8 +89,8 @@
     <div id="sidebar" class="mt-4">
       <div id="content" class="col-md-12">
         <!-- <div th:insert="~{Viewdetail :: detail}"></div> -->
-        <div th:insert="~{Interface :: content}"></div>
-        <div th:insert="~{product :: products}"></div>
+        <div th:insert="~{::content}"></div>
+        <!-- <div th:insert="~{product :: products}"></div> -->
       </div>
     </div>
   </div>

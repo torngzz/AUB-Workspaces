@@ -6,192 +6,98 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"/>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" integrity="sha384-k6RqeWeci5ZR/Lv4MR0sA0FfDOMt23cez/3paNdF+ZB3p0I5u78N1RFtB/C0XJ22" crossorigin="anonymous">
 
-
     <style>
       .row {
-        flex: 1; /* Allow row to grow to fill available space */
+        flex: 1;  /* Allow row to grow to fill available space */
       }
 
-      .sidebar {
+      .navbar {
         position: sticky;
         top: 0;
-        height: 100%;
-        /* Other styles for sidebar */
+        z-index: 500;
       }
 
-      .dropdown-menu{
-        position: initial !important;
+      .nav-link:hover {
+        background-color: rgb(255, 255, 255);
+        color: #456AD8 !important;
+        font-weight: bold;
+        border-radius: 25px;
+      }
+      .dropdown-menu {
+        padding: 0%;
+        margin-top: 7px;
+      }
+      .dropdown:hover .dropdown-menu {
+        display: block;
+      }
+      #content {
+        z-index: 499;
+      }
+      a:hover {
+        text-decoration: none;
+      }
+      .dropdown-item:hover{
+        color: #456AD8;
       }
     </style>
   </head>
-  <body>
-    <div th:fragment="layout">
-        <!-- <nav class="navbar navbar-expand-lg d-flex justify-content-between" style="background-color: #456AD8;">
-          <div class="container-fluid">
-              <a class="navbar-brand text-white fw-bold" href="#">E-SHOP</a>
-              <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                  <span class="navbar-toggler-icon fa-solid fa-bars text-white text-center pt-1"></span>
-              </button>
-              <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
-                  <ul class="navbar-nav navItems text">
-                      <li class="nav-item">
-                          <a class="nav-link active text-white" aria-current="page" href="#homeSection">PROMOTION </a>
-                      </li>
-                      <li class="nav-item">
-                          <a class="nav-link text-white" href="#shopSection">SHOP</a>
-                      </li>
-                      <li class="nav-item nav-item-products">
-                        <a class="nav-link text-white dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" href="#">
-                          PRODUCTS
-                        </a>
-                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                          <a class="dropdown-item" th:each="category : ${categories}" th:href="@{/products/{categoryId}(categoryId=${category.id})}" th:text="${category.cate_name}"></a>
-                        </div>
-                      </li>
-                      
-                      <li class="nav-item">
-                          <a class="nav-link text-white" href="#footerSection">CONTACT US</a>
-                      </li>
-                      <div class="nav-item nav-item-cart">
-                          <i class="nav-link fa-solid fa-cart-shopping text-white"></i>
-                      </div>
-                  </ul>
+<body>
+  <div th:fragment="layout">
+    <nav class="navbar navbar-expand-lg d-flex justify-content-between" style="background-color: #456AD8;">
+      <div class="container-fluid">
+        <a class="navbar-brand text-white fw-bold" href="#">E-SHOP</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon fa-solid fa-bars text-white text-center pt-1"></span>
+        </button>
+        <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+          <ul class="navbar-nav navItems text">
+            <li class="nav-item dropdown">
+              <a class="nav-link text-white dropdown-toggle" type="button" id="productDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" th:href="@{/products}">
+                PRODUCTS
+              </a>
+              <div class="dropdown-menu" aria-labelledby="productDropdown">
+                <a href="#allproduct" class="dropdown-item">All</a>
+                <a class="dropdown-item" th:each="category : ${categories}" th:href="@{/products/{categoryId}(categoryId=${category.id})}" th:text="${category.cate_name}"></a>
               </div>
-          </div>
-      </nav> -->
+            </li>
 
-      <nav class="navbar navbar-expand-lg d-flex justify-content-between" style="background-color: #456AD8;">
-        <div class="container-fluid">
-          <a class="navbar-brand text-white fw-bold" href="#">E-SHOP</a>
-          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon fa-solid fa-bars text-white text-center pt-1"></span>
-          </button>
-          <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
-            <ul class="navbar-nav navItems text">
-              <li class="nav-item dropdown">
-                <a class="nav-link text-white dropdown-toggle" type="button" id="promotionDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" href="#">
-                  PROMOTION
-                </a>
-                <div class="dropdown-menu" aria-labelledby="promotionDropdown">
-                  <a class="dropdown-item" href="#">Submenu Item 1</a>
-                  <a class="dropdown-item" href="#">Submenu Item 2</a>
-                </div>
-              </li>
-      
-              <li class="nav-item dropdown">
-                <a class="nav-link text-white dropdown-toggle" type="button" id="shopDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" href="#">
-                  SHOP
-                </a>
-                <div class="dropdown-menu" aria-labelledby="shopDropdown">
-                  <a class="dropdown-item" href="#">Submenu Item 1</a>
-                  <a class="dropdown-item" href="#">Submenu Item 2</a>
-                </div>
-              </li>
-      
-              <li class="nav-item nav-item-products">
-                <a class="nav-link text-white dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" href="#">
-                  PRODUCTS
-                </a>
-                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                  <a class="dropdown-item" th:each="category : ${categories}" th:href="@{/products/{categoryId}(categoryId=${category.id})}" th:text="${category.cate_name}"></a>
-                </div>
-              </li>
-      
-              <li class="nav-item">
-                <a class="nav-link text-white" href="#footerSection">CONTACT US</a>
-              </li>
-      
-              <li class="nav-item nav-item-cart">
-                <i class="nav-link fa-solid fa-cart-shopping text-white"></i>
-              </li>
-            </ul>
-          </div>
-        </div>
-      </nav>
-      
-
-      <!-- Sidebar -->
-      <div id="sidebar" class="text-white mt-4">  
-        <!-- <div class="row m-0" style="height: 90vh;"> -->
-          <!-- <div class="col-md-2 rounded-lg" style="background-color: #456AD8;">
-            <h5 class="text-center pt-3">Product Menu</h5>
-            <hr class="sidebar-divider" />
-
-            
-
-
-            <div>
-              <div th:action="@{/categories}" class="dropdown">
-                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    --Select Category--
-                </button>
-                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton"  th:each="category : ${categories}">                  
-                    <p class="dropdown-item" th:each="category : ${categories}" th:value="${category.id}" th:text="${category.cate_name}"></p>
-                </div>
+            <li class="nav-item dropdown">
+              <a th:href="@{/Article/list}" class="btn btn-primary">
+                PROMOTION
+              </a>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link text-white dropdown-toggle" type="button" id="shopDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" href="#">
+                SHOP
+              </a>
+              <div class="dropdown-menu" aria-labelledby="shopDropdown">
+                <a class="dropdown-item" href="#">Submenu Item 1</a>
+                <a class="dropdown-item" href="#">Submenu Item 2</a>
               </div>
-            </div>
-            <div class="dropdown mt-3">
-                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButtonModel" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    --Select Model--
-                </button>
-                <div class="dropdown-menu" aria-labelledby="dropdownMenuButtonModel">
-                    <a class="dropdown-item" th:each="model : ${promodel}" th:href="'#' + ${model.model_id}" th:text="${model.model_name}"></a>
-                </div>
-            </div> -->
-            <!-- <select id="category" name="category" class="form-control my-1">
-              <option value="" disabled selected>--Select Category--</option>
-              <option th:each="category : ${categories}" th:value="${category.id}" th:text="${category.cate_name}"> </option>
-              </select>           -->
-
-              <!-- <select id="model" name="model" class="form-control my-1">
-                  <option value="" disabled selected>--Select Model--</option>
-                  <option th:each="model : ${promodel}" th:value="${model.id}" th:text="${model.model_name}"></option>
-              </select> -->
-
-            <!-- Divider -->
-            <hr class="sidebar-divider" />
-          <!-- </div> -->
-          <div class="col-md-12">
-            <!-- Content -->
-            <div th:insert="~{::content}"></div>
-          </div>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link text-white" href="#footerSection">CONTACT US</a>
+            </li>
+            <li class="nav-item nav-item-cart">
+              <i class="nav-link fa-solid fa-cart-shopping text-white"></i>
+            </li>
+          </ul>
         </div>
       </div>
+    </nav>
+
+    <div id="sidebar" class="mt-4">
+      <div id="content" class="col-md-12">
+        <!-- <div th:insert="~{Viewdetail :: detail}"></div> -->
+        <div th:insert="~{::content}"></div>
+        <!-- <div th:insert="~{product :: products}"></div> -->
+      </div>
     </div>
+  </div>
 
-    </div>
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://kit.fontawesome.com/4000b889e3.js" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-    <!-- <script>
-      document.addEventListener('DOMContentLoaded', function() {
-        const categorySelect = document.querySelector('select[name="category"]');
-        const modelSelect = document.querySelector('select[name="model"]');
-
-        const models = {
-          Laptop: ['Mac', 'Dell', 'ROG', 'TUF', 'MSI'],
-          Desktop: ['HP', 'Dell', 'Lenovo'],
-          Accessory: ['Mouse', 'Keyboard', 'Headset'],
-          Phone: ['iPhone', 'Samsung', 'OnePlus']
-        };
-
-        categorySelect.addEventListener('change', function() {
-          const selectedCategory = categorySelect.value;
-          const options = models[selectedCategory] || [];
-          
-          // Clear previous options
-          modelSelect.innerHTML = '<option>--Select Model--</option>';
-          
-          // Add new options
-          options.forEach(function(model) {
-            const option = document.createElement('option');
-            option.textContent = model;
-            modelSelect.appendChild(option);
-          });
-        });
-      });
-    </script> -->
-
-  </body>
+  <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+  <script src="https://kit.fontawesome.com/4000b889e3.js" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
 </html>
