@@ -10,7 +10,7 @@ import jakarta.persistence.Id;
 
 @Entity
 public class Article {
-    @Id 
+    @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String title;
@@ -28,49 +28,63 @@ public class Article {
     public Long getId() {
         return id;
     }
+
     public void setId(Long id) {
         this.id = id;
     }
+
     public String getTitle() {
         return title;
     }
+
     public void setTitle(String title) {
         this.title = title;
     }
+
     public String getShortDescription() {
         return shortDescription;
     }
+
     public void setShortDescription(String shortDescription) {
         this.shortDescription = shortDescription;
     }
+
     public String getLongDescription() {
         return longDescription;
     }
-    
+
     public void setLongDescription(String longDescription) {
         this.longDescription = longDescription;
     }
+
     public String getCreatedBy() {
         return createdBy;
     }
+
     public void setCreatedBy(String createdBy) {
         this.createdBy = createdBy;
     }
+
     public Date getCreatedDate() {
         return createdDate;
     }
+
     public void setCreatedDate(Date createdDate) {
         this.createdDate = createdDate;
     }
+
     public String getImageUrl() {
         return imageUrl;
     }
+
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
     }
-    public Long getViewCount(){
+
+    public Long getViewCount() {
         return viewCount;
     }
+
     public void setViewCount(Long viewCount) {
         this.viewCount = viewCount;
     }
