@@ -3,6 +3,8 @@ package com.aub.backend_aub_shop.model;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -37,10 +39,13 @@ public class UserModel implements UserDetails {
     @LastModifiedDate
     private Date updatedDate;
 
-    @Override
+   @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Collections.singletonList(new SimpleGrantedAuthority("ROLE_" + role));
+        Set<GrantedAuthority> authorities = new HashSet<>();
+        authorities.add((GrantedAuthority) () -> this.role);
+        return authorities;
     }
+
 
     @Override
     public String getPassword() {

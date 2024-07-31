@@ -1,51 +1,12 @@
 
 INSERT INTO TBL_USER (username, password, email, phone, role, created_by, created_date, updated_by, updated_date) 
-VALUES ('admin', '123', 'phovodonn@gmail.com', '0974059394', 'Admin', 'Programmer', NOW(), 'None', NOW());
+VALUES ('chitra', '$2a$10$VpMmVWO5u/0K9fku2PVaZeB0aANg17TQ9xB6fqYep87iSLi6VCWce', 'phovodonn@gmail.com', '0974059394', 'Admin', 'Programmer', NOW(), 'None', NOW());
 
 INSERT INTO TBL_USER (username, password, email, phone, role, created_by, created_date, updated_by, updated_date) 
-VALUES ('admin', '123', 'phovodonn@gmail.com', '0974059394', 'Admin', 'Programmer', NOW(), 'None', NOW());
+VALUES ('don', '$2a$10$O5Z4xZT1W/ES5UqKiw6tKuI.O/zQZo1/5Vj3G72XvOEiI5FbsX.pW', 'phovodonn@gmail.com', '0974059394', 'Admin', 'Programmer', NOW(), 'None', NOW());
 
 INSERT INTO TBL_USER (username, password, email, phone, role, created_by, created_date, updated_by, updated_date) 
-VALUES ('admin', '123', 'phovodonn@gmail.com', '0974059394', 'Admin', 'Programmer', NOW(), 'None', NOW());
-
-INSERT INTO TBL_USER (username, password, email, phone, role, created_by, created_date, updated_by, updated_date) 
-VALUES ('admin', '123', 'phovodonn@gmail.com', '0974059394', 'Admin', 'Programmer', NOW(), 'None', NOW());
-
-INSERT INTO TBL_USER (username, password, email, phone, role, created_by, created_date, updated_by, updated_date) 
-VALUES ('admin', '123', 'phovodonn@gmail.com', '0974059394', 'Admin', 'Programmer', NOW(), 'None', NOW());
-
-INSERT INTO TBL_USER (username, password, email, phone, role, created_by, created_date, updated_by, updated_date) 
-VALUES ('admin', '123', 'phovodonn@gmail.com', '0974059394', 'Admin', 'Programmer', NOW(), 'None', NOW());
-
-INSERT INTO TBL_USER (username, password, email, phone, role, created_by, created_date, updated_by, updated_date) 
-VALUES ('admin', '123', 'phovodonn@gmail.com', '0974059394', 'Admin', 'Programmer', NOW(), 'None', NOW());
-
-INSERT INTO TBL_USER (username, password, email, phone, role, created_by, created_date, updated_by, updated_date) 
-VALUES ('admin', '123', 'phovodonn@gmail.com', '0974059394', 'Admin', 'Programmer', NOW(), 'None', NOW());
-
-INSERT INTO TBL_USER (username, password, email, phone, role, created_by, created_date, updated_by, updated_date) 
-VALUES ('admin', '123', 'phovodonn@gmail.com', '0974059394', 'Admin', 'Programmer', NOW(), 'None', NOW());
-
-INSERT INTO TBL_USER (username, password, email, phone, role, created_by, created_date, updated_by, updated_date) 
-VALUES ('admin', '123', 'phovodonn@gmail.com', '0974059394', 'Admin', 'Programmer', NOW(), 'None', NOW());
-
-INSERT INTO TBL_USER (username, password, email, phone, role, created_by, created_date, updated_by, updated_date) 
-VALUES ('admin', '123', 'phovodonn@gmail.com', '0974059394', 'Admin', 'Programmer', NOW(), 'None', NOW());
-
-INSERT INTO TBL_USER (username, password, email, phone, role, created_by, created_date, updated_by, updated_date) 
-VALUES ('admin', '123', 'phovodonn@gmail.com', '0974059394', 'Admin', 'Programmer', NOW(), 'None', NOW());
-
-INSERT INTO TBL_USER (username, password, email, phone, role, created_by, created_date, updated_by, updated_date) 
-VALUES ('admin', '123', 'phovodonn@gmail.com', '0974059394', 'Admin', 'Programmer', NOW(), 'None', NOW());
-
-INSERT INTO TBL_USER (username, password, email, phone, role, created_by, created_date, updated_by, updated_date) 
-VALUES ('admin', '123', 'phovodonn@gmail.com', '0974059394', 'Admin', 'Programmer', NOW(), 'None', NOW());
-
-INSERT INTO TBL_USER (username, password, email, phone, role, created_by, created_date, updated_by, updated_date) 
-VALUES ('admin', '123', 'phovodonn@gmail.com', '0974059394', 'Admin', 'Programmer', NOW(), 'None', NOW());
-
-INSERT INTO TBL_USER (username, password, email, phone, role, created_by, created_date, updated_by, updated_date) 
-VALUES ('admin', '123', 'phovodonn@gmail.com', '0974059394', 'Admin', 'Programmer', NOW(), 'None', NOW());
+VALUES ('ka', '$2a$10$7QJNjXXls7sMklxZfjFeGuwUvU0Eph7.vY3iCAGUQfVX5uYs0uqyO', 'phovodonn@gmail.com', '0974059394', 'Admin', 'Programmer', NOW(), 'None', NOW());
 
 
 
