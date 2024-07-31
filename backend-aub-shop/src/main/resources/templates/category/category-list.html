@@ -32,21 +32,7 @@
             </div>
         </form>
     </div>
-    <div class="mt-5">
-        <nav aria-label="Page navigation example">
-            <ul class="pagination">
-                <li th:class="${currentPage == 0} ? 'page-item disabled' : 'page-item'">
-                    <a class="page-link" href="#" th:onclick="'goToPage(' + (${currentPage} - 1) + ')'">Previous</a>
-                </li>
-                <li th:each="i : ${#numbers.sequence(0, totalPages - 1)}" th:class="${i == currentPage} ? 'page-item active' : 'page-item'">
-                    <a class="page-link" href="#" th:onclick="'goToPage(' + ${i} + ')'" th:text="${i + 1}"></a>
-                </li>
-                <li th:class="${currentPage == totalPages - 1} ? 'page-item disabled' : 'page-item'">
-                    <a class="page-link" href="#" th:onclick="'goToPage(' + (${currentPage} + 1) + ')'">Next</a>
-                </li>
-            </ul>
-        </nav>
-    </div>
+    
     <div class="table-container">
         
         <div class="table-responsive">
@@ -63,7 +49,7 @@
                     </tr>
                 </thead>
                 <tbody style="text-align: center">
-                    <tr th:each="c : ${category}">
+                    <tr th:each="c : ${categoryPage}">
                         <td th:text="${c.id}"></td>
                         <td th:text="${c.name}"></td>    
                         <td th:text="${c.description}"></td>
@@ -82,22 +68,38 @@
     <a th:href="@{/categorys/addCategory}" class="btn btn-primary float-right">
         <i class="bi bi-plus"></i> Add Category
     </a>
+
+    <div class="mt-5">
+        <div class="pagenumber">
+            <nav aria-label="Page navigation">
+                <div class="row">
+                    <div class="col-4"></div>
+                    <div class="col-6">
+                        <ul class="pagination text-center">
+                            <li th:class="${currentPage == 0} ? 'page-item disabled' : 'page-item'">
+                                <a class="page-link" th:href="@{/categorys(pageNumber=${currentPage - 1}, pageSize=${pageSize})}" aria-label="Previous">
+                                <span aria-hidden="true">&laquo;</span>
+                                <span class="sr-only">Previous</span>
+                                </a>
+                            </li>
+                            
+                            <li th:each="pageNum : ${#numbers.sequence(0, totalPages-1)}" th:class="${pageNum == currentPage} ? 'page-item active' : 'page-item'">
+                                <a class="page-link" th:href="@{/categorys(pageNumber=${pageNum}, pageSize=${pageSize})}" th:text="${pageNum + 1}"></a>
+                            </li>
+                            
+                            <li th:class="${currentPage == totalPages - 1} ? 'page-item disabled' : 'page-item'">
+                                <a class="page-link" th:href="@{/categorys(pageNumber=${currentPage + 1}, pageSize=${pageSize})}" aria-label="Next">
+                                <span aria-hidden="true">&raquo;</span>
+                                <span class="sr-only">Next</span>
+                                </a>
+                            </li>
+                         </ul>
+                    </div>
+                    <div class="col-2"></div>
+                </div>
+            </nav>
+        </div>
+    </div>
 </div>
-
-<script>
-   function goToPage(pageNumber) {
-        if (pageNumber < 0 || pageNumber >= totalPages) {
-            return; // Prevent invalid page numbers
-        }
-        const params = new URLSearchParams(window.location.search);
-        params.set('pageNumber', pageNumber);
-        params.set('pageSize', document.querySelector('select[name="pageSize"]') ? document.querySelector('select[name="pageSize"]').value : 10);
-        params.set('categoryName', document.querySelector('input[name="categoryName"]').value);
-        window.location.search = params.toString();
-    }
-
-    // Ensure totalPages is defined for validation within goToPage
-    const totalPages = /*[[${totalPages}]]*/ 1;
-</script>
 </body>
 </html>
