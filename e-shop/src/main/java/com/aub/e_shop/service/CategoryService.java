@@ -23,5 +23,10 @@ public class CategoryService {
         return categoryRepository.findById(id);
     }
 
+    // public Page<Category> getCategoryById(Long categoryId, int pageNumber, int pageSize) {
+    //     PageRequest pageable = PageRequest.of(pageNumber, pageSize);
+    //     return categoryRepository.getCategoryById(categoryId, pageable);
+    // }
+
 
 }

@@ -26,13 +26,35 @@
                 <div class="col-11 m-0 p-0">
                     <input type="text" th:name="categoryName" class="form-control w-100" placeholder="Search product by name..."th:value="${categoryName}">
                 </div>
+                <!-- <div class="col-2 m-0 p-0">
+                    <select class="form-control" th:name="pageSize">
+                        <option th:value="10" th:text="10" th:selected="${pageSize == 10}"></option>
+                        <option th:value="20" th:text="20" th:selected="${pageSize == 20}"></option>
+                        <option th:value="50" th:text="50" th:selected="${pageSize == 50}"></option>
+                        <option th:value="100" th:text="100" th:selected="${pageSize == 100}"></option>
+                    </select>
+                </div> -->
                 <div class="col-1 m-0 p-0">
                     <button type="submit" class="btn btn-primary float-right w-100">Search</button>
                 </div>
             </div>
         </form>
     </div>
-    
+    <div class="mt-5">
+        <nav aria-label="Page navigation example">
+            <ul class="pagination">
+                <li th:class="${currentPage == 0} ? 'page-item disabled' : 'page-item'">
+                    <a class="page-link" href="#" th:onclick="'goToPage(' + (${currentPage} - 1) + ')'">Previous</a>
+                </li>
+                <li th:each="i : ${#numbers.sequence(0, totalPages - 1)}" th:class="${i == currentPage} ? 'page-item active' : 'page-item'">
+                    <a class="page-link" href="#" th:onclick="'goToPage(' + ${i} + ')'" th:text="${i + 1}"></a>
+                </li>
+                <li th:class="${currentPage == totalPages - 1} ? 'page-item disabled' : 'page-item'">
+                    <a class="page-link" href="#" th:onclick="'goToPage(' + (${currentPage} + 1) + ')'">Next</a>
+                </li>
+            </ul>
+        </nav>
+    </div>
     <div class="table-container">
         
         <div class="table-responsive">
@@ -68,38 +90,6 @@
     <a th:href="@{/categorys/addCategory}" class="btn btn-primary float-right">
         <i class="bi bi-plus"></i> Add Category
     </a>
-
-    <div class="mt-5">
-        <div class="pagenumber">
-            <nav aria-label="Page navigation">
-                <div class="row">
-                    <div class="col-4"></div>
-                    <div class="col-6">
-                        <ul class="pagination text-center">
-                            <li th:class="${currentPage == 0} ? 'page-item disabled' : 'page-item'">
-                                <a class="page-link" th:href="@{/categorys(pageNumber=${currentPage - 1}, pageSize=${pageSize})}" aria-label="Previous">
-                                <span aria-hidden="true">&laquo;</span>
-                                <span class="sr-only">Previous</span>
-                                </a>
-                            </li>
-                            
-                            <li th:each="pageNum : ${#numbers.sequence(0, totalPages-1)}" th:class="${pageNum == currentPage} ? 'page-item active' : 'page-item'">
-                                <a class="page-link" th:href="@{/categorys(pageNumber=${pageNum}, pageSize=${pageSize})}" th:text="${pageNum + 1}"></a>
-                            </li>
-                            
-                            <li th:class="${currentPage == totalPages - 1} ? 'page-item disabled' : 'page-item'">
-                                <a class="page-link" th:href="@{/categorys(pageNumber=${currentPage + 1}, pageSize=${pageSize})}" aria-label="Next">
-                                <span aria-hidden="true">&raquo;</span>
-                                <span class="sr-only">Next</span>
-                                </a>
-                            </li>
-                         </ul>
-                    </div>
-                    <div class="col-2"></div>
-                </div>
-            </nav>
-        </div>
-    </div>
 </div>
 </body>
 </html>

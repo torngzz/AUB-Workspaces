@@ -5,57 +5,68 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title th:fragment="${pageTitle}">Admin Dashboard</title>
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" th:href="@{/style/css/styles.css}">
     <style>
-       #content{
-        z-index: 499;
-       }
-       #layout{
-        z-index: 500;
-        overflow: hidden;
-       }
+        #content {
+            z-index: 500;
+        }
+        #sidebar {
+            z-index: 499;
+            min-height: 100vh;
+            transition: all 0.3s;
+            position: sticky;
+            top: 56px;
+        }
+        .nav-link {
+            color: #fff !important;
+        }
+        .nav-link:hover {
+            color: #7386d5 !important;
+            background-color: #fff !important;
+        }
     </style>
 </head>
 <body>
-  <div id="layout" th:fragment="layout">
-    <header>
-      <div class="header-content">
-          <button class="btn btn-light d-md-none" id="sidebarCollapse">☰</button>
-          <h1>Admin Dashboard</h1>
-          <div>
-              <button class="btn btn-light">Logout</button>
-          </div>
-      </div>
-    </header>
-    <div class="row">
-      <div class="col-2">
-        <nav id="sidebar">
-            <div class="sidebar-header">
-                <h3>Admin Menu</h3>
+    <div id="layout" th:fragment="layout">
+        <header class="bg-primary text-white fixed-top nav navbar">
+            <div class="container-fluid d-flex justify-content-between align-items-center">
+                <button class="btn btn-light d-md-none" id="sidebarCollapse">☰</button>
+                <div class="navbar-brand">
+                    <h3>Admin Dashboard</h3>
+                </div>
+                <a th:href="@{/login}" class="btn btn-light">Logout</a>
             </div>
-            <ul class="list-unstyled components">
-                <p>User Management</p>
-                <li>
-                    <a href="#" th:href="@{/users}" class="">User</a>
-                </li>
-                <p>Product Management</p>
-                <li>
-                    <a href="#" th:href="@{/products}">Product</a>
-                </li>
-                <li>
-                    <a href="#" th:href="@{/categorys}">Category</a>
-                </li>
-            </ul>
-        </nav>
-      </div>
-      <div class="col-10">
-        <div id="content">
-          <!-- <div class="container" th:fragment="${content}"></div> -->
-          <div th:insert="~{::content}"></div>
+        </header>
+        <div class="container-fluid">
+            <div class="row">
+                <nav id="sidebar" class="col-md-2 d-none d-md-block bg-dark text-white">
+                    <div class="sidebar-sticky">
+                        <ul class="nav flex-column mt-5 pt-5">
+                            <li class="">
+                                <p class="">User Management</p>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link rounded-pill" th:href="@{/users}">User</a>
+                            </li>
+                            <li class="">
+                                <p class="">Product Management</p>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link rounded-pill" th:href="@{/products}">Product</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link rounded-pill" th:href="@{/categorys}">Category</a>
+                            </li>
+                        </ul>
+                    </div>
+                </nav>
+                <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
+                    <div id="content" class="mt-5 p-1">
+                        <div th:insert="~{::content}"></div>
+                    </div>
+                </main>
+            </div>
         </div>
-      </div>
     </div>
-  </div>
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>

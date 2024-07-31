@@ -1,6 +1,9 @@
 package com.aub.backend_aub_shop.model;
+ 
 
-import java.sql.Date;
+import java.util.Date;
+
+import org.springframework.format.annotation.DateTimeFormat;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -16,6 +19,7 @@ public class Category {
     private Long id;
     private String name;
     private String description;
+    @DateTimeFormat
     private Date created_date;
     private String created_by;
 
@@ -57,5 +61,14 @@ public class Category {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    @Override
+    public String toString() {
+        return "Category [id=" + id + ", name=" + name + ", description=" + description + ", created_date="
+                + created_date + ", created_by=" + created_by + "]";
     }  
+
+ 
+
 }

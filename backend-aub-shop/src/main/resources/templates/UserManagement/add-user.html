@@ -50,26 +50,6 @@
             placeholder="Enter role"
           />
         </div>
-        <div class="form-group">
-          <label for="createdBy">Created By</label>
-          <input
-            type="text"
-            class="form-control"
-            id="createdBy"
-            th:field="*{createdBy}"
-            placeholder="Enter creater"
-          />
-        </div>
-        <div class="form-group">
-          <label for="updatedBy">Update By</label>
-          <input
-            type="text"
-            class="form-control"
-            id="updatedBy"
-            th:field="*{updatedBy}"
-            placeholder="Enter updater"
-          />
-        </div>
         <div class="float-right">
           <button type="submit" class="btn btn-primary">Add User</button>
           <a th:href="@{/users}" class="btn btn-secondary">Cancel</a>
