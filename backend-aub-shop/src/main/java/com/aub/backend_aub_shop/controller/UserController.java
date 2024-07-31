@@ -18,23 +18,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.aub.backend_aub_shop.model.UserModel;
 import com.aub.backend_aub_shop.service.UserService;
 
+import jakarta.servlet.http.HttpServletRequest;
+
 @Controller
 @RequestMapping(value = {"", "/users"})
 //set tr role Admin
 @PreAuthorize("hasRole('ADMIN')")
 public class UserController {
   @Autowired UserService userService;
-
-    // @GetMapping(value = {"","/"})
-    // public String getAllUserx(
-    //     // @RequestParam(name = "pageNumber", defaultValue = "0" int pageNumber),
-    //     // @RequestParam(name = "pageSize", defaultValue = "10" int pageSize)
-    //     UserModel m
-    // ){
-    //     List<UserModel> users = userService.findAll(); 
-    //     m.addAttribute("users", users);
-    //     return "UserManagement/user-list";
-    // }
 
     @GetMapping(value = {"", "/"})
     public String getAllUser(
@@ -43,6 +34,9 @@ public class UserController {
         @RequestParam(name = "username", required = false, defaultValue = "") String username,
         Model model
     ) {
+
+
+        
         Page<UserModel> users = userService.findAll(username, pageNumber, pageSize);
         model.addAttribute("users", users);
         model.addAttribute("pageNumber", pageNumber);
@@ -53,6 +47,8 @@ public class UserController {
         return "UserManagement/user-list";
     }
 
+
+
     @GetMapping("/withoutpagination")
     public String getAllUsers(Model m){
         List<UserModel> users = userService.findAll(); 
@@ -61,14 +57,18 @@ public class UserController {
     }
 
     @GetMapping("/addUser")
-    public String addUser(Model m){
+    public String addUser(Model m)
+    {
         m.addAttribute("user", new UserModel());
         return "UserManagement/add-user";
     }
 
     @PostMapping("/save")
-    public String saveUser(@ModelAttribute("user") UserModel userModel) {
-        userService.create(userModel);
+    public String saveUser(@ModelAttribute("user") UserModel userModel,
+        HttpServletRequest httpRequest) 
+    {
+
+        userService.create(httpRequest, userModel);
         return "redirect:/users";
     }
 

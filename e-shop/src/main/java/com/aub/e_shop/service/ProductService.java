@@ -14,19 +14,37 @@ import com.aub.e_shop.repository.ProductRepository;
 @Service
 public class ProductService {
 
-    @Autowired 
+    @Autowired
     private ProductRepository productRepository;
 
-    public Page<Product> findAll(int pageNumber, int pageSize)
-    {
+    // public Page<Product> findAll(int pageNumber, int pageSize) {
+    //     PageRequest pageable = PageRequest.of(pageNumber, pageSize);
+    //     return productRepository.findAll(pageable);
+    // }
+
+    // public Page<Category> findByCategoryId(Long categoryId, int pageNumber, int pageSize) {
+    //     PageRequest pageable = PageRequest.of(pageNumber, pageSize);
+    //     return productRepository.findByCategoryId(categoryId, pageable);
+    // }
+
+    public Page<Product> findAll(Long category_id, int pageNumber, int pageSize) {
         Pageable pageable = PageRequest.of(pageNumber, pageSize);
-        return productRepository.findAll(pageable);
+        if(category_id == 0)
+        {
+            return productRepository.findAll(pageable);
+        }
+        return productRepository.findBycategory_id(category_id, pageable);
     }
 
-    public Optional<Product> getById(Long id)
-    {
+    public Page<Product> findByCategoryId(Long categoryId,String cate_name, int pageNumber, int pageSize) {
+        PageRequest pageable = PageRequest.of(pageNumber, pageSize);
+        return productRepository.findBycategory_id(categoryId, pageable);
+    }
+
+    public Optional<Product> getById(Long id) {
         return productRepository.findById(id);
     }
-    
+
+
 
 }

@@ -3,43 +3,13 @@
   <head>
     <meta charset="UTF-8" />
     <title>E-Shop Management</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"/>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" integrity="sha384-k6RqeWeci5ZR/Lv4MR0sA0FfDOMt23cez/3paNdF+ZB3p0I5u78N1RFtB/C0XJ22" crossorigin="anonymous">
 
-    <style>
-      .row {
-        flex: 1;  /* Allow row to grow to fill available space */
-      }
+    <div th:fragment="css">
+      <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" integrity="sha384-k6RqeWeci5ZR/Lv4MR0sA0FfDOMt23cez/3paNdF+ZB3p0I5u78N1RFtB/C0XJ22" crossorigin="anonymous">
+    </div>
 
-      .navbar {
-        position: sticky;
-        top: 0;
-        z-index: 500;
-      }
-
-      .nav-link:hover {
-        background-color: rgb(255, 255, 255);
-        color: #456AD8 !important;
-        font-weight: bold;
-        border-radius: 25px;
-      }
-      .dropdown-menu {
-        padding: 0%;
-        margin-top: 7px;
-      }
-      .dropdown:hover .dropdown-menu {
-        display: block;
-      }
-      #content {
-        z-index: 499;
-      }
-      a:hover {
-        text-decoration: none;
-      }
-      .dropdown-item:hover{
-        color: #456AD8;
-      }
-    </style>
+    <div th:insert="~{::css}"></div>
   </head>
 <body>
   <div th:fragment="layout">
@@ -49,15 +19,18 @@
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon fa-solid fa-bars text-white text-center pt-1"></span>
         </button>
-        <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+        <div class="collapse navbar-collapse justify-content-end pr-3" id="navbarNav">
           <ul class="navbar-nav navItems text">
             <li class="nav-item dropdown">
               <a class="nav-link text-white dropdown-toggle" type="button" id="productDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" th:href="@{/products}">
-                PRODUCTS
+                  PRODUCTS
               </a>
               <div class="dropdown-menu" aria-labelledby="productDropdown">
-                <a href="#allproduct" class="dropdown-item">All</a>
-                <a class="dropdown-item" th:each="category : ${categories}" th:href="@{/products/{categoryId}(categoryId=${category.id})}" th:text="${category.cate_name}"></a>
+                  <!-- <a href="#cate_id" class="dropdown-item">All</a> -->
+                  <a th:href="@{/products#cate_id}" class="dropdown-item" id="cate_id">All</a>
+
+                  <a th:each="category : ${categories}" th:href="@{/products?cate_id={category_id}(category_id=${category.id})}" class="dropdown-item" th:text="${category.cate_name}"></a>
+                  <!-- <a th:each="category : ${categories}" th:href="@{/products?cate_id={category_id}(category_id=${category.id})}" class="dropdown-item" th:text="${category.cate_name}"></a> -->
               </div>
             </li>
 
@@ -66,7 +39,7 @@
                 PROMOTION
               </a>
             </li>
-            <li class="nav-item dropdown">
+            <!-- <li class="nav-item dropdown">
               <a class="nav-link text-white dropdown-toggle" type="button" id="shopDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" href="#">
                 SHOP
               </a>
@@ -74,7 +47,7 @@
                 <a class="dropdown-item" href="#">Submenu Item 1</a>
                 <a class="dropdown-item" href="#">Submenu Item 2</a>
               </div>
-            </li>
+            </li> -->
             <li class="nav-item">
               <a class="nav-link text-white" href="#footerSection">CONTACT US</a>
             </li>
@@ -87,17 +60,33 @@
     </nav>
 
     <div id="sidebar" class="mt-4">
+<<<<<<< HEAD
       <div id="content" class="col-md-12">
         <!-- <div th:insert="~{Viewdetail :: detail}"></div> -->
         <div th:insert="~{::content}"></div>
         <!-- <div th:insert="~{product :: products}"></div> -->
+=======
+      <div id="content" class="container col-md-12">        
+        <!-- <div th:insert="~{Viewdetail :: detail}"></div>
+        <div th:insert="~{product :: products}"></div> -->
+        <!-- <div th:insert="~{Interface :: interface}"></div>   -->
+        <div th:insert="~{::content}"></div>
+>>>>>>> af2586b737a7923c119b2a9a4ae54777c190fa89
       </div>
     </div>
   </div>
 
-  <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js" crossorigin="anonymous"></script>
   <script src="https://kit.fontawesome.com/4000b889e3.js" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  
+  <div th:insert="~{::scripts}"></div>
+
+  <!-- <div th:insert="~{::scripts}"></div> -->
+
 </body>
 </html>
+
+

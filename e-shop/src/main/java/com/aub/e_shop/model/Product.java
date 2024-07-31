@@ -2,10 +2,14 @@ package com.aub.e_shop.model;
 
 import java.util.Date;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 @Entity
@@ -14,7 +18,7 @@ public class Product {
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
 
-    // @Column(name = "product_id")
+    
     private Long product_id;
 
     // @Column(name = "pro_name")
@@ -26,8 +30,8 @@ public class Product {
     // @Column(name = "sale_price")    
     private Double sale_price;
 
-    // @Column(name = "category_id")
-    private String category_id;
+    @Column(name = "category_id", insertable = false, updatable = false)
+    private Long categoryId;
 
     // @Column(name = "image")
     private String image_url;
@@ -42,17 +46,29 @@ public class Product {
 
     private String detail_ImageUrl;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="category_id") // Consider EAGER for smaller categories
+    private Category category;
+
+
+    public Category getCategory() {
+        return category;
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
+    }
 
     public Product()
     {
 
     }
 
-    public Product(String name, double price, String category, String image, String description) {
+    public Product(String name, double price, Long category, String image, String description) {
 
         this.pro_name = name;
         this.sale_price = price;
-        this.category_id = category;
+        this.categoryId = category;
         this.detail_ImageUrl = image;
         this.description = description;
     }
@@ -61,7 +77,7 @@ public class Product {
         StringBuilder details = new StringBuilder();
         details.append("Product ID: ").append(product_id).append("\n");
         details.append("Name: ").append(pro_name).append("\n");
-        details.append("Category: ").append(category_id).append("\n");
+        details.append("Category: ").append(categoryId).append("\n");
         details.append("Price: ").append(sale_price).append("\n");
         details.append("Description: ").append(description).append("\n");
         return details.toString();
@@ -92,12 +108,12 @@ public class Product {
         this.image_url = image_url;
     }
 
-    public void setCategory_id(String category_id) {
-        this.category_id = category_id;
+    public void setCategory_id(Long category_id) {
+        this.categoryId = category_id;
     }
 
-    public String getCategory_id() {
-        return category_id;
+    public Long getCategory_id() {
+        return categoryId;
     }
 
     public Date getCreated_date() {

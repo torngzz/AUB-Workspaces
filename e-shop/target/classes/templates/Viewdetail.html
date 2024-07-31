@@ -1,49 +1,37 @@
 <!DOCTYPE html>
-<!-- <html xmlns:th="http://www.thymeleaf.org"  lang="en" > -->
-<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{layout :: layout}">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Product Details</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <style>
+        .main-product-image {
+            width: 300px;
+            height: 300px;
+            overflow: hidden;
+        }
+        .main-product-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
         .detail-image {
             border: 2px solid transparent;
             cursor: pointer;
-            width: 150px;
-            height: auto;
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
             margin: 5px;
         }
-
         .detail-image:hover {
-            border: 2px solid #000; /* Change color as needed */
+            border: 2px solid #000;
         }
-
-        .main-product-image {
-            width: 100%;
-            height: auto;
-            max-width: 500px;
-        }
-
-        .product-container {
-            display: flex;
-            justify-content: space-between;
-        }
-
-        .product-image {
-            width: 100%;
-            height: auto;
-        }
-
         .product-details {
-            max-width: 500px;
+            max-width: 100%;
         }
-
         .total-price {
             font-size: 1.2em;
             font-weight: bold;
         }
-
         .btn-container {
             margin-top: 20px;
         }
@@ -52,33 +40,31 @@
             flex-wrap: wrap;
             justify-content: center;
         }
-        p{
-            font-size: 2rem;
+        p {
+            font-size: 1.2rem;
         }
     </style>
 </head>
 <body>
+<<<<<<< HEAD
     <div class="container" th:fragment="content">
+=======
+    <div th:fragment="content" class="container">
+>>>>>>> af2586b737a7923c119b2a9a4ae54777c190fa89
         <h1>Product Details</h1>
-        <div class="product-container">
+        <div class="row">
             <div class="col-md-6">
-                <img class="main-product-image" th:src="${productdetail.image_url}" alt="Product Image" id="main-product-image">
-
-                <!-- Additional pictures -->
+                <div class="main-product-image">
+                    <img width="300px" th:src="${productdetail.image_url}" alt="Product Image" id="main-product-image">
+                </div>
                 <div class="additional-pictures">
-                    <img th:each="imageUrl : ${detailImageUrls}" class="detail-image" th:src="${imageUrl}" alt="Additional Image" onclick="switchImage(this)">
+                    <img width="150px" th:each="imagedetail : ${detailImageUrls}" class="detail-image" th:src="${imagedetail}" alt="Additional Image" onclick="switchImage(this)">
                 </div>
             </div>
-            <div class="product-details col-md-6">
+            <div class="col-md-6 product-details">
                 <h2 th:text="${productdetail.pro_name}"></h2>
-                <p>
-                    <span>Category: </span>
-                    <span th:text="${productdetail.category_id}"></span>
-                </p>
-                <p>
-                    <span>Price: $</span>
-                    <span th:text="${productdetail.sale_price}"></span>
-                </p>
+                <p><span>Category: </span><span th:text="${productdetail.category_id}"></span></p>
+                <p><span>Price: $</span><span th:text="${productdetail.sale_price}" id="sale-price"></span></p>
                 <p th:text="${productdetail.description}"></p>
                 
                 <div class="add-item">
@@ -113,16 +99,17 @@
             <a href="/aubshop/products" class="btn btn-danger">Back to Product List</a>
         </div>
     </div>
-
-    <script th:inline="javascript">
-        /*<![CDATA[*/
+    
+   <script th:fragment="scripts">
         document.addEventListener('DOMContentLoaded', function() {
             const qtyInput = document.getElementById('product-qty');
             const decreaseButton = document.getElementById('decrease-product-qty');
             const increaseButton = document.getElementById('increase-product-qty');
-            const salePrice = /*[[${productdetail.sale_price}]]*/ 0.00; // Initialize with default value
+            const salePriceElement = document.getElementById('sale-price');
+            const salePrice = parseFloat(salePriceElement.textContent.trim()) || 0.00;
 
-            // Function to update the quantity
+            console.log("Initial Sale Price:", salePrice); // Debugging
+
             function updateQuantity(change) {
                 let currentQty = parseInt(qtyInput.value, 10);
                 const maxValue = parseInt(qtyInput.getAttribute('max-value'), 10) || Infinity;
@@ -134,14 +121,12 @@
                 updateTotalPrice();
             }
 
-            // Function to update the total price
             function updateTotalPrice() {
                 let currentQty = parseInt(qtyInput.value, 10);
                 let totalPrice = currentQty * salePrice;
                 document.getElementById('total-price').innerText = totalPrice.toFixed(2);
             }
 
-            // Add event listeners to buttons
             decreaseButton.addEventListener('click', function() {
                 updateQuantity('decrease');
             });
@@ -160,7 +145,7 @@
             var mainImage = document.getElementById('main-product-image');
             mainImage.src = image.src;
         }
-        /*]]>*/
     </script>
+
 </body>
 </html>
