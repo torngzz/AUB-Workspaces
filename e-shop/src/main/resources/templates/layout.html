@@ -49,15 +49,18 @@
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon fa-solid fa-bars text-white text-center pt-1"></span>
         </button>
-        <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+        <div class="collapse navbar-collapse justify-content-end pr-3" id="navbarNav">
           <ul class="navbar-nav navItems text">
             <li class="nav-item dropdown">
               <a class="nav-link text-white dropdown-toggle" type="button" id="productDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" th:href="@{/products}">
-                PRODUCTS
+                  PRODUCTS
               </a>
               <div class="dropdown-menu" aria-labelledby="productDropdown">
-                <a href="#allproduct" class="dropdown-item">All</a>
-                <a class="dropdown-item" th:each="category : ${categories}" th:href="@{/products/{categoryId}(categoryId=${category.id})}" th:text="${category.cate_name}"></a>
+                  <!-- <a href="#cate_id" class="dropdown-item">All</a> -->
+                  <a th:href="@{/products#cate_id}" class="dropdown-item" id="cate_id">All</a>
+
+                  <a th:each="category : ${categories}" th:href="@{/products?cate_id={category_id}&cate_name={cate_name}(category_id=${category.id}, cate_name=${category.cate_name})}" class="dropdown-item" th:text="${category.cate_name}"></a>
+                  <!-- <a th:each="category : ${categories}" th:href="@{/products?cate_id={category_id}(category_id=${category.id})}" class="dropdown-item" th:text="${category.cate_name}"></a> -->
               </div>
             </li>
 
@@ -70,7 +73,7 @@
                 <a class="dropdown-item" href="#">Submenu Item 2</a>
               </div>
             </li>
-            <li class="nav-item dropdown">
+            <!-- <li class="nav-item dropdown">
               <a class="nav-link text-white dropdown-toggle" type="button" id="shopDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" href="#">
                 SHOP
               </a>
@@ -78,7 +81,7 @@
                 <a class="dropdown-item" href="#">Submenu Item 1</a>
                 <a class="dropdown-item" href="#">Submenu Item 2</a>
               </div>
-            </li>
+            </li> -->
             <li class="nav-item">
               <a class="nav-link text-white" href="#footerSection">CONTACT US</a>
             </li>
@@ -91,10 +94,11 @@
     </nav>
 
     <div id="sidebar" class="mt-4">
-      <div id="content" class="col-md-12">
-        <!-- <div th:insert="~{Viewdetail :: detail}"></div> -->
-        <div th:insert="~{Interface :: content}"></div>
-        <div th:insert="~{product :: products}"></div>
+      <div id="content" class="container col-md-12">        
+        <!-- <div th:insert="~{Viewdetail :: detail}"></div>
+        <div th:insert="~{product :: products}"></div> -->
+        <!-- <div th:insert="~{Interface :: interface}"></div>   -->
+        <div th:insert="~{::content}"></div>
       </div>
     </div>
   </div>
@@ -105,3 +109,13 @@
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 </html>
+
+<script>
+  $(document).ready(function() {
+      $('.dropdown').hover(function() {
+          $(this).find('.dropdown-menu').show();
+      }, function() {
+          $(this).find('.dropdown-menu').hide();
+      });
+  });
+  </script>

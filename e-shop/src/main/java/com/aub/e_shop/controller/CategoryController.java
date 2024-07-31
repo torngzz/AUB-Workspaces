@@ -26,11 +26,11 @@ public class CategoryController {
     }
 
     // @GetMapping("/getById{id}")
-    // public String getCategoryById(@PathVariable("id") Long id, Model model) 
+    // public String getCategoryById(@PathVariable Long id, Model model) 
     // {
     //     Optional<Category> category = categoryService.getCategoryById(id);
-    //     model.addAttribute("category", category.orElse(new Category()));
-    //     return "categories-view-form"; // Thymeleaf template for viewing a single category
+    //     model.addAttribute("categorybyid", category.orElse(new Category()));
+    //     return "product"; // Thymeleaf template for viewing a single category
     // }
     
 }
