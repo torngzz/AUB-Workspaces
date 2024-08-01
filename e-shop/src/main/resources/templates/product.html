@@ -4,49 +4,29 @@
     <!-- <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0"> -->
     <title>Product</title>
+        <style>
+            .myfont > p {
+                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                font-size: 10px !important;
+                font-weight: bold;
+            }
+            .pagenumber {
+                text-align: center;
+                font-size: 30px !important;
+            }
+         
+          </style>
 
 </head>
 <body>
-<<<<<<< HEAD
-    <div th:fragment="content" class="container" >
-=======
     <div th:fragment="content" class="container">
-        
-        <div id="carousel">
-            <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
-            <ol class="carousel-indicators">
-                <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
-                <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
-                <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
-            </ol>
-            <div class="carousel-inner">
-                <div class="carousel-item d-flex justify-content-center align-items-center">
-                    <img class="d-block w-75" th:src="'https://th.bing.com/th/id/R.c0db1c8149493acb21b46849ac5f526b?rik=ZMs32uvokZMbWw&riu=http%3a%2f%2fgetwallpapers.com%2fwallpaper%2ffull%2ff%2fa%2f5%2f1025426-vertical-1920-x-1080-hd-wallpapers-1920x1080-macbook.jpg&ehk=qwDhIT%2fT%2b8cXPVFFtW%2fAWZc7ZXNHGh9DL0oVD0Q7TdA%3d&risl=&pid=ImgRaw&r=0'" alt="First slide">
-                </div>
-                <div class="carousel-item d-flex justify-content-center align-items-center">
-                    <img class="d-block w-75" th:src="'https://wallpapercave.com/wp/wp6908944.jpg'" alt="Second slide">
-                </div>
-                <div class="carousel-item d-flex justify-content-center align-items-center">
-                    <img class="d-block w-75" th:src="'https://th.bing.com/th/id/R.9462f0f34a40b9269d0030af13dd993a?rik=UXFVPY4F4n2EMg&pid=ImgRaw&r=0'" alt="Third slide">
-                </div>
-            </div>
-            <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
-                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                <span class="sr-only">Previous</span>
-            </a>
-            <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
-                <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                <span class="sr-only">Next</span>
-            </a>
-            </div>
-        </div>
 
->>>>>>> af2586b737a7923c119b2a9a4ae54777c190fa89
-        <div class="d-flex align-items-center bg-gradient-dark"> 
+        <div class="d-flex align-items-center bg-gradient-dark mt-3"> 
             <div class="p-1">         
-                <a href="#allproduct" class="dropdown-item mb-0 fw-bold">Product</a> 
+                <!-- <a href="#allproduct" class="btn btn-sm btn-info">Product</a>  -->
+                <a th:href="@{/products}" class="btn btn-sm btn-info" id="cate_id">Product</a>
             </div> 
-            <div class="p-1">         
+            <div class="p-1">   
                 <a class="mb-0 fw-bold">
                     <span th:if="${category == null}" th:text="'All'">All</span>
                     <span th:if="${category != null}" th:text="${category.cate_name}">Category Name</span>
@@ -93,7 +73,7 @@
                 </div>
             </div>
         </div>
-        <div class="pagenumber">
+        <div class="pagenumber mt-3">
             <nav aria-label="Page navigation">
                 <div class="row">
                     <div class="col-5"></div>

@@ -18,7 +18,7 @@ import com.aub.e_shop.service.CategoryService;
 import com.aub.e_shop.service.ProductService;
 
 @Controller
-@RequestMapping(value = {"", "/products"})
+@RequestMapping("/products")
 public class ProductController {
     private static final Logger LOGGER = LoggerFactory.getLogger(ProductController.class);
 

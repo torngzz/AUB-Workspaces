@@ -22,21 +22,28 @@ public class ArticleController {
     @GetMapping("/list")
     public String get(
     @RequestParam(name = "pageNumber", defaultValue= "0") int pageNumber,
-    @RequestParam(name = "pageSize", defaultValue= "2") int pageSize,
+    @RequestParam(name = "pageSize", defaultValue= "5") int pageSize,
     Model m)
-
     {
         Page<Article> articles = articleService.findAll(pageNumber, pageSize);
         System.out.println("hiii" + articles.toString());
         m.addAttribute("articles", articles);
         m.addAttribute("currentPage", pageNumber);
-        m.addAttribute("pageize", pageSize);
+        m.addAttribute("pagesize", pageSize);
         m.addAttribute("totalPages", articles.getTotalPages());
 
-        return "article-form";
-        
+        return "article-form";        
     }
 
+   
+    // @GetMapping("/list/load")
+    // public @ResponseBody Page<Article> loadMoreArticles(
+    //     @RequestParam(name = "pageNumber", defaultValue = "0") int pageNumber,
+    //     @RequestParam(name = "pageSize", defaultValue = "5") int pageSize
+    // ) {
+    //     return articleService.findAll(pageNumber, pageSize);
+    // }
+    
     @GetMapping("/details/{id}")
     public String getArticleDetails(@PathVariable Long id, Model m) {
         // Increment view count before fetching the article details
@@ -46,9 +53,11 @@ public class ArticleController {
             m.addAttribute("article", article.get());
             return "article-details";
         } else {
-            return "redirect:/Article/list";
+            return "redirect:Article/list";
         }
     }
+
+
 
 }
 

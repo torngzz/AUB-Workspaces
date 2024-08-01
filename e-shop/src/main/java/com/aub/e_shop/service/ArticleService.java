@@ -1,5 +1,6 @@
 package com.aub.e_shop.service;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,4 +40,8 @@ public class ArticleService {
         }
     }
     
+    public List<Article> findTopArticles() {
+        return articleRepository.findAll(PageRequest.of(0, 6)).getContent(); // Fetch top 3 articles for example
+    }
+
 }

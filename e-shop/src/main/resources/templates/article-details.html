@@ -3,22 +3,37 @@
 <head>
     <title>Article Details</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+    <!-- <div th:insert="~{/src/style :: css}"></div> -->
+
+    <style>
+        .btnback {
+        width: 70px;
+        height: 30px;
+      }
+    </style>
 </head>
 <body>
     <div th:fragment="content">
         <div class="container">
             <div class="row">
                 <div class="col-md-4">
-                    <img th:src="@{${article.imageUrl}}" class="img-fluid rounded mb-4" alt="Article Image">
+                    <img th:src="@{${article.imageUrl}}" class="img-fluid rounded" alt="Article Image">
                 </div>
-                <div class="col-md-6">
-                    <h1 class="mb-4" th:text="${article.title}"></h1>
-                    <p class="text-dark" th:text="${article.longDescription}"></p>
-                    <p>Views: <span th:text="${article.viewCount}"></span></p>
-                    <a th:href="@{/Article/list}" class="btn btn-primary">Back to List</a>
+                <div class="col-md-8 d-flex flex-column">
+                    <div>
+                        <h1 class="mb-4" th:text="${article.title}"></h1>
+                        <p class="text-dark" th:text="${article.longDescription}"></p>
+                        <p>Views: <span th:text="${article.viewCount}"></span></p>
+                    </div>
+                    <div class="mt-auto">
+                        <a th:href="@{/Article/list}" class="btn btn-outline-info btn-sm">Back To List</a>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
+
+    <div th:fragment="scripts"></div>
 </body>
 </html>

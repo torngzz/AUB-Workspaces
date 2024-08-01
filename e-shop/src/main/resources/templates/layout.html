@@ -4,54 +4,85 @@
     <meta charset="UTF-8" />
     <title>E-Shop Management</title>
 
-    <div th:fragment="css">
       <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" integrity="sha384-k6RqeWeci5ZR/Lv4MR0sA0FfDOMt23cez/3paNdF+ZB3p0I5u78N1RFtB/C0XJ22" crossorigin="anonymous">
-    </div>
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" integrity="sha384-k6RqeWeci5ZR/Lv4MR0sA0FfDOMzNlT4BTxEPCcMQzFdlBp1S1OqEO9xsQzEO0qM" crossorigin="anonymous">
 
-    <div th:insert="~{::css}"></div>
-  </head>
+    <!-- <div th:insert="~{/src/style :: css}"></div> -->
+
+    <style>
+      /* layout */
+      .row {
+        flex: 1;  /* Allow row to grow to fill available space */
+      }
+      .navbar {
+        position: sticky;
+        top: 0;
+        z-index: 500;
+      }
+      .nav-link:hover {
+        background-color: rgb(255, 255, 255);
+        color: #456AD8 !important;
+        font-weight: bold;
+        border-radius: 25px;
+      }
+      .dropdown-menu {
+        padding: 0%;
+        margin-top: 7px;
+      }
+      .dropdown:hover .dropdown-menu {
+        display: block;
+      }
+      #content {
+        z-index: 499;
+      }
+      a:hover {
+        text-decoration: none;
+      }
+      .dropdown-item:hover {
+        color: #456AD8;
+      }
+      .mycart{
+        padding-top: 5px;
+      }
+   
+    </style>
+
+</head>
 <body>
   <div th:fragment="layout">
     <nav class="navbar navbar-expand-lg d-flex justify-content-between" style="background-color: #456AD8;">
       <div class="container-fluid">
-        <a class="navbar-brand text-white fw-bold" href="#">E-SHOP</a>
+        <a class="navbar-brand text-white fw-bold" href="/aubshop/home">E-SHOP</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon fa-solid fa-bars text-white text-center pt-1"></span>
         </button>
         <div class="collapse navbar-collapse justify-content-end pr-3" id="navbarNav">
-          <ul class="navbar-nav navItems text">
+          <ul class="navbar-nav navItems text mr-3">
+
+            <li class="nav-item">
+              <a th:href="@{/home}" class="nav-link text-white">HOME</a>
+            </li>
+
             <li class="nav-item dropdown">
               <a class="nav-link text-white dropdown-toggle" type="button" id="productDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" th:href="@{/products}">
                   PRODUCTS
               </a>
               <div class="dropdown-menu" aria-labelledby="productDropdown">
                   <!-- <a href="#cate_id" class="dropdown-item">All</a> -->
-                  <a th:href="@{/products#cate_id}" class="dropdown-item" id="cate_id">All</a>
-
+                  <a th:href="@{/products#allproduct}" class="dropdown-item" id="cate_id">All</a>
                   <a th:each="category : ${categories}" th:href="@{/products?cate_id={category_id}(category_id=${category.id})}" class="dropdown-item" th:text="${category.cate_name}"></a>
                   <!-- <a th:each="category : ${categories}" th:href="@{/products?cate_id={category_id}(category_id=${category.id})}" class="dropdown-item" th:text="${category.cate_name}"></a> -->
               </div>
             </li>
 
-            <li class="nav-item dropdown">
-              <a th:href="@{/Article/list}" class="btn btn-primary">
-                PROMOTION
-              </a>
+            <li class="nav-item">
+              <a th:href="@{/Article/list}" class="nav-link text-white">PROMOTION</a>
             </li>
-            <!-- <li class="nav-item dropdown">
-              <a class="nav-link text-white dropdown-toggle" type="button" id="shopDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" href="#">
-                SHOP
-              </a>
-              <div class="dropdown-menu" aria-labelledby="shopDropdown">
-                <a class="dropdown-item" href="#">Submenu Item 1</a>
-                <a class="dropdown-item" href="#">Submenu Item 2</a>
-              </div>
-            </li> -->
+
             <li class="nav-item">
               <a class="nav-link text-white" href="#footerSection">CONTACT US</a>
             </li>
-            <li class="nav-item nav-item-cart">
+            <li class="nav-item nav-item-cart mycart">
               <i class="nav-link fa-solid fa-cart-shopping text-white"></i>
             </li>
           </ul>
@@ -60,20 +91,13 @@
     </nav>
 
     <div id="sidebar" class="mt-4">
-<<<<<<< HEAD
+
       <div id="content" class="col-md-12">
         <!-- <div th:insert="~{Viewdetail :: detail}"></div> -->
         <div th:insert="~{::content}"></div>
-        <!-- <div th:insert="~{product :: products}"></div> -->
-=======
-      <div id="content" class="container col-md-12">        
-        <!-- <div th:insert="~{Viewdetail :: detail}"></div>
-        <div th:insert="~{product :: products}"></div> -->
-        <!-- <div th:insert="~{Interface :: interface}"></div>   -->
-        <div th:insert="~{::content}"></div>
->>>>>>> af2586b737a7923c119b2a9a4ae54777c190fa89
       </div>
     </div>
+   
   </div>
 
 
@@ -81,10 +105,10 @@
   <script src="https://kit.fontawesome.com/4000b889e3.js" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-  
+
   <div th:insert="~{::scripts}"></div>
 
-  <!-- <div th:insert="~{::scripts}"></div> -->
+
 
 </body>
 </html>
