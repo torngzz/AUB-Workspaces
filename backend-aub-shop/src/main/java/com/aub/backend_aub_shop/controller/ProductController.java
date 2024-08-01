@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,6 +27,8 @@ import com.aub.backend_aub_shop.service.ProductService;
 // }
 @Controller
 @RequestMapping("/products")
+
+@PreAuthorize("hasRole('Admo')")
 public class ProductController{
     @Autowired ProductService productService;
 

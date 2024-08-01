@@ -40,11 +40,11 @@ public class UserModel implements UserDetails {
     private Date updatedDate;
 
    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        Set<GrantedAuthority> authorities = new HashSet<>();
-        authorities.add((GrantedAuthority) () -> this.role);
-        return authorities;
-    }
+   public Collection<? extends GrantedAuthority> getAuthorities() {
+    Set<GrantedAuthority> authorities = new HashSet<>();
+    authorities.add(new SimpleGrantedAuthority("ROLE_"+ role)); // Add ROLE_ prefix
+    return authorities;
+}
 
 
     @Override

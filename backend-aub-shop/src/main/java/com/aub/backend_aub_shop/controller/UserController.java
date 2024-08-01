@@ -23,7 +23,7 @@ import jakarta.servlet.http.HttpServletRequest;
 @Controller
 @RequestMapping(value = {"", "/users"})
 //set tr role Admin
-@PreAuthorize("hasRole('ADMIN')")
+@PreAuthorize("hasRole('Admin')")
 public class UserController {
   @Autowired UserService userService;
 
