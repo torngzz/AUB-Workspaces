@@ -41,7 +41,7 @@ public class ArticleService {
     }
     
     public List<Article> findTopArticles() {
-        return articleRepository.findAll(PageRequest.of(0, 6)).getContent(); // Fetch top 3 articles for example
+        return articleRepository.findAll(PageRequest.of(0, 3)).getContent(); // Fetch top 3 articles for example
     }
 
 }
