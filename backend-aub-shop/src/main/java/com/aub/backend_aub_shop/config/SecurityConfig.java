@@ -37,7 +37,7 @@ public class SecurityConfig {
         .logout((logout) -> logout
 
                 .logoutUrl("/logout")
-                .logoutSuccessHandler(new HttpStatusReturningLogoutSuccessHandler())
+                //.logoutSuccessHandler(new HttpStatusReturningLogoutSuccessHandler())
                 .invalidateHttpSession(true)
                 .deleteCookies("JSESSIONID")
                 .logoutSuccessUrl("/login?logout")
@@ -45,11 +45,9 @@ public class SecurityConfig {
         
         )
         .authorizeHttpRequests((requests) -> requests
-            .anyRequest().authenticated()
+            .anyRequest().hasRole("Admin")
         )
         ;
-        
-
         return http.build();
     }
 }
