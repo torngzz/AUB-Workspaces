@@ -1,8 +1,5 @@
 package com.aub.backend_aub_shop.controller;
 
-
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -77,10 +74,6 @@ public class CategoryController {
 
     @GetMapping("/addCategory")
     public String addCategory(Model m){
-            // In your controller
-        LocalDate today = LocalDate.now();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        m.addAttribute("created_date", today.format(formatter));
         m.addAttribute("category",new Category());
         return "/category/add-category";
     }

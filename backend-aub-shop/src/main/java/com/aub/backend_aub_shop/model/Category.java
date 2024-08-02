@@ -1,14 +1,19 @@
 package com.aub.backend_aub_shop.model;
- 
+
+
 
 import java.util.Date;
+import java.util.List;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 @Entity
@@ -19,9 +24,21 @@ public class Category {
     private Long id;
     private String name;
     private String description;
-    @DateTimeFormat
+  @DateTimeFormat
     private Date created_date;
     private String created_by;
+ 
+    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    private List<Product> products;
+
+
+    public List<Product> getProducts() {
+        return products;
+    }
+
+    public void setProducts(List<Product> products) {
+        this.products = products;
+    }
 
     public Long getId() {
         return id;
@@ -59,16 +76,16 @@ public class Category {
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setName(String cate_name) {
+        this.name = cate_name;
     }
 
     @Override
     public String toString() {
         return "Category [id=" + id + ", name=" + name + ", description=" + description + ", created_date="
-                + created_date + ", created_by=" + created_by + "]";
-    }  
+                + created_date + ", created_by=" + created_by + ", products=" + products + "]";
+    }
 
- 
+   
 
 }
