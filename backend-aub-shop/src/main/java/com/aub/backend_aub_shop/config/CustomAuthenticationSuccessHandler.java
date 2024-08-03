@@ -71,7 +71,6 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
             LOGGER.error("Authorities>>>"+ authority.getAuthority());
             roles.add(authority.getAuthority());
         }
-    return roles;
-
+        return roles;
     }
 }

@@ -18,13 +18,15 @@ import org.springframework.stereotype.Service;
 
 import com.aub.backend_aub_shop.model.UserModel;
 import com.aub.backend_aub_shop.repository.UserRepository;
+import com.aub.backend_aub_shop.util.UserSessionUtils;
 
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
+import jakarta.transaction.Transactional;
 
 @Service
 public class UserService implements UserDetailsService {
     private static final Logger LOGGER = LoggerFactory.getLogger(UserService.class);
-
     private final UserRepository userRepo;
     private final PasswordEncoder passwordEncoder;
 
@@ -38,14 +40,35 @@ public class UserService implements UserDetailsService {
         return passwordEncoder.encode(plainPassword);
     }
 
+    private static final Logger logger = LoggerFactory.getLogger(UserService.class);
+
+    @Transactional
     public UserModel create(HttpServletRequest request, UserModel user) {
-        String userID = request.getSession().getAttribute("user").toString();
-        user.setCreatedDate(new Date());
-        user.setUpdatedDate(new Date());
-        user.setPassword(encryptPassword("123456"));
-        user.setCreatedBy("Admin");
-        user.setUpdatedBy("None");
-        user.setUsername(userID); // Set username based on request/session attribute
+        Optional<UserModel> existingUsername = userRepo.findByUsername(user.getUsername());
+        Optional<UserModel> existingEmail = userRepo.findByEmail(user.getEmail());
+        if(existingUsername.isPresent()){
+            throw new IllegalArgumentException("This username is already existed!");
+        }
+        else if(existingEmail.isPresent()){
+            throw new IllegalArgumentException("This Email is already existed!");
+        }
+        else{
+            HttpSession session = request.getSession();
+            Object userAttribute = session.getAttribute("user");
+            Object usernameAttribute = UserSessionUtils.getUsername(session);
+    
+            logger.info("User session attribute: {}", userAttribute);
+            logger.info("Username session attribute: {}", usernameAttribute);
+    
+            // String userID = (userAttribute != null) ? userAttribute.toString() : "defaultUser";
+            String id = (usernameAttribute != null) ? usernameAttribute.toString() : "defaultId";
+    
+            user.setCreatedDate(new Date());
+            user.setUpdatedDate(new Date());
+            user.setPassword(encryptPassword("123456")); // Encrypt the default password
+            user.setCreatedBy(id);
+            user.setUpdatedBy(id);
+        } 
         return userRepo.save(user);
     }
 
@@ -81,17 +104,37 @@ public class UserService implements UserDetailsService {
         userRepo.deleteById(id);
     }
 
-    public UserModel update(UserModel user, Long id) {
+    public UserModel update(UserModel user, Long id, HttpServletRequest request) {
         Optional<UserModel> optionalUser = userRepo.findById(id);
         if (optionalUser.isPresent()) {
             UserModel userModel = optionalUser.get();
-            userModel.setUsername(user.getUsername()); // Update username
-            userModel.setRole(user.getRole()); // Update role
-            userModel.setPhone(user.getPhone()); // Update phone
-            userModel.setEmail(user.getEmail()); // Update email
-            userModel.setUpdatedDate(new Date(System.currentTimeMillis())); // Update date
+
+            // Check for existing username and email
+            Optional<UserModel> existingUsername = userRepo.findByUsername(user.getUsername());
+            Optional<UserModel> existingEmail = userRepo.findByEmail(user.getEmail());
+
+            if (existingUsername.isPresent() && !existingUsername.get().getId().equals(id)) {
+                throw new IllegalArgumentException("This username is already existed!");
+            }
+            if (existingEmail.isPresent() && !existingEmail.get().getId().equals(id)) {
+                throw new IllegalArgumentException("This email is already existed!");
+            }
+
+            HttpSession session = request.getSession();
+            String username = UserSessionUtils.getUsername(session);
+
+            // Update user details
+            userModel.setUsername(user.getUsername());
+            userModel.setRole(user.getRole());
+            userModel.setPhone(user.getPhone());
+            userModel.setEmail(user.getEmail());
+            userModel.setCreatedBy(user.getCreatedBy());
+            userModel.setCreatedDate(user.getCreatedDate());
+            userModel.setUpdatedDate(new Date());
+            userModel.setUpdatedBy(username);
+
             return userRepo.save(userModel); // Save updated user
         }
-        return null;
+        throw new IllegalArgumentException("User not found");
     }
 }

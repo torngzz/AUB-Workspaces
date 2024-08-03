@@ -34,9 +34,6 @@ public class UserController {
         @RequestParam(name = "username", required = false, defaultValue = "") String username,
         Model model
     ) {
-
-
-        
         Page<UserModel> users = userService.findAll(username, pageNumber, pageSize);
         model.addAttribute("users", users);
         model.addAttribute("pageNumber", pageNumber);
@@ -46,8 +43,6 @@ public class UserController {
         model.addAttribute("currentPage", pageNumber); // Add currentPage to the model
         return "UserManagement/user-list";
     }
-
-
 
     @GetMapping("/withoutpagination")
     public String getAllUsers(Model m){
@@ -64,12 +59,15 @@ public class UserController {
     }
 
     @PostMapping("/save")
-    public String saveUser(@ModelAttribute("user") UserModel userModel,
-        HttpServletRequest httpRequest) 
+    public String saveUser(@ModelAttribute("user") UserModel userModel, HttpServletRequest httpRequest) 
     {
-
-        userService.create(httpRequest, userModel);
-        return "redirect:/users";
+        try{
+            userService.create(httpRequest, userModel);
+            return "redirect:/users";
+        }
+        catch(IllegalArgumentException e){
+            return "redirect:/users/error";   
+        }
     }
 
     @GetMapping("/edit/{id}")
@@ -80,15 +78,24 @@ public class UserController {
     }
     
     @PostMapping("/update/{id}")
-    public String updateUser(@PathVariable("id") Long id, @ModelAttribute("user") UserModel users , Model m){
-        UserModel updateUser = userService.update(users, id);
-        m.addAttribute("user",updateUser);
-        return "redirect:/users";
+    public String updateUser(@PathVariable("id") Long id, @ModelAttribute("user") UserModel users , Model m, HttpServletRequest httpRequest){
+        try {
+            UserModel updateUser = userService.update(users, id, httpRequest);
+            m.addAttribute("user",updateUser);
+            return "redirect:/users"; 
+        } catch (IllegalArgumentException e) {
+            return "redirect:/users/error";   
+        }
     }
 
     @GetMapping("/delete/{id}")
     public String deleteUser(@PathVariable Long id) {
         userService.deleteById(id);
         return "redirect:/users"; 
+    }
+
+    @GetMapping("/error")
+    public String errorPage(){
+        return "error/page-404";
     }
 }

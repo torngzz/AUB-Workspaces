@@ -9,7 +9,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
-import org.springframework.security.web.authentication.logout.HttpStatusReturningLogoutSuccessHandler;
 
 @Configuration
 @EnableWebSecurity
@@ -35,19 +34,16 @@ public class SecurityConfig {
             .successHandler(customAuthenticationSuccessHandler)
         )
         .logout((logout) -> logout
-
                 .logoutUrl("/logout")
                 //.logoutSuccessHandler(new HttpStatusReturningLogoutSuccessHandler())
                 .invalidateHttpSession(true)
                 .deleteCookies("JSESSIONID")
                 .logoutSuccessUrl("/login?logout")
                 .permitAll()
-        
         )
         .authorizeHttpRequests((requests) -> requests
             .anyRequest().hasRole("Admin")
-        )
-        ;
+        );
         return http.build();
     }
 }

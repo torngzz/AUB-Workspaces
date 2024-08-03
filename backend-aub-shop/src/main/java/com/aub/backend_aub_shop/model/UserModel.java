@@ -1,7 +1,6 @@
 package com.aub.backend_aub_shop.model;
 
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -45,7 +44,6 @@ public class UserModel implements UserDetails {
     authorities.add(new SimpleGrantedAuthority("ROLE_"+ role)); // Add ROLE_ prefix
     return authorities;
 }
-
 
     @Override
     public String getPassword() {

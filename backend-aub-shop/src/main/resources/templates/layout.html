@@ -28,9 +28,9 @@
 <body>
     <div id="layout" th:fragment="layout">
         <header class="bg-primary text-white fixed-top nav navbar">
-            <div class="container-fluid d-flex justify-content-between align-items-center">
+            <div class="container-fluid d-flex justify-content-between align-items-center text-nowrap">
                 <button class="btn btn-light d-md-none" id="sidebarCollapse">☰</button>
-                <div class="navbar-brand">
+                <div class="navbar-brand d-none d-md-block">
                     <h3>Admin Dashboard</h3>
                 </div>
                 <a th:href="@{/login}" class="btn btn-light">Logout</a>
@@ -38,16 +38,16 @@
         </header>
         <div class="container-fluid">
             <div class="row">
-                <nav id="sidebar" class="col-md-2 d-none d-md-block bg-dark text-white">
+                <nav id="sidebar" class="col-lg-2 d-none d-lg-block bg-dark text-white">
                     <div class="sidebar-sticky">
                         <ul class="nav flex-column mt-5 pt-5">
                             <li class="">
-                                <p class="">User Management</p>
+                                <p class="text-primary">User Management</p>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link rounded-pill" th:href="@{/users}">User</a>
                             </li>
-                            <li class="">
+                            <li class="text-primary">
                                 <p class="">Product Management</p>
                             </li>
                             <li class="nav-item">
@@ -56,10 +56,16 @@
                             <li class="nav-item">
                                 <a class="nav-link rounded-pill" th:href="@{/categorys}">Category</a>
                             </li>
+                            <li class="">
+                                <p class="text-primary">Article Management</p>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link rounded-pill" th:href="@{/users}">Article</a>
+                            </li>
                         </ul>
                     </div>
                 </nav>
-                <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
+                <main role="main" class="col-lg-10 px-4">
                     <div id="content" class="mt-5 p-1">
                         <div th:insert="~{::content}"></div>
                     </div>
