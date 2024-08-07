@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Add Article</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container mt-5">
+        <h2>Add New Article</h2>
+        <form th:action="@{/Article/add}" th:object="${article}" method="post">
+            <div class="form-group">
+                <label for="title">Title</label>
+                <input type="text" id="title" class="form-control" th:field="*{title}" />
+            </div>
+            <div class="form-group">
+                <label for="shortDescription">Short Description</label>
+                <textarea id="shortDescription" class="form-control" th:field="*{shortDescription}"></textarea>
+            </div>
+            <div class="form-group">
+                <label for="longDescription">Long Description</label>
+                <textarea id="longDescription" class="form-control" th:field="*{longDescription}"></textarea>
+            </div>
+            <div class="form-group">
+                <label for="createdBy">Created By</label>
+                <input type="text" id="createdBy" class="form-control" th:field="*{createdBy}" />
+            </div>
+            <div class="form-group">
+                <label for="imageUrl">Image URL</label>
+                <input type="text" id="imageUrl" class="form-control" th:field="*{imageUrl}" />
+            </div>
+            <button type="submit" class="btn btn-primary">Add Article</button>
+        </form>
+    </div>
+</body>
+</html>

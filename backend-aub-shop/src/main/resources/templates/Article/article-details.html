@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Article Details</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container mt-5">
+        <h2 th:text="${article.title}">Article Title</h2>
+        <p th:text="${article.longDescription}">Article Description</p>
+        <img th:src="@{${article.imageUrl}}" alt="Article Image" class="img-fluid" />
+        <a href="#" class="btn btn-primary" th:href="@{/Article/list}">Back to List</a>
+    </div>
+</body>
+</html>

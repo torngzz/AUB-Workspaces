@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Article List</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container mt-5">
+        <h2>Articles</h2>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Title</th>
+                    <th>Short Description</th>
+                    <th>Created Date</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="article : ${articles.content}">
+                    <td th:text="${article.id}">1</td>
+                    <td th:text="${article.title}">Title</td>
+                    <td th:text="${article.shortDescription}">Short Description</td>
+                    <td th:text="${article.createdDate}">Date</td>
+                    <td><a th:href="@{/Article/details/{id}(id=${article.id})}" th:text="${article.title}">Title</a></td>
+
+                </tr>
+            </tbody>
+        </table>
+
+        <!-- Pagination Controls -->
+        <nav>
+            <ul class="pagination">
+                <li class="page-item" th:classappend="${currentPage == 0} ? 'disabled'">
+                    <a class="page-link" th:href="@{/Article/list(pageNumber=${currentPage - 1}, pageSize=${pagesize})}">Previous</a>
+                </li>
+                <li class="page-item" th:classappend="${currentPage == totalPages - 1} ? 'disabled'">
+                    <a class="page-link" th:href="@{/Article/list(pageNumber=${currentPage + 1}, pageSize=${pagesize})}">Next</a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+</body>
+</html>
