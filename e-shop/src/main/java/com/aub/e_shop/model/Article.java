@@ -26,6 +26,8 @@ public class Article {
     private String imageUrl;
     private Long viewCount = 0L;
 
+    
+
     // Getters and setters
     public Long getId() {
         return id;
