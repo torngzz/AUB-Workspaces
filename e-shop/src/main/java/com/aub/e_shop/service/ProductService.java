@@ -1,5 +1,6 @@
 package com.aub.e_shop.service;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,6 +46,23 @@ public class ProductService {
         return productRepository.findById(id);
     }
 
+    public List<Product> findTopViewProducts()
+    {
+        return productRepository.findAll(PageRequest.of(0, 6)).getContent();
+    }
+
+    public void incrementViewCount(Long id) {
+        Optional<Product> product = productRepository.findById(id);
+        if (product.isPresent()) {
+            Product pro = product.get();
+            Long currentViewCount = pro.getViewCount();
+            if (currentViewCount == null) {
+                currentViewCount = 0L;
+            }
+            pro.setViewCount(currentViewCount + 1);
+            productRepository.save(pro);
+        }
+    }
 
 
 }

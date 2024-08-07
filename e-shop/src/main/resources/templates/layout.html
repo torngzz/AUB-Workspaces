@@ -1,116 +1,140 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" th:fragment="layout">
-  <head>
-    <meta charset="UTF-8" />
+<head>
+    <meta charset="UTF-8"/>
     <title>E-Shop Management</title>
-
-      <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" integrity="sha384-k6RqeWeci5ZR/Lv4MR0sA0FfDOMzNlT4BTxEPCcMQzFdlBp1S1OqEO9xsQzEO0qM" crossorigin="anonymous">
-
-    <!-- <div th:insert="~{/src/style :: css}"></div> -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" integrity="sha384-nQrSJbMcDhzGqwujtRYl7C9CChcHXLlYWcuQZ5r8sTx9qmUlz5+LIlT6WFCNs2vQ" crossorigin="anonymous" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.2.0/css/all.min.css">
 
     <style>
-      /* layout */
-      .row {
-        flex: 1;  /* Allow row to grow to fill available space */
-      }
-      .navbar {
-        position: sticky;
-        top: 0;
-        z-index: 500;
-      }
-      .nav-link:hover {
-        background-color: rgb(255, 255, 255);
-        color: #456AD8 !important;
-        font-weight: bold;
-        border-radius: 25px;
-      }
-      .dropdown-menu {
-        padding: 0%;
-        margin-top: 7px;
-      }
-      .dropdown:hover .dropdown-menu {
-        display: block;
-      }
-      #content {
-        z-index: 499;
-      }
-      a:hover {
-        text-decoration: none;
-      }
-      .dropdown-item:hover {
-        color: #456AD8;
-      }
-      .mycart{
-        padding-top: 5px;
-      }
-   
+        /* layout */
+        .row {
+            flex: 1;  /* Allow row to grow to fill available space */
+        }
+        .navbar {
+            position: sticky;
+            top: 0;
+            z-index: 500;
+        }
+        .nav-link:hover {
+            background-color: rgb(255, 255, 255);
+            color: #456AD8 !important;
+            font-weight: bold;
+            border-radius: 25px;
+        }
+        .dropdown-menu {
+            padding: 0%;
+            margin-top: 7px;
+        }
+        .dropdown:hover .dropdown-menu {
+            display: block;
+        }
+        #content {
+            z-index: 499;
+        }
+        a:hover {
+            text-decoration: none;
+        }
+        .dropdown-item:hover {
+            color: #456AD8;
+        }
+        .mycart {
+            padding-top: 5px;
+        }
     </style>
-
 </head>
 <body>
-  <div th:fragment="layout">
+<div th:fragment="layout">
     <nav class="navbar navbar-expand-lg d-flex justify-content-between" style="background-color: #456AD8;">
-      <div class="container-fluid">
-        <a class="navbar-brand text-white fw-bold" href="/aubshop/home">E-SHOP</a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon fa-solid fa-bars text-white text-center pt-1"></span>
-        </button>
-        <div class="collapse navbar-collapse justify-content-end pr-3" id="navbarNav">
-          <ul class="navbar-nav navItems text mr-3">
-
-            <!-- <li class="nav-item">
-              <a th:href="@{/home}" class="nav-link text-white">HOME</a>
-            </li> -->
-
-            <li class="nav-item dropdown">
-              <a class="nav-link text-white dropdown-toggle" type="button" id="productDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" th:href="@{/products}">
-                  PRODUCTS
-              </a>
-              <div class="dropdown-menu" aria-labelledby="productDropdown">
-                  <!-- <a href="#cate_id" class="dropdown-item">All</a> -->
-                  <a th:href="@{/products#allproduct}" class="dropdown-item" id="cate_id">All</a>
-                  <a th:each="category : ${categories}" th:href="@{/products?cate_id={category_id}(category_id=${category.id})}" class="dropdown-item" th:text="${category.cate_name}"></a>
-                  <!-- <a th:each="category : ${categories}" th:href="@{/products?cate_id={category_id}(category_id=${category.id})}" class="dropdown-item" th:text="${category.cate_name}"></a> -->
-              </div>
-            </li>
-
-            <li class="nav-item">
-              <a th:href="@{/Article/list}" class="nav-link text-white">PROMOTION</a>
-            </li>
-
-            <li class="nav-item">
-              <a class="nav-link text-white" href="#footerSection">CONTACT US</a>
-            </li>
-            <li class="nav-item nav-item-cart mycart">
-              <i class="nav-link fa-solid fa-cart-shopping text-white"></i>
-            </li>
-          </ul>
+        <div class="container-fluid">
+            <a class="navbar-brand text-white fw-bold" href="/aubshop/home">E-SHOP</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon fa-solid fa-bars text-white text-center pt-1"></span>
+            </button>
+            <div class="collapse navbar-collapse justify-content-end pr-3" id="navbarNav">
+                <ul class="navbar-nav navItems text mr-3">
+                    <li class="nav-item dropdown">
+                        <a th:href="@{/products}" class="nav-link text-white dropdown-toggle" id="productDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            PRODUCTS
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="productDropdown" id="productDropdownMenu">
+                            <!-- Categories will be populated here -->
+                        </div> 
+                    </li>
+                    
+                    
+                    <li class="nav-item">
+                        <a th:href="@{/Article/list}" class="nav-link text-white">PROMOTION</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-white" href="#footerSection">CONTACT US</a>
+                    </li>
+                    <li class="nav-item nav-item-cart mycart">
+                        <i class="nav-link fa-solid fa-cart-shopping text-white"></i>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a th:href="@{/home?lang=en}" class="nav-link text-white ">English</a>
+                        <a th:href="@{/home?lang=kh}" class="nav-link text-white" >Khmer</a>
+                        <a th:href="@{/home?lang=th}" class="nav-link text-white " >Thai</a>
+                    </li>
+                </ul>
+            </div>
         </div>
-      </div>
     </nav>
-
-    <div id="sidebar" class="mt-4">
-
-      <div id="content" class="col-md-12">
-        <!-- <div th:insert="~{Viewdetail :: detail}"></div> -->
-        <div th:insert="~{::content}"></div>
-      </div>
+    <div class="container mt-5">
+        <div id="content" class="col-md-12">
+            <div th:insert="~{::content}"></div>
+        </div>
     </div>
-   
+</div>
+
+
+<!-- <div th:insert="~{::scripts}"></div> -->
+
+  <div th:fragment="scripts">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" crossorigin="anonymous"></script>
+    <script src="https://kit.fontawesome.com/4000b889e3.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    
   </div>
+  <script>
+    $(document).ready(function()
+    {
+      $.ajax({
+          url: '[[@{/categories}]]', // Use Thymeleaf to resolve the URL
+              type: 'GET',
+              dataType: 'json',
+              data: {},
+              success: function(data) {
+                  console.log('Categories fetched:', data); // Debug statement
+                        // Populate dropdown
+                        const dropdownMenu = $('#productDropdownMenu');
+                        dropdownMenu.empty(); // Clear existing items
 
+                        const allLink = $('<a>', {
+                            class: 'dropdown-item',
+                            href: '/aubshop/products#allproduct',
+                            text: 'All'
+                        });
+                        dropdownMenu.append(allLink);
 
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js" crossorigin="anonymous"></script>
-  <script src="https://kit.fontawesome.com/4000b889e3.js" crossorigin="anonymous"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
-  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-
-  <div th:insert="~{::scripts}"></div>
-
-
-
+                        data.forEach(category => {
+                            const categoryLink = $('<a>', {
+                                class: 'dropdown-item',
+                                href: `/aubshop/products?cate_id=${category.id}`,
+                                text: category.cate_name
+                            });
+                            dropdownMenu.append(categoryLink);
+                        });
+                    },
+              error: function(xhr, status, error) {
+                  console.error('Error fetching categories:', error); // Debug statement
+              }
+          });
+    });
+                
+</script>
 </body>
 </html>
-
-
