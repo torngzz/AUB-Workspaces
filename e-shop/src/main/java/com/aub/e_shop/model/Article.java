@@ -16,13 +16,13 @@ public class Article {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String title;
-    @Column(length = 5000)
+    @Column(length = 500)
     private String shortDescription;
-    @Column(length = 50000)
+    @Column(length = 1000)
     private String longDescription;
     private String createdBy;
     private Date createdDate;
-    @Column(length = 20000)
+    @Column(length = 500)
     private String imageUrl;
     private Long viewCount = 0L;
 
