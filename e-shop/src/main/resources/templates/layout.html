@@ -41,6 +41,13 @@
         .mycart {
             padding-top: 5px;
         }
+        #lang option:first-child{
+            display: none;
+        }
+        .item{
+            white-space: nowrap;
+            
+        }
     </style>
 </head>
 <body>
@@ -52,7 +59,7 @@
                 <span class="navbar-toggler-icon fa-solid fa-bars text-white text-center pt-1"></span>
             </button>
             <div class="collapse navbar-collapse justify-content-end pr-3" id="navbarNav">
-                <ul class="navbar-nav navItems text mr-3">
+                <ul class="navbar-nav navItems text mr-3 item">
                     <li class="nav-item dropdown">
                         <a th:href="@{/products}" class="nav-link text-white dropdown-toggle" id="productDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             PRODUCTS
@@ -72,11 +79,21 @@
                     <li class="nav-item nav-item-cart mycart">
                         <i class="nav-link fa-solid fa-cart-shopping text-white"></i>
                     </li>
-                    <li class="nav-item dropdown">
-                        <a th:href="@{/home?lang=en}" class="nav-link text-white ">English</a>
-                        <a th:href="@{/home?lang=kh}" class="nav-link text-white" >Khmer</a>
-                        <a th:href="@{/home?lang=th}" class="nav-link text-white " >Thai</a>
-                    </li>
+                    
+                    <select name="lang" id="language" class="form-control w-25">
+                        <option value="">Language</option>
+                        <option value="en">English</option>
+                        <option value="kh">Khmer</option>
+                        <option value="th">Thai</option>
+                    </select>
+ 
+
+                        <!-- <a th:href="@{/home?lang=en}" class="nav-link text-white dropdown-toggle" id="languageDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">English</a>
+                        <div class="dropdown-menu" aria-labelledby="productDropdown" id="productDropdownMenu">
+                            <a th:href="@{/home?lang=kh}" class="dropdown-item">Khmer</a>
+                            <a th:href="@{/home?lang=th}" class="dropdown-item">Thai</a>
+                        </div>  -->
+               
                 </ul>
             </div>
         </div>
@@ -100,8 +117,22 @@
     
   </div>
   <script>
+
+
     $(document).ready(function()
     {
+        $("#language").change(function(){
+            langVal = $(this).val();
+            if(langVal != ""){
+                window.location.href = "/aubshop/home?lang=" + langVal;
+                
+            }
+        });
+        // function changeLanguage(lang) {
+        // if (lang) {
+        //     window.location.href = "@{/home?lang=" + lang +"}";
+        // }
+        // };
       $.ajax({
           url: '[[@{/categories}]]', // Use Thymeleaf to resolve the URL
               type: 'GET',
@@ -133,6 +164,8 @@
                   console.error('Error fetching categories:', error); // Debug statement
               }
           });
+
+          
     });
                 
 </script>
