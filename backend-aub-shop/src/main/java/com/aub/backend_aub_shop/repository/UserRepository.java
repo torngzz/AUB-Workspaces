@@ -14,6 +14,7 @@ public interface UserRepository extends JpaRepository<UserModel, Long> {
     public Page<UserModel> findByUsername(@Param("username") String username, Pageable pageable);
     Optional<UserModel> findByUsername(String username);
     Optional<UserModel> findByEmail(String email);
+    Optional<UserModel> findByPhone(String phone);
     // @Query("SELECT um FROM UserModel um LEFT JOIN FETCH um.createdBy LEFT JOIN FETCH um.updatedBy WHERE um.username LIKE %:username%")
     // Page<UserModel> findAllWithUsers(@Param("username") String username, Pageable pageable);
 }
