@@ -63,24 +63,25 @@ public Page<Category> findAll(String cate_name, int pageNumber, int pageSize) {
   
        Optional<Category> optionalCategory = categoryRepository.findById(id);
 
-    try
-     { 
-        LOGGER.info("My Category: "  + category.toString());
-        Date d = new Date();
-        category.setCreated_date(d);
-        return categoryRepository.save(category);
-     } catch (Exception e) {
-        LOGGER.error(" System error", e);
-       if (optionalCategory.isPresent()){
-            Category ca = optionalCategory.get();
-            ca.setName(category.getName());
-            ca.setDescription(category.getDescription());
-            ca.setCreated_date(category.getCreated_date());
-            ca.setCreated_by(category.getCreated_by());
-       
-            return categoryRepository.save(ca);
-       }
-       return null;
-     }
+        try
+        { 
+            LOGGER.info("My Category: "  + category.toString());
+            Date d = new Date();
+            category.setCreated_date(d);
+            return categoryRepository.save(category);
+        } catch (Exception e) {
+            LOGGER.error(" System error", e);
+        if (optionalCategory.isPresent()){
+                Category ca = optionalCategory.get();
+                ca.setName(category.getName());
+                ca.setDescription(category.getDescription());
+                ca.setCreated_date(category.getCreated_date());
+                ca.setCreated_by(category.getCreated_by());
+        
+                return categoryRepository.save(ca);
+        }
+        return null;
+        }
+
     }
 }

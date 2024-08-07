@@ -4,6 +4,8 @@ package com.aub.backend_aub_shop.model;
 
 import java.util.Date;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -39,6 +41,7 @@ public class Product {
     private String image_url;
 
     // @Column(name = "created_date")
+    @DateTimeFormat
     private Date created_date;
 
     // @Column(name = "created_by")

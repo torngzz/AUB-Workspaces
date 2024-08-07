@@ -61,17 +61,26 @@ public class ProductController{
         m.addAttribute("categories", categoryService.getAllCategories());
         return "edit-product";
     }
-    @PostMapping("/update/{id}")
-    public String updateProduct(@PathVariable("id") Long id, @ModelAttribute("product") Product products , Model m){
-        Product updateProduct = productService.updateProduct(products, id);
+    @PostMapping("/update")
+    public String updateProduct(@RequestParam("productId") Long productId
+    , @ModelAttribute("product") Product products 
+    , Model m)
+    {
+        Product updateProduct = productService.updateProduct(products, productId);
         m.addAttribute("product",updateProduct);
      
         return "redirect:/products";
     }
 
-    @PostMapping("/delete")
-    public String deleteStaff(@RequestParam("id") Long id) {
+    // @GetMapping("/delete/{id}")
+    // public String deleteProduct(@RequestParam("id") Long id) {
+    //     productService.deleteById(id);
+    //     return "redirect:/products"; 
+    // } 
+
+    @GetMapping("/delete")
+    public String deleteProduct(@RequestParam("productId") Long id) {
         productService.deleteById(id);
-        return "redirect:/products"; // Redirect to staff list after deletion
+        return "redirect:/products"; 
     } 
 }

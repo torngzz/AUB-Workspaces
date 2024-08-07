@@ -79,18 +79,18 @@ public class ProductService {
 
     /**
      * 
-     * @param productList_Model
+     * @param product
      * @return
      */
-    public Product saveProduct(Product productList_Model){
+    public Product saveProduct(Product product){
         try { 
-            LOGGER.info("My Category: "  + productList_Model.toString());
+            LOGGER.info("My Category: "  + product.toString());
             Date d = new Date();
-            productList_Model.setCreated_date(d);
-            return productRepository.save(productList_Model);
+            product.setCreated_date(d);
+            return productRepository.save(product);
         } catch (Exception e) {
             LOGGER.error(" System error", e);
-            return productRepository.save(productList_Model);
+            return productRepository.save(product);
         }
     }
 
@@ -106,36 +106,39 @@ public class ProductService {
 
     /**
      * 
-     * @param productList_Model
+     * @param product
      * @param id
      * @return
      */
-    public Product updateProduct(Product productList_Model, Long id){
-        // ProductList_Model pro = productRepository.findById(id).get();
-        // pro.setName(productList_Model.getName());
-        // pro.setCategory(productList_Model.getCategory());
-        // pro.setPrice(productList_Model.getPrice());
-
-        // return productRepository.save(pro);
-
-       Optional<Product> optionalProduct = productRepository.findById(id);
-       LOGGER.info(" My Product" + optionalProduct.get().toString());
-       if (optionalProduct.isPresent()){
-            Product pro = optionalProduct.get();
-            pro.setName(productList_Model.getName());
-            pro.setCategory(productList_Model.getCategory());
-            pro.setSale_price(productList_Model.getSale_price());
-            pro.setOriginal_price(productList_Model.getOriginal_price());
-            pro.setCategory_id(productList_Model.getCategory_id());
-            pro.setImage_url(productList_Model.getImage_url());
-            pro.setCreated_date(productList_Model.getCreated_date());
-            pro.setCreated_by(productList_Model.getCreated_by());
-            pro.setDescription(productList_Model.getDescription());
-            pro.setDetailImageUrl(productList_Model.getDetailImageUrl());
-
-            return productRepository.save(pro);
-       }
-       return null;
+    public Product updateProduct(Product product, Long id){
+        Product pro = null;
+        try
+        { 
+            
+            LOGGER.info("My Category: "  + product.toString());
+            Optional<Product> optionalProduct = productRepository.findById(id);
+             
+            if (optionalProduct.isPresent()){
+                pro = optionalProduct.get();
+                pro.setName(product.getName());
+                pro.setCategory(product.getCategory());
+                pro.setSale_price(product.getSale_price());
+                pro.setOriginal_price(product.getOriginal_price());
+                pro.setCategory_id(product.getCategory_id());
+                pro.setImage_url(product.getImage_url());
+                pro.setCreated_by(product.getCreated_by());
+              
+                
+                pro.setDescription(product.getDescription());
+                pro.setDetailImageUrl(product.getDetailImageUrl());
+                productRepository.save(pro);
+                
+            }
+        } catch (Exception e) {
+            LOGGER.error(" System error", e); 
+        }
+        return pro;
     }
+
     
 }
