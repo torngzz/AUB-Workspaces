@@ -6,6 +6,9 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" integrity="sha384-k6RqeWeci5ZR/Lv4MR0sA0FfDOMzNlT4BTxEPCcMQzFdlBp1S1OqEO9xsQzEO0qM" crossorigin="anonymous">
 
 <style>
+  body{
+    background-color: aqua;
+  }
     .myfont > p {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       font-size: 10px !important;
@@ -21,6 +24,14 @@
       display: block;
       font-size: 14px !important;
     }
+    .truncate {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+      .card-header {
+          max-width: 100%;
+      }
   </style>
 </head>
 <body>
@@ -55,9 +66,10 @@
           </div>
       </div>
 
-
+    <h1 th:text="#{greeting}"></h1> 
     <!-- Top Selling  -->
-    <div class="top my-5">
+    <h3 class="fs-5 pt-5">Top View Articles</h3>
+    <div class="top">
       <div class="row">
         <div th:each="article : ${articles}" class="col-md-4 col-sm-4 mb-3">
             <a th:href="@{/Article/details/{id}(id=${article.id})}">
@@ -65,17 +77,48 @@
                 <div class="card-body h-100 w-100">              
                   <img th:src="${article.imageUrl}" class="card-img h-75 w-100" alt="Article Image">
                 </div>
-                <div class="card-header text-white fw-bold titlecard" style="background-color: #456AD8;">
-                  <h5 class="card-title" th:text="${article.title}"></h5>
+                <div class="card-header text-white fw-bold " style="background-color: #456AD8;">
+                  <h5 class="card-title truncate mb-0" th:text="${article.title}" style="width: 100%; white-space: nowrap;
+                  overflow: hidden;
+                  text-overflow: ellipsis;"></h5>
                 </div>
               </div>
             </a>          
         </div>
       </div>
     </div>
+
+    <!-- Top View Prodcut  -->
+    <h3 class="pt-5">Top View Products</h3>
+    <div class="row" id="cate_id">
+      <div th:each="product : ${products}" class="col-md-4 col-sm-4 mb-3">
+          <div class="card shadow h-100 w-100 d-flex flex-column">
+              <a th:href="@{/products/details/{id}(id=${product.product_id})}">
+                  <div class="card-body h-100 w-100 flex-grow-1 min-height: 0">
+                      <div>
+                          <img th:src="${product.image_url}" class="h-100 w-100" alt="Product Image">
+                      </div>
+                      <div class="p-2 text-dark fw-bold">
+                          <p>Name: <span th:text="${product.pro_name}"></span></p>
+                          <p>Price: $<span th:text="${product.sale_price}"></span></p>
+                      </div>
+                  </div>
+              </a>
+              <div class="card-footer">
+                  <form th:action="@{/cart/add}" method="post" class="btn-sm text-center">
+                      <input type="hidden" th:name="product_id" th:value="${product.product_id}" />
+                      <button type="submit" class="btn btn-success btn-block">
+                          <i class="fas fa-cart-plus"></i> Add to Cart
+                      </button>
+                  </form>
+              </div>
+          </div>
+      </div>
+  </div>
       
   </div>
 
-  <div th:fragment="scripts"></div>
+  <div th:insert="~{scripts}"></div>
+  <!-- <div th:fragment="scripts"></div> -->
 </body>
 </html>
