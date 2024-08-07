@@ -7,22 +7,26 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 
 @Entity
+@Table(name = "TBL_ARTICLE")
 public class Article {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String title;
-    @Column(length = 5000)
+    @Column(length = 500)
     private String shortDescription;
-    @Column(length = 50000)
+    @Column(length = 1000)
     private String longDescription;
     private String createdBy;
     private Date createdDate;
-    @Column(length = 20000)
+    @Column(length = 500)
     private String imageUrl;
     private Long viewCount = 0L;
+
+    
 
     // Getters and setters
     public Long getId() {

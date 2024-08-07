@@ -3,10 +3,11 @@ package com.aub.e_shop.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.aub.e_shop.model.Category;
 import com.aub.e_shop.service.CategoryService;
@@ -19,11 +20,12 @@ public class CategoryController {
     private CategoryService categoryService;
 
     @GetMapping(value={"","/"})
-    public String getAllCategories(Model model) {
-        List<Category> cate = categoryService.getAllCategories();
-        model.addAttribute("categories", cate);
-        return "layout"; // Thymeleaf template for listing categories
+    @ResponseBody
+    public ResponseEntity<List<Category>> getAllCategories() {
+
+        return  ResponseEntity.ok(categoryService.getAllCategories()); 
     }
+   
 
     // @GetMapping("/getById{id}")
     // public String getCategoryById(@PathVariable Long id, Model model) 

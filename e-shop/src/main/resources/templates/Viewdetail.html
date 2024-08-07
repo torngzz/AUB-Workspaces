@@ -43,62 +43,70 @@
         p {
             font-size: 1.2rem;
         }
+      
     </style>
 </head>
 <body>
-<<<<<<< HEAD
-    <div class="container" th:fragment="content">
-=======
+
     <div th:fragment="content" class="container">
->>>>>>> af2586b737a7923c119b2a9a4ae54777c190fa89
-        <h1>Product Details</h1>
-        <div class="row">
-            <div class="col-md-6">
-                <div class="main-product-image">
-                    <img width="300px" th:src="${productdetail.image_url}" alt="Product Image" id="main-product-image">
+        <div class="card">  
+            <h4 class="card-header bg-primary text-white">Product Details</h4>
+            <div class="card-body">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="main-product-image">
+                        <img width="300px" th:src="${productdetail.image_url}" alt="Product Image" id="main-product-image">
+                    </div>
+                    <div class="additional-pictures">
+                        <img width="150px" th:each="imagedetail : ${detailImageUrls}" class="detail-image" th:src="${imagedetail}" alt="Additional Image" onclick="switchImage(this)">
+                    </div>
                 </div>
-                <div class="additional-pictures">
-                    <img width="150px" th:each="imagedetail : ${detailImageUrls}" class="detail-image" th:src="${imagedetail}" alt="Additional Image" onclick="switchImage(this)">
-                </div>
-            </div>
-            <div class="col-md-6 product-details">
-                <h2 th:text="${productdetail.pro_name}"></h2>
-                <p><span>Category: </span><span th:text="${productdetail.category_id}"></span></p>
-                <p><span>Price: $</span><span th:text="${productdetail.sale_price}" id="sale-price"></span></p>
-                <p th:text="${productdetail.description}"></p>
-                
-                <div class="add-item">
-                    <div class="d-flex align-items-center">
-                        <div class="w-100 mb-3">
-                            <div class="row">
-                                <div class="col-6 m-0 p-0">
-                                    <div class="input-group mr-2 flex-grow m-0 p-0">
-                                        <div class="input-group-prepend">
-                                            <button type="button" class="btn btn-outline-primary" id="decrease-product-qty">-</button>
-                                        </div>
-                                        <input type="text" value="1" class="border-primary form-control text-center font-weight-bold" id="product-qty">
-                                        <div class="input-group-append">
-                                            <button type="button" class="btn btn-outline-primary" id="increase-product-qty">+</button>
+                <div class="col-md-6 product-details">
+                    <div class="mb-3 text-right">
+                        <p><i class="fas fa-eye"></i> <span th:text="${productdetail.viewCount}"></span></p>
+                    </div>
+
+                    <h2 th:text="${productdetail.pro_name}"></h2>
+                    <!-- <p><span>Category: </span><span th:text="${productdetail.category_id}"></span></p> -->
+                    <h4><span>Price: $</span><span th:text="${productdetail.sale_price}" id="sale-price"></span></h4>
+                    <p th:text="${productdetail.description}"></p>
+                    
+                    <div class="add-item">
+                        <div class="d-flex align-items-center">
+                            <div class="w-100 mb-3">
+                                <div class="row">
+                                    <div class="col-md-8">
+                                        <h4 class="total-price text-danger">Total Price: $<span id="total-price">0.00</span></h4>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="input-group flex-grow btnincrement">
+                                            <div class="input-group-prepend">
+                                                <button type="button" class="btn btn-outline-primary" id="decrease-product-qty">-</button>
+                                            </div>
+                                            <input type="text" value="1" class="border-primary form-control text-center font-weight-bold" id="product-qty">
+                                            <div class="input-group-append">
+                                                <button type="but   ton" class="btn btn-outline-primary" id="increase-product-qty">+</button>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                                <div class="col-6">
-                                    <button type="submit" class="btn btn-success btn-block">
-                                        <i class="fas fa-cart-plus"></i> Add to Cart
-                                    </button>
+                                    <div class="col-md-12 mt-4">
+                                        <button type="submit" class="btn btn-success btn-block ">
+                                            <i class="fas fa-cart-plus"></i> Add to Cart
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-                <p class="total-price">Total Price: $<span id="total-price">0.00</span></p>
             </div>
         </div>
-
-        <div class="btn-container">
-            <a href="/aubshop/products" class="btn btn-danger">Back to Product List</a>
-        </div>
     </div>
+
+        <div class="btn-container mt-3">
+            <a href="/aubshop/products" class="btn btn-secondary">Back to Product List</a>
+        </div>
+
     
    <script th:fragment="scripts">
         document.addEventListener('DOMContentLoaded', function() {

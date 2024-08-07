@@ -36,10 +36,8 @@ public class Product {
     // @Column(name = "image")
     private String image_url;
 
-    // @Column(name = "created_date")
     private Date created_date;
 
-    // @Column(name = "created_by")
     private String created_by;
 
     private String description;
@@ -47,8 +45,10 @@ public class Product {
     private String detail_ImageUrl;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="category_id") // Consider EAGER for smaller categories
+    @JoinColumn(name="category_id")
     private Category category;
+
+    private Long viewCount = 0L;
 
 
     public Category getCategory() {
@@ -169,6 +169,30 @@ public class Product {
 
     public void setDetailImageUrl(String detail_ImageUrl) {
         this.detail_ImageUrl = detail_ImageUrl;
+    }
+
+    public Long getCategoryId() {
+        return categoryId;
+    }
+
+    public void setCategoryId(Long categoryId) {
+        this.categoryId = categoryId;
+    }
+
+    public String getDetail_ImageUrl() {
+        return detail_ImageUrl;
+    }
+
+    public void setDetail_ImageUrl(String detail_ImageUrl) {
+        this.detail_ImageUrl = detail_ImageUrl;
+    }
+
+    public Long getViewCount() {
+        return viewCount;
+    }
+
+    public void setViewCount(Long viewcount) {
+        this.viewCount = viewcount;
     }
 
 
