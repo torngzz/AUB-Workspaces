@@ -16,6 +16,9 @@
             position: sticky;
             top: 56px;
         }
+        #lang:first-child{
+            display: none;
+        }
         .nav-link {
             color: #fff !important;
         }
@@ -33,6 +36,12 @@
                 <div class="navbar-brand d-none d-md-block">
                     <h3>Admin Dashboard</h3>
                 </div>
+                <select name="lang" id="lang" class="form-control w-25" onchange="changeLanguage(this.value)">
+                    <option value="">Select Language</option>
+                    <option value="en">English</option>
+                    <option value="kh">Khmer</option>
+                    <option value="th">Thai</option>
+                </select>
                 <a th:href="@{/login}" class="btn btn-light">Logout</a>
             </div>
         </header>
@@ -82,6 +91,12 @@
                 $('#sidebar, #content').toggleClass('active');
             });
         });
+        
+        function changeLanguage(lang) {
+        if (lang) {
+            window.location.href = "?lang=" + lang;
+        }
+    }
     </script>
 </body>
 </html>
