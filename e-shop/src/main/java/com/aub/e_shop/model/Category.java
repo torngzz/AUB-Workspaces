@@ -20,7 +20,7 @@ public class Category {
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY) 
     private Long id;
-    private String cate_name;
+    private String categoryName;
     private String description;
     private Date created_date;
     private String created_by;
@@ -36,6 +36,15 @@ public class Category {
 
     public void setProducts(List<Product> products) {
         this.products = products;
+    }
+
+    public String getCategoryName()
+    {
+        return categoryName;
+    }
+    public void getCategoryName(String categoryname)
+    {
+        this.categoryName = categoryname;
     }
 
     public Long getId() {
@@ -70,13 +79,7 @@ public class Category {
         this.created_by = created_by;
     }
 
-    public String getCate_name() {
-        return cate_name;
-    }
-
-    public void setCate_name(String cate_name) {
-        this.cate_name = cate_name;
-    }
+   
 
    
 

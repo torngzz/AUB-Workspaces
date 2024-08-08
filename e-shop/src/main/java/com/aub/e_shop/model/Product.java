@@ -21,8 +21,8 @@ public class Product {
     
     private Long product_id;
 
-    // @Column(name = "pro_name")
-    private String pro_name;
+    @Column(name = "pro_name")
+    private String productName;
 
     // @Column(name = "original_price")
     private Double original_price;
@@ -66,7 +66,7 @@ public class Product {
 
     public Product(String name, double price, Long category, String image, String description) {
 
-        this.pro_name = name;
+        this.productName = name;
         this.sale_price = price;
         this.categoryId = category;
         this.detail_ImageUrl = image;
@@ -76,7 +76,7 @@ public class Product {
     public String getProductDetails() {
         StringBuilder details = new StringBuilder();
         details.append("Product ID: ").append(product_id).append("\n");
-        details.append("Name: ").append(pro_name).append("\n");
+        details.append("Name: ").append(productName).append("\n");
         details.append("Category: ").append(categoryId).append("\n");
         details.append("Price: ").append(sale_price).append("\n");
         details.append("Description: ").append(description).append("\n");
@@ -157,11 +157,11 @@ public class Product {
     }
 
     public String getPro_name() {
-        return pro_name;
+        return productName;
     }
 
-    public void setPro_name(String pro_name) {
-        this.pro_name = pro_name;
+    public void setPro_name(String productName) {
+        this.productName = productName;
     }
     public String getDetailImageUrl() {
         return detail_ImageUrl;
