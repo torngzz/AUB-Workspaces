@@ -17,47 +17,36 @@ import com.aub.e_shop.service.ArticleService;
 @Controller
 @RequestMapping("/Article")
 public class ArticleController {
-    @Autowired ArticleService articleService;
+    @Autowired
+    private ArticleService articleService;
 
     @GetMapping("/list")
     public String get(
-    @RequestParam(name = "pageNumber", defaultValue= "0") int pageNumber,
-    @RequestParam(name = "pageSize", defaultValue= "5") int pageSize,
-    Model m)
-    {
-        Page<Article> articles = articleService.findAll(pageNumber, pageSize);
-        System.out.println("hiii" + articles.toString());
-        m.addAttribute("articles", articles);
-        m.addAttribute("currentPage", pageNumber);
-        m.addAttribute("pagesize", pageSize);
-        m.addAttribute("totalPages", articles.getTotalPages());
+        @RequestParam(name = "pageNumber", defaultValue = "0") int pageNumber,
+        @RequestParam(name = "pageSize", defaultValue = "5") int pageSize,
+        Model model) {
 
-        return "article-form";        
+        Page<Article> articles = articleService.findAll(pageNumber, pageSize);
+        model.addAttribute("articles", articles);
+        model.addAttribute("currentPage", pageNumber);
+        model.addAttribute("pageSize", pageSize);
+        model.addAttribute("totalPages", articles.getTotalPages());
+
+        return "article-form"; // Corrected to match the template name
     }
 
-   
-    // @GetMapping("/list/load")
-    // public @ResponseBody Page<Article> loadMoreArticles(
-    //     @RequestParam(name = "pageNumber", defaultValue = "0") int pageNumber,
-    //     @RequestParam(name = "pageSize", defaultValue = "5") int pageSize
-    // ) {
-    //     return articleService.findAll(pageNumber, pageSize);
-    // }
-    
     @GetMapping("/details/{id}")
-    public String getArticleDetails(@PathVariable Long id, Model m) {
+    public String getArticleDetails(@PathVariable Long id, Model model) {
         // Increment view count before fetching the article details
         articleService.incrementViewCount(id);
         Optional<Article> article = articleService.getById(id);
         if (article.isPresent()) {
-            m.addAttribute("article", article.get());
-            return "article-details";
+            model.addAttribute("article", article.get());
+            return "article-details"; // Ensure this matches the template name
         } else {
-            return "redirect:Article/list";
+            return "redirect:/Article/list"; // Corrected the redirection URL
         }
     }
-
-
 
 }
 

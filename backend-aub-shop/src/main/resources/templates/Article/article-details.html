@@ -1,16 +1,28 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{layout :: layout}">
 <head>
-    <meta charset="UTF-8">
     <title>Article Details</title>
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 </head>
 <body>
-    <div class="container mt-5">
-        <h2 th:text="${article.title}">Article Title</h2>
-        <p th:text="${article.longDescription}">Article Description</p>
-        <img th:src="@{${article.imageUrl}}" alt="Article Image" class="img-fluid" />
-        <a href="#" class="btn btn-primary" th:href="@{/Article/list}">Back to List</a>
+    <div th:fragment="content">
+        <div class="container">
+            <h1 class="mb-4 mt-5">Article Details</h1>
+            <div class="card">
+                <div class="card-body">
+                    <h2 class="card-title" th:text="${article.title}"></h2>
+                    <p class="card-text" th:text="${article.longDescription}"></p>
+                    <p><strong>Short Description:</strong> <span th:text="${article.shortDescription}"></span></p>
+                    <p><strong>Created By:</strong> <span th:text="${article.createdBy}"></span></p>
+                    <p><strong>Created Date:</strong> <span th:text="${#dates.format(article.createdDate, 'yyyy-MM-dd')}"></span></p>
+                    <img th:src="@{${article.imageUrl}}" alt="Article Image" class="img-fluid my-3">
+                    <!-- Uncomment these if needed -->
+                    <!-- <a th:href="@{/Article/edit/{id}(id=${article.id})}" class="btn btn-warning">Edit</a> -->
+                    <!-- <a th:href="@{/Article/delete/{id}(id=${article.id})}" class="btn btn-danger" onclick="return confirm('Are you sure?')">Delete</a> -->
+                    <a th:href="@{/Article/list}" class="btn btn-primary">Back to List</a>
+                </div>
+            </div>
+        </div>
     </div>
 </body>
 </html>
