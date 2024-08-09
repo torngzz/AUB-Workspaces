@@ -10,7 +10,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "TBL_ARTICLE")
+@Table(name = "article")
 public class Article {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -18,7 +18,7 @@ public class Article {
     private String title;
     @Column(length = 500)
     private String shortDescription;
-    @Column(length = 1000)
+    @Column(length = 1500)
     private String longDescription;
     private String createdBy;
     private Date createdDate;
