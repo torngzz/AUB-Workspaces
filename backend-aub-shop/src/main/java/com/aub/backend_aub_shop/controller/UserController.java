@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.aub.backend_aub_shop.dto.UserDTO;
 import com.aub.backend_aub_shop.model.UserModel;
 import com.aub.backend_aub_shop.service.UserService;
 
@@ -25,7 +26,9 @@ import jakarta.servlet.http.HttpServletRequest;
 //set tr role Admin
 @PreAuthorize("hasRole('Admin')")
 public class UserController {
-  @Autowired UserService userService;
+
+    @Autowired
+    private UserService userService;
 
     @GetMapping(value = {"", "/"})
     public String getAllUser(
@@ -34,16 +37,18 @@ public class UserController {
         @RequestParam(name = "username", required = false, defaultValue = "") String username,
         Model model
     ) {
-        Page<UserModel> users = userService.findAll(username, pageNumber, pageSize);
-        model.addAttribute("users", users);
+        Page<UserDTO> users = userService.findAll(username, pageNumber, pageSize);
+
+        model.addAttribute("users", users.getContent());
         model.addAttribute("pageNumber", pageNumber);
         model.addAttribute("pageSize", pageSize);
         model.addAttribute("username", username);
         model.addAttribute("totalPages", users.getTotalPages());
-        model.addAttribute("currentPage", pageNumber); // Add currentPage to the model
-        return "UserManagement/user-list";
-    }
+        model.addAttribute("currentPage", pageNumber);
 
+        return "UserManagement/user-list";
+    }    
+    
     @GetMapping("/withoutpagination")
     public String getAllUsers(Model m){
         List<UserModel> users = userService.findAll(); 

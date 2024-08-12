@@ -37,38 +37,37 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
             throws IOException, ServletException {
         try {
             HttpSession session = request.getSession();
-            // get authentication details;
             UserDetails userDetails = (UserDetails) authentication.getPrincipal();
 
-            LOGGER.info("Exception has occurred: " + userDetails.getUsername());
+            LOGGER.info("User {} successfully authenticated.", userDetails.getUsername());
 
             UserModel user = userService.findUserByUsername(userDetails.getUsername());
-            UserSessionManager u = new UserSessionManager(user.getId(), user.getUsername());
-            extractUserRoles(authentication);
+            UserSessionManager userSession = new UserSessionManager(user.getId(), user.getUsername());
+
             // Set user data in session
-            session.setAttribute("UserSessionManager", u); // assuming UserModel has getId() method
+            session.setAttribute("UserSessionManager", userSession);
 
-            session.setAttribute("authorities", authentication.getAuthorities());
+            // Extract user roles and set them in session
+            List<String> roles = extractUserRoles(authentication);
+            session.setAttribute("roles", roles);
 
+            // Redirect to the homepage or desired location
+            response.sendRedirect(request.getContextPath() + "/");
         } catch (UsernameNotFoundException e) {
-            LOGGER.error("Exception has occurred: " + e.getMessage(), e);
+            LOGGER.error("User not found: {}", e.getMessage(), e);
+            response.sendRedirect(request.getContextPath() + "/error");
         } catch (Exception e) {
-            LOGGER.error("Exception has occurred", e);
-            response.sendRedirect("/backendaubshop/error");
+            LOGGER.error("An unexpected error occurred during authentication.", e);
+            response.sendRedirect(request.getContextPath() + "/error");
         }
-        response.sendRedirect("/backendaubshop");
     }
-    /**
-     * 
-     * @param authentication
-     * @return
-     */
+
     private List<String> extractUserRoles(Authentication authentication) {
         Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
         List<String> roles = new ArrayList<>();
 
         for (GrantedAuthority authority : authorities) {
-            LOGGER.error("Authorities>>>"+ authority.getAuthority());
+            LOGGER.info("Authorities: {}", authority.getAuthority());
             roles.add(authority.getAuthority());
         }
         return roles;

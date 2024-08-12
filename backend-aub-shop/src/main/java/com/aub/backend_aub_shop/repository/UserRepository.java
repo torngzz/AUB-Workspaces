@@ -11,13 +11,14 @@ import com.aub.backend_aub_shop.model.UserModel;
 
 @Repository
 public interface UserRepository extends JpaRepository<UserModel, Long> {
+
     Optional<UserModel> findByUsername(String username);
 
     Optional<UserModel> findByEmail(String email);
 
     Optional<UserModel> findByPhone(String phone);
 
-    Page<UserModel> findByUsername(String username, Pageable pageable);
+    Page<UserModel> findByUsernameContaining(String username, Pageable pageable);
 
     Optional<UserModel> findByUsernameOrEmailOrPhoneAndIdNot(String username, String email, String phone, Long id);
 

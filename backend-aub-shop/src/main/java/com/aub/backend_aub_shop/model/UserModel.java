@@ -32,9 +32,9 @@ public class UserModel implements UserDetails {
     private String role;
     private String phone;
     private String email;
-    private String createdBy;
+    private Long createdBy; // Store as ID
     private Date createdDate;
-    private String updatedBy;
+    private Long updatedBy; // Store as ID
     private Date updatedDate;
 
     @OneToMany(mappedBy = "user")
@@ -49,12 +49,12 @@ public class UserModel implements UserDetails {
         this.articles = articles;
     }
 
-   @Override
-   public Collection<? extends GrantedAuthority> getAuthorities() {
-    Set<GrantedAuthority> authorities = new HashSet<>();
-    authorities.add(new SimpleGrantedAuthority("ROLE_"+ role)); // Add ROLE_ prefix
-    return authorities;
-}
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        Set<GrantedAuthority> authorities = new HashSet<>();
+        authorities.add(new SimpleGrantedAuthority("ROLE_" + role)); // Add ROLE_ prefix
+        return authorities;
+    }
 
     @Override
     public String getPassword() {
@@ -87,57 +87,70 @@ public class UserModel implements UserDetails {
     }
 
     // Getter and setter methods for other fields
-
     public Long getId() {
         return id;
     }
+
     public void setId(Long id) {
         this.id = id;
     }
+
     public String getRole() {
         return role;
     }
+
     public void setRole(String role) {
         this.role = role;
     }
+
     public String getPhone() {
         return phone;
     }
+
     public void setPhone(String phone) {
         this.phone = phone;
     }
+
     public String getEmail() {
         return email;
     }
+
     public void setEmail(String email) {
         this.email = email;
     }
-    public String getCreatedBy() {
-        return createdBy;
-    }
-    public void setCreatedBy(String createdBy) {
-        this.createdBy = createdBy;
-    }
+
     public Date getCreatedDate() {
         return createdDate;
     }
+
     public void setCreatedDate(Date createdDate) {
         this.createdDate = createdDate;
     }
-    public String getUpdatedBy() {
+
+    public Long getCreatedBy() {
+        return createdBy;
+    }
+
+    public void setCreatedBy(Long createdBy) {
+        this.createdBy = createdBy;
+    }
+
+    public Long getUpdatedBy() {
         return updatedBy;
     }
-    public void setUpdatedBy(String updatedBy) {
+
+    public void setUpdatedBy(Long updatedBy) {
         this.updatedBy = updatedBy;
     }
+
     public Date getUpdatedDate() {
         return updatedDate;
     }
+
     public void setUpdatedDate(Date updatedDate) {
         this.updatedDate = updatedDate;
     }
 
-    // Add these setters
     public void setPassword(String password) {
         this.password = password;
     }
