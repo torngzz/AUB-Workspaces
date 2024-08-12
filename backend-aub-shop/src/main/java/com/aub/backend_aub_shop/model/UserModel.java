@@ -3,22 +3,25 @@ package com.aub.backend_aub_shop.model;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.EntityListeners;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "TBL_USER")
+@EntityListeners(AuditingEntityListener.class)
 public class UserModel implements UserDetails {
 
     @Id
@@ -30,13 +33,21 @@ public class UserModel implements UserDetails {
     private String phone;
     private String email;
     private String createdBy;
-
-    @CreatedDate
     private Date createdDate;
     private String updatedBy;
-
-    @LastModifiedDate
     private Date updatedDate;
+
+    @OneToMany(mappedBy = "user")
+    private List<ArticleModel> articles;
+
+    // Getters and setters
+    public List<ArticleModel> getArticles() {
+        return articles;
+    }
+
+    public void setArticles(List<ArticleModel> articles) {
+        this.articles = articles;
+    }
 
    @Override
    public Collection<? extends GrantedAuthority> getAuthorities() {

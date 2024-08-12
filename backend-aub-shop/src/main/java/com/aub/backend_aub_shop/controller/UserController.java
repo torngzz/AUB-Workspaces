@@ -78,15 +78,22 @@ public class UserController {
     }
     
     @PostMapping("/update/{id}")
-    public String updateUser(@PathVariable("id") Long id, @ModelAttribute("user") UserModel users , Model m, HttpServletRequest httpRequest){
+    public String updateUser(@PathVariable("id") Long id, @ModelAttribute("user") UserModel users, Model m, HttpServletRequest httpRequest) {
         try {
             UserModel updateUser = userService.update(users, id, httpRequest);
-            m.addAttribute("user",updateUser);
-            return "redirect:/users"; 
+            m.addAttribute("user", updateUser);
+            return "redirect:/users";
         } catch (IllegalArgumentException e) {
-            return "redirect:/users/error";   
+            // Handle specific exceptions like IllegalArgumentException
+            m.addAttribute("error", e.getMessage());
+            return "redirect:/users/error";
+        } catch (Exception e) {
+            // Handle any other unexpected exceptions
+            m.addAttribute("error", "An unexpected error occurred.");
+            return "redirect:/users/error";
         }
     }
+
 
     @GetMapping("/delete/{id}")
     public String deleteUser(@PathVariable Long id) {

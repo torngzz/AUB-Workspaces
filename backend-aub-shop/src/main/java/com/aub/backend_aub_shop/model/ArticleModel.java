@@ -1,14 +1,14 @@
 package com.aub.backend_aub_shop.model;
 
 import java.util.Date;
-import java.util.List;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 @Entity
@@ -27,18 +27,19 @@ public class ArticleModel {
     private Date createdDate;
     @Column(length = 2000)
     private String imageUrl;
-    // One-to-Many relationship with Article
-    @OneToMany(mappedBy = "user")
-    private List<ArticleModel> articles;
+    
+    @ManyToOne
+    @JoinColumn(name = "user_id") // or any appropriate column name
+    private UserModel user;
+
     // Getters and setters
-    public List<ArticleModel> getArticles() {
-        return articles;
+    public UserModel getUser() {
+        return user;
     }
 
-    public void setArticles(List<ArticleModel> articles) {
-        this.articles = articles;
+    public void setUser(UserModel user) {
+        this.user = user;
     }
-
     public Long getId() {
         return id;
     }

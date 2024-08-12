@@ -6,7 +6,6 @@ import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -30,7 +29,6 @@ public class UserService implements UserDetailsService {
     private final UserRepository userRepo;
     private final PasswordEncoder passwordEncoder;
 
-    @Autowired
     public UserService(UserRepository userRepo, PasswordEncoder passwordEncoder) {
         this.userRepo = userRepo;
         this.passwordEncoder = passwordEncoder;
@@ -40,61 +38,39 @@ public class UserService implements UserDetailsService {
         return passwordEncoder.encode(plainPassword);
     }
 
-    private static final Logger logger = LoggerFactory.getLogger(UserService.class);
-
     @Transactional
     public UserModel create(HttpServletRequest request, UserModel user) {
-        Optional<UserModel> existingUsername = userRepo.findByUsername(user.getUsername());
-        Optional<UserModel> existingEmail = userRepo.findByEmail(user.getEmail());
-        Optional<UserModel> existingPhone = userRepo.findByPhone(user.getPhone());
+        checkForDuplicateUser(user);
 
-        if(existingUsername.isPresent()){
-            throw new IllegalArgumentException("This username is already existed!");
-        }
-        else if(existingEmail.isPresent()){
-            throw new IllegalArgumentException("This Email is already existed!");
-        }
-        else if(existingPhone.isPresent()){
-            throw new IllegalArgumentException("This Phone Number is already existed!");
-        }
-        else{
-            HttpSession session = request.getSession();
-            Object userAttribute = session.getAttribute("user");
-            Object usernameAttribute = UserSessionUtils.getUsername(session);
+        HttpSession session = request.getSession();
+        String id = UserSessionUtils.getUsername(session) != null ? UserSessionUtils.getUsername(session) : "defaultId";
 
-            logger.info("User session attribute: {}", userAttribute);
-            logger.info("Username session attribute: {}", usernameAttribute);
-    
-            // String userID = (userAttribute != null) ? userAttribute.toString() : "defaultUser";
-            String id = (usernameAttribute != null) ? usernameAttribute.toString() : "defaultId";
-    
-            user.setCreatedDate(new Date());
-            user.setUpdatedDate(new Date());
-            user.setPassword(encryptPassword("123456")); // Encrypt the default password
-            user.setCreatedBy(id);
-            user.setUpdatedBy(id);
-        }
+        user.setCreatedDate(new Date());
+        user.setUpdatedDate(new Date());
+        user.setPassword(encryptPassword("123456")); // Encrypt the default password
+        user.setCreatedBy(id);
+        user.setUpdatedBy(id);
+
         return userRepo.save(user);
     }
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        LOGGER.info("It's working here.");
+        LOGGER.info("Loading user by username: {}", username);
         UserModel user = userRepo.findByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
-        return user; // UserModel implements UserDetails
+        return user;
     }
 
     public UserModel findUserByUsername(String username) throws UsernameNotFoundException {
-        return userRepo.findByUsername(username).get();
+        return userRepo.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException("User not found"));
     }
 
     public Page<UserModel> findAll(String username, int pageNumber, int pageSize) {
-        Pageable pageable = PageRequest.of(pageNumber, pageSize);    
-        if (username == null || username.trim().isEmpty()) {
-            return userRepo.findAll(pageable);
-        }
-        return userRepo.findByUsername(username, pageable);
+        Pageable pageable = PageRequest.of(pageNumber, pageSize);
+        return username == null || username.trim().isEmpty() 
+            ? userRepo.findAll(pageable)
+            : userRepo.findByUsername(username, pageable);
     }
 
     public List<UserModel> findAll() {
@@ -109,43 +85,55 @@ public class UserService implements UserDetailsService {
         userRepo.deleteById(id);
     }
 
+    @Transactional
     public UserModel update(UserModel user, Long id, HttpServletRequest request) {
-        Optional<UserModel> optionalUser = userRepo.findById(id);
-        if (optionalUser.isPresent()) {
-            UserModel userModel = optionalUser.get();
+        UserModel userModel = userRepo.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("User not found"));
 
-            // Check for existing username and email
-            Optional<UserModel> existingUsername = userRepo.findByUsername(user.getUsername());
-            Optional<UserModel> existingEmail = userRepo.findByEmail(user.getEmail());
-            Optional<UserModel> existingPhone = userRepo.findByPhone(user.getPhone());
+        checkForDuplicateUser(user, id);
 
-            if (existingUsername.isPresent() && !existingUsername.get().getId().equals(id)) {
-                throw new IllegalArgumentException("This username is already existed!");
-            }
+        HttpSession session = request.getSession();
+        String username = UserSessionUtils.getUsername(session);
 
-            else if (existingEmail.isPresent() && !existingEmail.get().getId().equals(id)) {
-                throw new IllegalArgumentException("This email is already existed!");
-            }
+        userModel.setUsername(user.getUsername());
+        userModel.setRole(user.getRole());
+        userModel.setPhone(user.getPhone());
+        userModel.setEmail(user.getEmail()); 
+        userModel.setUpdatedDate(new Date());
+        userModel.setUpdatedBy(username);
 
-            else if(existingPhone.isPresent()){
-                throw new IllegalArgumentException("This Phone number is already exited!");
-            }
-            else{
-                HttpSession session = request.getSession();
-                String username = UserSessionUtils.getUsername(session);
-    
-                // Update user details
-                userModel.setUsername(user.getUsername());
-                userModel.setRole(user.getRole());
-                userModel.setPhone(user.getPhone());
-                userModel.setEmail(user.getEmail());
-                userModel.setCreatedBy(user.getCreatedBy());
-                userModel.setCreatedDate(user.getCreatedDate());
-                userModel.setUpdatedDate(new Date());
-                userModel.setUpdatedBy(username);
-            }
-            return userRepo.save(userModel); // Save updated user
+        LOGGER.info("Updating user with ID: {}. Preserving createdDate: {}", id, userModel.getCreatedDate());
+
+        return userRepo.save(userModel);
+    }
+
+    private void checkForDuplicateUser(UserModel user) {
+        if (userRepo.existsByUsername(user.getUsername())) {
+            throw new IllegalArgumentException("This username already exists!");
         }
-        throw new IllegalArgumentException("User not found");
+        if (userRepo.existsByEmail(user.getEmail())) {
+            throw new IllegalArgumentException("This email already exists!");
+        }
+        if (userRepo.existsByPhone(user.getPhone())) {
+            throw new IllegalArgumentException("This phone number already exists!");
+        }
+    }
+
+    private void checkForDuplicateUser(UserModel user, Long id) {
+        Optional<UserModel> existingUser = userRepo.findByUsernameOrEmailOrPhoneAndIdNot(user.getUsername(), user.getEmail(), user.getPhone(), id);
+        if (existingUser.isPresent()) {
+            UserModel existing = existingUser.get();
+            if (!existing.getId().equals(id)) {
+                if (!existing.getUsername().equals(user.getUsername())) {
+                    throw new IllegalArgumentException("This username already exists!");
+                }
+                if (!existing.getEmail().equals(user.getEmail())) {
+                    throw new IllegalArgumentException("This email already exists!");
+                }
+                if (!existing.getPhone().equals(user.getPhone())) {
+                    throw new IllegalArgumentException("This phone number already exists!");
+                }
+            }
+        }
     }
 }

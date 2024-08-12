@@ -8,6 +8,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 
 @Configuration
@@ -19,11 +20,14 @@ public class SecurityConfig {
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
-     private final AuthenticationSuccessHandler customAuthenticationSuccessHandler;
+    private final AuthenticationSuccessHandler customAuthenticationSuccessHandler;
+    private final AccessDeniedHandler accessDeniedHandler;
 
-    public SecurityConfig(CustomAuthenticationSuccessHandler customAuthenticationSuccessHandler) {
+    public SecurityConfig(CustomAuthenticationSuccessHandler customAuthenticationSuccessHandler, AccessDeniedHandler accessDeniedHandler) {
         this.customAuthenticationSuccessHandler = customAuthenticationSuccessHandler;
+        this.accessDeniedHandler = accessDeniedHandler;
     }
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
@@ -34,15 +38,18 @@ public class SecurityConfig {
             .successHandler(customAuthenticationSuccessHandler)
         )
         .logout((logout) -> logout
-                .logoutUrl("/logout")
-                //.logoutSuccessHandler(new HttpStatusReturningLogoutSuccessHandler())
-                .invalidateHttpSession(true)
-                .deleteCookies("JSESSIONID")
-                .logoutSuccessUrl("/login?logout")
-                .permitAll()
+            .logoutUrl("/logout")
+            //.logoutSuccessHandler(new HttpStatusReturningLogoutSuccessHandler())
+            .invalidateHttpSession(true)
+            .deleteCookies("JSESSIONID")
+            .logoutSuccessUrl("/login?logout")
+            .permitAll()
         )
         .authorizeHttpRequests((requests) -> requests
             .anyRequest().hasRole("Admin")
+        )
+        .exceptionHandling((exceptions)->exceptions
+            .accessDeniedHandler(accessDeniedHandler)
         );
         return http.build();
     }

@@ -1,12 +1,9 @@
 package com.aub.backend_aub_shop.util;
 
 import org.springframework.stereotype.Component;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
 
 import com.aub.backend_aub_shop.model.UserSessionManager;
 
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 
 @Component

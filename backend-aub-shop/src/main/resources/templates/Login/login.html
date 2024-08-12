@@ -81,12 +81,14 @@
                         <!-- Nested Row within Card Body -->
                         <div class="row">
                             <div class="col-lg-6 d-none d-sm-block bg-login-image" style="background-size: cover; background-image: url('https://via.placeholder.com/150?text=Login Image')"></div>
-                            
-                            
+
                             <div class="col-lg-6">
                                 <div class="p-5">
                                     <div class="text-center">
                                         <h1 class="h4 text-gray-900 mb-4">Welcome!</h1>
+                                    </div>
+                                    <div th:if="${param.error == 'accessDenied'}" class="alert alert-danger mt-3" role="alert">
+                                        Access Denied: You do not have permission to access the requested page.
                                     </div>
                                     <form th:action="@{/login}" method="post">
                                         <div class="form-group">
