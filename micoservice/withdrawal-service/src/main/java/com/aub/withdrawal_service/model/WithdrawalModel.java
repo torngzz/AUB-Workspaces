@@ -9,10 +9,12 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "TBL_ACCOUNT")
+@Table(name = "TBL_WITHDRAWAL")
 public class WithdrawalModel {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    
     private Long id;
     private String accountNumber;
     private Double amount;
@@ -49,6 +51,12 @@ public class WithdrawalModel {
     }
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    @Override
+    public String toString() {
+        return "WithdrawalModel [id=" + id + ", accountNumber=" + accountNumber + ", amount=" + amount + ", timestamp="
+                + timestamp + ", status=" + status + "]";
     }
     
 }

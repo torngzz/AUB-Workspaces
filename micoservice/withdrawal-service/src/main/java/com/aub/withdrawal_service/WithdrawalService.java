@@ -17,12 +17,12 @@ public class WithdrawalService {
     private WithdrawalRepository withdrawalRepository; 
 
     @Autowired
-    private AccountServiceClient accountServiceClient;
+     AccountServiceClient accountServiceClient;
 
     public WithdrawalModel createWithdrawal(String accountNumber, Double amount) {
         // Fetch account details from account-service
         AccountResponse account = accountServiceClient.getAccountByNumber(accountNumber);
-
+        System.out.println("account="+account.getAccountNumber());
         if (account == null || "INACTIVE".equals(account.getStatus())) {
             throw new RuntimeException("Account not found or inactive.");
         }

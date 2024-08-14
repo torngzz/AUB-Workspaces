@@ -7,12 +7,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.aub.withdrawal_service.WithdrawalService;
 import com.aub.withdrawal_service.model.WithdrawalModel;
+import com.aub.withdrawal_service.model.WithdrawalRequestModel;
 
 @RestController
 @RequestMapping("/withdrawals")
@@ -23,10 +24,12 @@ public class WithdrawalController {
 
     @PostMapping("/save")
     public ResponseEntity<WithdrawalModel> createWithdrawal(
-            @RequestParam String accountNumber,
-            @RequestParam Double amount) {
+        @RequestBody WithdrawalRequestModel requestModel
+            ) {
         try {
-            WithdrawalModel withdrawal = withdrawalService.createWithdrawal(accountNumber, amount);
+            System.out.println("Account="+requestModel.getAccountNumber());
+            System.out.println("Amount="+requestModel.getAmount());
+            WithdrawalModel withdrawal = withdrawalService.createWithdrawal(requestModel.getAccountNumber(), requestModel.getAmount());
             return ResponseEntity.ok(withdrawal);
         } catch (RuntimeException e) {
             return ResponseEntity.badRequest().body(null);

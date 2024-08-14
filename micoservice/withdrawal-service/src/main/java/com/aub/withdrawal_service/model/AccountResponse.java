@@ -1,7 +1,7 @@
 package com.aub.withdrawal_service.model;
 
 public class AccountResponse {
-    private Long id;
+        private Long id;
         private String accountNumber;
         private String accountHolderName;
         private Double balance;
