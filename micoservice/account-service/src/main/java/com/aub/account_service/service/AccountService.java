@@ -76,7 +76,6 @@ public class AccountService {
     public void deleteAccount(Long id){
         accountRepository.deleteById(id);
     }
-
     public Account updateBalance(String accountNumber, Double amount) {
         Account account = accountRepository.findByAccountNumber(accountNumber);
         if (account == null) {

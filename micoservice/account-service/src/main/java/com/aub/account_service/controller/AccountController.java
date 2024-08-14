@@ -73,7 +73,6 @@ public class AccountController {
         accountService.deleteAccount(id);
         return ResponseEntity.noContent().build();
     }  
-
     @PutMapping("/update-balance/{accountNumber}")
     public ResponseEntity<Account> updateBalance(@PathVariable String accountNumber, @RequestParam Double amount) {
         Account updatedAccount = accountService.updateBalance(accountNumber, amount);
