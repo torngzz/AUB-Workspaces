@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.aub.account_service.model.Account;
@@ -72,4 +73,10 @@ public class AccountController {
         accountService.deleteAccount(id);
         return ResponseEntity.noContent().build();
     }  
+
+    @PutMapping("/update-balance/{accountNumber}")
+    public ResponseEntity<Account> updateBalance(@PathVariable String accountNumber, @RequestParam Double amount) {
+        Account updatedAccount = accountService.updateBalance(accountNumber, amount);
+        return ResponseEntity.ok(updatedAccount);
+    }
 }

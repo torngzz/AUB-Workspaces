@@ -7,6 +7,8 @@ import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.aub.deposit_service.model.AccountResponse;
 
@@ -19,4 +21,7 @@ public interface AccountServiceClient {
 
     @GetMapping("/accounts")
     ResponseEntity<List<AccountResponse>> getAllAccounts();
+
+    @PutMapping("/accounts/update-balance/{accountNumber}")
+    void updateBalance(@PathVariable("accountNumber") String accountNumber, @RequestParam Double amount);
 }

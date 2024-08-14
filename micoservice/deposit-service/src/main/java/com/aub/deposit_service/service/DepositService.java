@@ -32,13 +32,26 @@ public class DepositService {
         // }
 
           // Create and save the withdrawal record
-          Deposit deposit = new Deposit();
-          deposit.setAccountNumber(accountNumber);
-          deposit.setAmount(amount);
-          deposit.setTimestamp(LocalDateTime.now());
-          deposit.setStatus("active");
+        //   Deposit deposit = new Deposit();
+        //   deposit.setAccountNumber(accountNumber);
+        //   deposit.setAmount(amount);
+        //   deposit.setTimestamp(LocalDateTime.now());
+        //   deposit.setStatus("active");
 
-          return depositRepository.save(deposit);
+        //   return depositRepository.save(deposit);
+
+         // Create and save the deposit record
+         Deposit deposit = new Deposit();
+         deposit.setAccountNumber(accountNumber);
+         deposit.setAmount(amount);
+         deposit.setTimestamp(LocalDateTime.now());
+         deposit.setStatus("active");
+         Deposit savedDeposit = depositRepository.save(deposit);
+ 
+         // Update the account balance in the account-service
+         accountServiceClient.updateBalance(accountNumber, amount);
+ 
+         return savedDeposit;
 
         }  
 

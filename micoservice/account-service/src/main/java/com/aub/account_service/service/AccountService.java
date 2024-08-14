@@ -69,9 +69,21 @@ public class AccountService {
     public Account updateAccount(Account account){
         return accountRepository.save(account);
     }
-
+    /**
+     * 
+     * @param id
+     */
     public void deleteAccount(Long id){
         accountRepository.deleteById(id);
+    }
+
+    public Account updateBalance(String accountNumber, Double amount) {
+        Account account = accountRepository.findByAccountNumber(accountNumber);
+        if (account == null) {
+            throw new RuntimeException("Account not found");
+        }
+        account.setBalance(account.getBalance() + amount);
+        return accountRepository.save(account);
     }
     
 }
