@@ -16,7 +16,7 @@ public class ApiConfig {
                     .uri("lb://account-service"))
 
             .route("withdrawal-service", r -> r
-                    .path("/aub/withdrawal-service/**")
+                    .path("/aub/withdrawals/**")
             .filters(f -> f.stripPrefix(1))
                     .uri("lb://withdrawal-service"))
 
