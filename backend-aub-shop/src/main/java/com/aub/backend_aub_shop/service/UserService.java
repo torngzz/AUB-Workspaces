@@ -30,6 +30,12 @@ public class UserService implements UserDetailsService {
     private final UserRepository userRepo;
     private final PasswordEncoder passwordEncoder;
 
+    @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
+    private UserService userService;  // Assuming this service has a method to get a username by ID
+
     public UserService(UserRepository userRepo, PasswordEncoder passwordEncoder) {
         this.userRepo = userRepo;
         this.passwordEncoder = passwordEncoder;
@@ -73,12 +79,6 @@ public class UserService implements UserDetailsService {
     public UserModel findUserByUsername(String username) throws UsernameNotFoundException {
         return userRepo.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException("User not found"));
     }
-
-    @Autowired
-    private UserRepository userRepository;
-
-    @Autowired
-    private UserService userService;  // Assuming this service has a method to get a username by ID
 
     public Page<UserDTO> findAll(String username, int pageNumber, int pageSize) {
         Page<UserModel> users = userRepository.findByUsernameContaining(username, PageRequest.of(pageNumber, pageSize));
@@ -148,7 +148,6 @@ public class UserService implements UserDetailsService {
         return userRepo.save(userModel);
     }
 
-
     private void checkForDuplicateUser(UserModel user) {
         if (userRepo.existsByUsername(user.getUsername())) {
             throw new IllegalArgumentException("This username already exists!");
@@ -177,5 +176,28 @@ public class UserService implements UserDetailsService {
                 }
             }
         }
+    }
+
+    public void changePassword(String username, String oldPassword, String newPassword, String confirmPassword) {
+        // Check if user exists
+        UserModel user = userRepo.findByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+
+        // Verify that the old password is correct
+        if (!passwordEncoder.matches(oldPassword, user.getPassword())) {
+            throw new IllegalArgumentException("Old password is incorrect");
+        }
+
+        // Check if the new password matches the confirm password
+        if (!newPassword.equals(confirmPassword)) {
+            throw new IllegalArgumentException("New password and confirm password do not match");
+        }
+
+        // Update the user's password and set the updated date
+        user.setPassword(passwordEncoder.encode(newPassword));
+        user.setUpdatedDate(new Date());
+
+        // Save the updated user object
+        userRepo.save(user);
     }
 }

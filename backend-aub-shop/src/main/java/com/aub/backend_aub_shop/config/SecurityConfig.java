@@ -20,6 +20,7 @@ public class SecurityConfig {
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
+
     private final AuthenticationSuccessHandler customAuthenticationSuccessHandler;
     private final AccessDeniedHandler accessDeniedHandler;
 
@@ -37,20 +38,23 @@ public class SecurityConfig {
             .failureHandler(new CustomeFailerHandler())
             .successHandler(customAuthenticationSuccessHandler)
         )
+
         .logout((logout) -> logout
-            .logoutUrl("/logout")
-            //.logoutSuccessHandler(new HttpStatusReturningLogoutSuccessHandler())
-            .invalidateHttpSession(true)
-            .deleteCookies("JSESSIONID")
-            .logoutSuccessUrl("/login?logout")
+            .logoutUrl("/logout")  // The URL that Spring Security will listen to for logout
+            .invalidateHttpSession(true)  // Invalidate the session
+            .deleteCookies("JSESSIONID")  // Delete session cookies
+            .logoutSuccessUrl("/login?logout")  // Redirect to login page with logout success message
             .permitAll()
         )
+
         .authorizeHttpRequests((requests) -> requests
             .anyRequest().hasRole("Admin")
         )
+
         .exceptionHandling((exceptions)->exceptions
             .accessDeniedHandler(accessDeniedHandler)
         );
+        
         return http.build();
     }
 }

@@ -30,33 +30,89 @@
 </head>
 <body>
     <div id="layout" th:fragment="layout">
-        <header class="bg-primary text-white fixed-top nav navbar">
+        <header class="bg-primary text-white fixed-top navbar">
             <div class="container-fluid d-flex justify-content-between align-items-center text-nowrap">
-                <button class="btn btn-light d-md-none" id="sidebarCollapse">☰</button>
                 <div class="navbar-brand d-none d-md-block">
                     <h3>Admin Dashboard</h3>
                 </div>
-                <select name="lang" id="lang" class="form-control w-25" onchange="changeLanguage(this.value)">
-                    <option value="">Select Language</option>
-                    <option value="en">English</option>
-                    <option value="kh">Khmer</option>
-                    <option value="th">Thai</option>
-                </select>
-                <a th:href="@{/login}" class="btn btn-light">Logout</a>
+                <div class="dropdown w-25">
+                    <button class="btn btn-light dropdown-toggle float-right" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Settings
+                    </button>
+                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
+                        <div class="btn-group dropleft">
+                            <button id="dropdownLeft" class="dropdown-item dropdown-toggle w-100 border-light" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Change Language
+                            </button>
+                            <div class="dropdown-menu">
+                                <a class="dropdown-item" href="#" onclick="changeLanguage('en')">English</a>
+                                <a class="dropdown-item" href="#" onclick="changeLanguage('kh')">Khmer</a>
+                                <a class="dropdown-item" href="#" onclick="changeLanguage('th')">Thai</a>
+                            </div>
+                        </div>
+                        <button type="button" class="dropdown-item" data-toggle="modal" data-target="#exampleModal">
+                            Change Password
+                        </button>
+
+                        <div class="dropdown-divider"></div>
+
+                        <a class="dropdown-item" th:href="@{/logout}">Logout</a>
+
+                    </div>
+                </div>
             </div>
         </header>
+        <!-- Modal -->
+        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Change Password</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div th:if="${successMessage}" class="alert alert-success" role="alert">
+                            <p th:text="${successMessage}"></p>
+                        </div>
+
+                        <div th:if="${errorMessage}" class="alert alert-danger" role="alert">
+                            <p th:text="${errorMessage}"></p>
+                        </div>
+
+                        <form id="changePasswordForm" th:action="@{/change-password}" method="post">
+                            <div class="form-group">
+                                <label for="oldPassword">Old Password</label>
+                                <input type="password" id="oldPassword" name="oldPassword" class="form-control" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="newPassword">New Password</label>
+                                <input type="password" id="newPassword" name="newPassword" class="form-control" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="cfPassword">Confirm New Password</label>
+                                <input type="password" id="cfPassword" name="cfPassword" class="form-control" required>
+                            </div>
+                            <input type="submit" value="Reset" class="btn btn-primary btn-user btn-block w-25 float-right">
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <div class="container-fluid">
             <div class="row">
                 <nav id="sidebar" class="col-lg-2 d-none d-lg-block bg-dark text-white">
                     <div class="sidebar-sticky">
                         <ul class="nav flex-column mt-5 pt-5">
                             <li class="">
-                                <p class="text-primary h4">User Management</p>
+                                <p class="text-primary h6">User Management</p>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link rounded-pill" th:href="@{/users}">User</a>
                             </li>
-                            <li class="text-primary h4">
+                            <li class="text-primary h6">
                                 <p class="">Product Management</p>
                             </li>
                             <li class="nav-item">
@@ -65,7 +121,7 @@
                             <li class="nav-item">
                                 <a class="nav-link rounded-pill" th:href="@{/categorys}">Category</a>
                             </li>
-                            <li class=" h4">
+                            <li class=" h6">
                                 <p class="text-primary">Article Management</p>
                             </li>
                             <li class="nav-item">
@@ -83,20 +139,53 @@
         </div>
     </div>
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script>
         $(document).ready(function () {
-            $('#sidebarCollapse').on('click', function () {
-                $('#sidebar, #content').toggleClass('active');
+        // Prevent the main dropdown from closing when interacting with the nested dropdown
+        $('#dropdownLeft').on('click', function (e) {
+            e.stopPropagation(); // Prevent the click event from bubbling up
+            $(this).next('.dropdown-menu').toggle(); // Toggle the nested dropdown
+        });
+
+        // Close nested dropdown if clicking outside
+        $(document).on('click', function (e) {
+            if (!$(e.target).closest('#dropdownLeft').length) {
+                $('.dropdown-menu').hide(); // Hide all dropdown menus
+            }
+        });
+
+        // Ensure clicking on the main dropdown toggles its menu
+        $('#dropdownMenuButton').on('click', function (e) {
+            e.stopPropagation(); // Prevent the click event from bubbling up
+            $(this).next('.dropdown-menu').toggle(); // Toggle the main dropdown
+        });
+
+            // Handle form submission via AJAX
+            $('#changePasswordForm').on('submit', function (e) {
+                e.preventDefault(); // Prevent default form submission
+                $.ajax({
+                    url: $(this).attr('action'),
+                    type: $(this).attr('method'),
+                    data: $(this).serialize(),
+                    success: function (response) {
+                        alert(response); // Show success message
+                        $('#exampleModal').modal('hide'); // Close the modal
+                    },
+                    error: function (xhr) {
+                        alert(xhr.responseText); // Show error message
+                    }
+                });
             });
+
         });
         
         function changeLanguage(lang) {
-        if (lang) {
-            window.location.href = "?lang=" + lang;
+            if (lang) {
+                window.location.href = "?lang=" + lang;
+            }
         }
-    }
     </script>
 </body>
 </html>

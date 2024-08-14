@@ -32,10 +32,12 @@ public class UserModel implements UserDetails {
     private String role;
     private String phone;
     private String email;
-    private Long createdBy; // Store as ID
+    private Long createdBy; 
     private Date createdDate;
-    private Long updatedBy; // Store as ID
+    private Long updatedBy;
     private Date updatedDate;
+    private Long newPassword;
+    private Long cfPassword;
 
     @OneToMany(mappedBy = "user")
     private List<ArticleModel> articles;
@@ -158,4 +160,21 @@ public class UserModel implements UserDetails {
     public void setUsername(String username) {
         this.username = username;
     }
+
+    public Long getNewPassword() {
+        return newPassword;
+    }
+
+    public void setNewPassword(Long newPassword) {
+        this.newPassword = newPassword;
+    }
+
+    public Long getCfPassword() {
+        return cfPassword;
+    }
+
+    public void setCfPassword(Long cfPassword) {
+        this.cfPassword = cfPassword;
+    }
+
 }

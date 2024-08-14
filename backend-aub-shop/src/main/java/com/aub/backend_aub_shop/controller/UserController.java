@@ -6,6 +6,8 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -29,6 +31,9 @@ public class UserController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @GetMapping(value = {"", "/"})
     public String getAllUser(
@@ -99,7 +104,6 @@ public class UserController {
         }
     }
 
-
     @GetMapping("/delete/{id}")
     public String deleteUser(@PathVariable Long id) {
         userService.deleteById(id);
@@ -109,5 +113,23 @@ public class UserController {
     @GetMapping("/error")
     public String errorPage(){
         return "error/page-404";
+    }
+
+    @PostMapping("/change-password")
+    public String changePassword(@RequestParam("oldPassword") String oldPassword,
+                                @RequestParam("newPassword") String newPassword,
+                                @RequestParam("cfPassword") String confirmPassword,
+                                Model model) {
+
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+
+        try {
+            userService.changePassword(username, oldPassword, newPassword, confirmPassword);
+            model.addAttribute("successMessage", "Password changed successfully.");
+        } catch (IllegalArgumentException e) {
+            model.addAttribute("errorMessage", e.getMessage());
+        }
+
+        return "redirect:/"; // Redirects to the homepage or current page
     }
 }
