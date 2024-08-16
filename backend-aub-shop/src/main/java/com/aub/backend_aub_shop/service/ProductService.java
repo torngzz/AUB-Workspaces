@@ -8,15 +8,22 @@ import org.hibernate.Hibernate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.aub.backend_aub_shop.model.Product;
 import com.aub.backend_aub_shop.repository.ProductRepository;
+import com.aub.backend_aub_shop.util.UserSessionUtils;
+
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 
 @Service("productService")
 public class ProductService {
     @Autowired ProductRepository productRepository;
+    @Autowired ProductService productService;
     private static final Logger LOGGER = LoggerFactory.getLogger(ProductService.class);
 
     /**
@@ -29,41 +36,65 @@ public class ProductService {
     //    LOGGER.info(" My Product" + ps.toString());
     //     return ps;
     // }
-
     @Transactional(readOnly = true)
-    public List<Product> findAll() {
-        List<Product> products = productRepository.findAll();
-        LOGGER.info(" My Product" + products.toString());
+    public Page<Product> findAll(String username, int pagenumber, int pagesize) {
+        Page<Product> products = productRepository.findBycreatebyUsernameContaining(username, PageRequest.of(pagenumber, pagesize));
+        LOGGER.info("My Product: " + products.toString());
+        
         products.forEach(product -> {
             if (product.getCategory() != null) {
                 Hibernate.initialize(product.getCategory()); 
             }
+            // Assuming getUsernameById is a method in productService that takes a user ID and returns the username
+            String createByUsername = productService.getUsernameById(product.getCreated_by());
+            product.setCreatebyUsername(createByUsername); // Set the username in the product
         });
+    
         return products;
     }
-    
+
+    // @Transactional(readOnly = true)
+    // public List<Product> findAll() {
+    //     List<Product> products = productRepository.findAll();
+    //     LOGGER.info(" My Product" + products.toString());
+    //     products.forEach(product -> {
+    //         if (product.getCategory() != null) {
+    //             Hibernate.initialize(product.getCategory()); 
+    //         }
+    //     });
+    //     products.setCreatebyUsername(productService.getUsernameById(products.getCreated_by()));
+
+    //     return products;
+    // }
+
+    public String getUsernameById(Long userId) {
+        Product pro = productRepository.findById(userId)
+            .orElseThrow(() -> new RuntimeException("User not found"));
+        return pro.getCreatebyUsername();
+    }
+
     public List<Product> searchProductsByName(String name) {
         if (name == null || name.trim().isEmpty()) {
-            return findAll(); // Return all products if the search term is empty
+            return productRepository.findAll(); // Return all products if the search term is empty
         }
-        return productRepository.findByNameContainingIgnoreCase(name);
+        return productRepository.findByproductNameContainingIgnoreCase(name);
     }
 
     public List<Product> findByNameContainingIgnoreCase(String name){
         LOGGER.info(" My Product" );
         List<Product> products = null;
         try {
-            products = productRepository.findByNameContainingIgnoreCase(name);
+            products = productRepository.findByproductNameContainingIgnoreCase(name);
             products.forEach(product -> {
                 if (product.getCategory() != null) {
                     Hibernate.initialize(product.getCategory());
     
-                }
+                }   
             });
             LOGGER.info(" My Product" + products);
             
         } catch (Exception e) {
-            e.printStackTrace();
+            LOGGER.error("exception :::"  , e);
         }
         return products;
     }
@@ -74,7 +105,9 @@ public class ProductService {
      * @return
      */
     public Optional<Product> findById(Long id){
+       
         return productRepository.findById(id);
+       
     }
 
     /**
@@ -82,11 +115,17 @@ public class ProductService {
      * @param product
      * @return
      */
-    public Product saveProduct(Product product){
+    public Product saveProduct(Product product, HttpServletRequest request){
+        HttpSession session = request.getSession();
+        Long sessionId = UserSessionUtils.getUserId(session);
+        if (sessionId == null) {
+            throw new IllegalStateException("User ID not found in session. Cannot create user.");
+        }
         try { 
             LOGGER.info("My Category: "  + product.toString());
             Date d = new Date();
             product.setCreated_date(d);
+            product.setCreated_by(sessionId);
             return productRepository.save(product);
         } catch (Exception e) {
             LOGGER.error(" System error", e);
@@ -100,9 +139,12 @@ public class ProductService {
      * 
      * @param id
      */
-    public void deleteById(Long id){
+    //@Transactional(readOnly = true)
+    public void deleteProductById(Long id) {
+        LOGGER.info("delete success " + id);
         productRepository.deleteById(id);
     }
+    
 
     /**
      * 
@@ -120,7 +162,7 @@ public class ProductService {
              
             if (optionalProduct.isPresent()){
                 pro = optionalProduct.get();
-                pro.setName(product.getName());
+                pro.setPro_name(product.getPro_name());
                 pro.setCategory(product.getCategory());
                 pro.setSale_price(product.getSale_price());
                 pro.setOriginal_price(product.getOriginal_price());

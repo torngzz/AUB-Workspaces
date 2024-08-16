@@ -22,7 +22,7 @@ public class Category {
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY) 
     private Long id;
-    private String name;
+    private String categoryName;
     private String description;
     @DateTimeFormat
     private Date created_date;
@@ -46,6 +46,16 @@ public class Category {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+
+    public String getCategoryName()
+    {
+        return categoryName;
+    }
+    public void setCategoryName(String categoryname)
+    {
+        this.categoryName = categoryname;
     }
 
     public String getDescription() {
@@ -72,17 +82,10 @@ public class Category {
         this.created_by = created_by;
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String cate_name) {
-        this.name = cate_name;
-    }
-
+  
     @Override
     public String toString() {
-        return "Category [id=" + id + ", name=" + name + ", description=" + description + ", created_date="
+        return "Category [id=" + id + ", name=" + categoryName + ", description=" + description + ", created_date="
                 + created_date + ", created_by=" + created_by + ", products=" + products + "]";
     }
 
