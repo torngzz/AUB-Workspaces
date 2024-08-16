@@ -2,6 +2,8 @@ package com.aub.withdrawal_service.controller;
 
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,6 +20,7 @@ import com.aub.withdrawal_service.model.WithdrawalRequestModel;
 @RestController
 @RequestMapping("/withdrawals")
 public class WithdrawalController {
+    private static final Logger LOGGER = LoggerFactory.getLogger(WithdrawalController.class);
 
     @Autowired
     private WithdrawalService withdrawalService;
@@ -27,11 +30,15 @@ public class WithdrawalController {
         @RequestBody WithdrawalRequestModel requestModel
             ) {
         try {
-            System.out.println("Account="+requestModel.getAccountNumber());
-            System.out.println("Amount="+requestModel.getAmount());
+
+            LOGGER.info("Account="+requestModel.getAccountNumber());
+            LOGGER.info("Amount="+requestModel.getAmount());
+
             WithdrawalModel withdrawal = withdrawalService.createWithdrawal(requestModel.getAccountNumber(), requestModel.getAmount());
             return ResponseEntity.ok(withdrawal);
+            
         } catch (RuntimeException e) {
+            LOGGER.error("Exception" + e.getMessage(),e);
             return ResponseEntity.badRequest().body(null);
         }
     }

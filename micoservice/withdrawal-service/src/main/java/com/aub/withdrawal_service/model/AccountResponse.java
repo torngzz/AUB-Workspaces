@@ -5,56 +5,75 @@ public class AccountResponse {
         private String accountNumber;
         private String accountHolderName;
         private Double balance;
-        private String accountType;
+        private String accouyntType;
         private String status;
     
-        // Getters and Setters
-    
+
     public Long getId() {
-        return id;
-    }
+            return id;
+        }
+
+
+        public void setId(Long id) {
+            this.id = id;
+        }
+
+
+        public String getAccountNumber() {
+            return accountNumber;
+        }
+
+
+        public void setAccountNumber(String accountNumber) {
+            this.accountNumber = accountNumber;
+        }
+
+
+        public String getAccountHolderName() {
+            return accountHolderName;
+        }
+
+
+        public void setAccountHolderName(String accountHolderName) {
+            this.accountHolderName = accountHolderName;
+        }
+
+
+        public Double getBalance() {
+            return balance;
+        }
+
+
+        public void setBalance(Double balance) {
+            this.balance = balance;
+        }
+
+
+        public String getAccouyntType() {
+            return accouyntType;
+        }
+
+
+        public void setAccouyntType(String accouyntType) {
+            this.accouyntType = accouyntType;
+        }
+
+
+        public String getStatus() {
+            return status;
+        }
+
+
+        public void setStatus(String status) {
+            this.status = status;
+        }
+
+
+    @Override
+    public String toString() {
+        return "AccountResponse [id=" + id + ", accountNumber=" + accountNumber + ", accountHolderName="
+                + accountHolderName + ", balance=" + balance + ", accouyntType=" + accouyntType + ", status=" + status
+                + "]";
+    }  
     
-    public void setId(Long id) {
-        this.id = id;
-    }
-    
-    public String getAccountNumber() {
-        return accountNumber;
-    }
-    
-    public void setAccountNumber(String accountNumber) {
-        this.accountNumber = accountNumber;
-    }
-    
-    public String getAccountHolderName() {
-        return accountHolderName;
-    }
-    
-    public void setAccountHolderName(String accountHolderName) {
-        this.accountHolderName = accountHolderName;
-    }
-    
-    public Double getBalance() {
-        return balance;
-    }
-    
-    public void setBalance(Double balance) {
-        this.balance = balance;
-    }
-    
-    public String getAccountType() {
-        return accountType;
-    }
-    
-    public void setAccountType(String accountType) {
-        this.accountType = accountType;
-    }
-    
-    public String getStatus() {
-        return status;
-    }
-    
-    public void setStatus(String status) {
-        this.status = status;
-    }
 }
