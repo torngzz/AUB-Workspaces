@@ -26,6 +26,11 @@ public class ApiConfig {
             .filters(f -> f.stripPrefix(1))
                 .uri("lb://deposit-service"))
 
+           .route("transfer-service", r -> r
+                .path("/aub/transfer/**")
+           .filters(f -> f.stripPrefix(1))
+                .uri("lb://transfer-service"))
+
             .build();
     }
     

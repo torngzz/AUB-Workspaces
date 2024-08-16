@@ -60,6 +60,5 @@ public class Account {
     public String toString() {
         return "Account [id=" + id + ", accountNumber=" + accountNumber + ", accountHolderName=" + accountHolderName
                 + ", balance=" + balance + ", accouyntType=" + accouyntType + ", status=" + status + "]";
-    }
-    
+    }  
 }
