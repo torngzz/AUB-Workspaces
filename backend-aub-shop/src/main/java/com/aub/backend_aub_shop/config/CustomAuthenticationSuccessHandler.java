@@ -8,6 +8,7 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -28,8 +29,13 @@ import jakarta.servlet.http.HttpSession;
 public class CustomAuthenticationSuccessHandler implements AuthenticationSuccessHandler {
     private static final Logger LOGGER = LoggerFactory.getLogger(CustomAuthenticationSuccessHandler.class);
 
-    @Autowired
+    // @Autowired
     private UserService userService;
+
+    @Autowired
+    public void setUserService(@Lazy UserService userService) {
+        this.userService = userService;
+    }
 
     @Override
     public void onAuthenticationSuccess(

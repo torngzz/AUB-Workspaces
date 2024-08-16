@@ -67,7 +67,6 @@ public class UserService implements UserDetailsService {
         return userRepo.save(user);
     }
 
-
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         LOGGER.info("Loading user by username: {}", username);
@@ -84,6 +83,7 @@ public class UserService implements UserDetailsService {
         Page<UserModel> users = userRepository.findByUsernameContaining(username, PageRequest.of(pageNumber, pageSize));
 
         return users.map(user -> {
+            
             UserDTO dto = new UserDTO();
             dto.setId(user.getId());
             dto.setUsername(user.getUsername());
