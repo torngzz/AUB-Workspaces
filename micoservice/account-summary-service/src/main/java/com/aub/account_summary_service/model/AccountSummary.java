@@ -1,42 +1,48 @@
 package com.aub.account_summary_service.model;
 
-
 import java.math.BigDecimal;
+import java.util.List;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
-@Entity
 @Table(name = "accounts")
 public class AccountSummary {
-    @Id
-    private Long accountId;
-    private String accountHolderName;
-    private BigDecimal balance;
-
-    public Long getAccountId() {
-        return accountId;
+    private String accountNumber;
+    private BigDecimal currentBalance;
+    private BigDecimal totalDeposits;
+    private BigDecimal totalWithdrawals;
+    private List<TransactionSummary> recentTransactions;
+    
+    //Getter and Setter
+    public String getAccountNumber() {
+        return accountNumber;
     }
-
-    public void setAccountId(Long accountId) {
-        this.accountId = accountId;
+    public void setAccountNumber(String accountNumber) {
+        this.accountNumber = accountNumber;
     }
-
-    public String getAccountHolderName() {
-        return accountHolderName;
+    public BigDecimal getCurrentBalance() {
+        return currentBalance;
     }
-
-    public void setAccountHolderName(String accountHolderName) {
-        this.accountHolderName = accountHolderName;
+    public void setCurrentBalance(BigDecimal currentBalance) {
+        this.currentBalance = currentBalance;
     }
-
-    public BigDecimal getBalance() {
-        return balance;
+    public BigDecimal getTotalDeposits() {
+        return totalDeposits;
     }
-
-    public void setBalance(BigDecimal balance) {
-        this.balance = balance;
+    public void setTotalDeposits(BigDecimal totalDeposits) {
+        this.totalDeposits = totalDeposits;
+    }
+    public BigDecimal getTotalWithdrawals() {
+        return totalWithdrawals;
+    }
+    public void setTotalWithdrawals(BigDecimal totalWithdrawals) {
+        this.totalWithdrawals = totalWithdrawals;
+    }
+    public List<TransactionSummary> getRecentTransactions() {
+        return recentTransactions;
+    }
+    public void setRecentTransactions(List<TransactionSummary> recentTransactions) {
+        this.recentTransactions = recentTransactions;
     }
 
 }
