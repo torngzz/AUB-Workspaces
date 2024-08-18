@@ -22,7 +22,7 @@ import jakarta.servlet.http.HttpSession;
 
 @Service("productService")
 public class ProductService {
-    @Autowired ProductRepository productRepository;
+    @Autowired private ProductRepository productRepository;
     @Autowired ProductService productService;
     private static final Logger LOGGER = LoggerFactory.getLogger(ProductService.class);
 
@@ -107,7 +107,6 @@ public class ProductService {
     public Optional<Product> findById(Long id){
        
         return productRepository.findById(id);
-       
     }
 
     /**
@@ -135,16 +134,31 @@ public class ProductService {
 
 
  
+
+    
     /**
      * 
      * @param id
      */
     //@Transactional(readOnly = true)
-    public void deleteProductById(Long id) {
-        LOGGER.info("delete success " + id);
-        productRepository.deleteById(id);
+    // public void deleteProductById(Long id) {
+    //     LOGGER.info("delete success " + id);
+    //     productRepository.deleteById(id);
+    // }
+    @Transactional
+    public void deleteProductById(Long productId) {
+        try {
+            // Optional: Add a check to see if the product exists before attempting deletion
+            if (productRepository.existsById(productId)) {
+                productRepository.deleteById(productId);
+                LOGGER.info("Product with ID " + productId + " deleted successfully.");
+            } else {
+                LOGGER.warn("Product with ID " + productId + " does not exist.");
+            }
+        } catch (Exception e) {
+            LOGGER.error("Error occurred while trying to delete product with ID " + productId, e);
+        }
     }
-    
 
     /**
      * 

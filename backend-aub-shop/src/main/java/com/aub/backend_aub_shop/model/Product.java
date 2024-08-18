@@ -11,7 +11,6 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
@@ -21,7 +20,6 @@ public class Product {
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
 
-    
     private Long product_id;
 
     @Column(name = "pro_name")
@@ -218,6 +216,4 @@ public class Product {
     public void setCreatebyUsername(String createbyUsername) {
         this.createbyUsername = createbyUsername;
     }
- 
-
 }

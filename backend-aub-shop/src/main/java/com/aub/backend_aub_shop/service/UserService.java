@@ -1,5 +1,6 @@
 package com.aub.backend_aub_shop.service;
 
+import java.security.SecureRandom;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -41,15 +42,23 @@ public class UserService implements UserDetailsService {
         this.passwordEncoder = passwordEncoder;
     }
 
-    public String encryptPassword(String plainPassword) {
-        return passwordEncoder.encode(plainPassword);
+@Autowired
+    private EmailService emailService;
+
+    public String generateRandomPassword() {
+        SecureRandom random = new SecureRandom();
+        int password = 100000 + random.nextInt(900000);
+        return String.valueOf(password);
     }
+
+    // public String encryptPassword(String plainPassword) {
+    //     return passwordEncoder.encode(plainPassword);
+    // }
 
     @Transactional
     public UserModel create(HttpServletRequest request, UserModel user) {
         checkForDuplicateUser(user);
 
-        // Get the current user ID from the session
         HttpSession session = request.getSession();
         Long userId = UserSessionUtils.getUserId(session);
 
@@ -57,13 +66,18 @@ public class UserService implements UserDetailsService {
             throw new IllegalStateException("User ID not found in session. Cannot create user.");
         }
 
-        // Set the user attributes
+        String rawPassword = generateRandomPassword();
+        String encryptedPassword = passwordEncoder.encode(rawPassword);// Encrypt the generated password
+        emailService.sendEmail(user.getEmail(), "AUB E-Shop Password","Your password to login to AUB E-Shop is : " + rawPassword);
+        
         user.setCreatedDate(new Date());
         user.setUpdatedDate(new Date());
-        user.setPassword(encryptPassword("123456")); // Encrypt the default password
+        user.setPassword(encryptedPassword); 
         user.setCreatedBy(userId);
         user.setUpdatedBy(userId);
-
+        
+        // LOGGER.info("The password is " + rawPassword);
+        // LOGGER.info("The encryted password is " + rawPassword);
         return userRepo.save(user);
     }
 

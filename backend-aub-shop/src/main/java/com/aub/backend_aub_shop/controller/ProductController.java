@@ -173,11 +173,12 @@ public class ProductController {
     // }
 
     @PostMapping("/delete")
-    public String deleteProduct(@RequestParam Long productId) {
+    public String deleteProduct(@RequestParam("productId") Long productId) {
         productService.deleteProductById(productId);
         logger.info("Product with ID " + productId + " deleted successfully.");
-        return "redirect:/products"; 
+        return "redirect:/products";
     }
+
 
     // @PostMapping("/delete")
     // public String deleteProduct(@PathVariable Long id) {
