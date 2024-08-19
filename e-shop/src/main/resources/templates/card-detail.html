@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{layout :: layout}">
+<head>
+    <title>Cart Detail</title>
+
+</head>
+<body>
+    <div th:fragment="content" class="container">
+        <h1>Cart Detail</h1>
+        <div id="cart-details">
+            <img th:src="${imageUrl}" alt="Product Image" id="cart-product-image" />
+            <p>Product Name: <span id="cart-product-name" th:text="${productName}"></span></p>
+            <p>Sale Price: <span id="cart-sale-price" th:text="${salePrice}"></span></p>
+            <p>Total Price: <span id="cart-total-price" th:text="${totalPrice}"></span></p>
+        </div>
+        
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js" crossorigin="anonymous"></script>
+        <script>
+            $(document).ready(function() {
+                
+                function getCookie(name) {
+                    let nameEQ = name + "=";
+                    let ca = document.cookie.split(';');
+                    for (let i = 0; i < ca.length; i++) {
+                        let c = ca[i];
+                        while (c.charAt(0) === ' ') c = c.substring(1, c.length);
+                        if (c.indexOf(nameEQ) === 0) return decodeURIComponent(c.substring(nameEQ.length, c.length));
+                    }
+                    return null;
+                }
+
+                const cartProduct = getCookie('cartProduct');
+                
+                if (cartProduct) {
+                    try {
+                        const product = JSON.parse(cartProduct);
+                        $('#cart-details').html(`
+                            <div class="card">
+                                <img src="${product.image}" class="card-img-top" alt="${product.name}">
+                                <div class="card-body">
+                                    <h5 class="card-title">${product.name}</h5>
+                                    <p class="card-text">Price: $${product.salePrice}</p>
+                                    <p class="card-text">Quantity: ${product.quantity}</p>
+                                    <p class="card-text">Total: $${product.totalPrice}</p>
+                                </div>
+                            </div>
+                        `);
+                    } catch (e) {
+                        console.error("Failed to parse cartProduct cookie:", e);
+                        $('#cart-details').html('<p>Your cart is empty.</p>');
+                    }
+                } else {
+                    $('#cart-details').html('<p>Your cart is empty.</p>');
+                }
+            });
+
+        </script>
+    </div>
+         
+    
+</body>
+</html>
