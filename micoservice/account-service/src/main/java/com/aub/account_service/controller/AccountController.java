@@ -77,6 +77,7 @@ public class AccountController {
         accountService.deleteAccount(id);
         return ResponseEntity.noContent().build();
     }  
+    //when deposit update balance in account
     @PutMapping("/update-balance/{accountNumber}")
     public ResponseEntity<Account> updateBalance(@PathVariable String accountNumber, @RequestParam Double amount) {
         Account updatedAccount = accountService.updateBalance(accountNumber, amount);

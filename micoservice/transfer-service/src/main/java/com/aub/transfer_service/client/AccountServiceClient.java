@@ -1,5 +1,7 @@
 package com.aub.transfer_service.client;
 
+import java.math.BigDecimal;
+
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -18,8 +20,8 @@ public interface AccountServiceClient {
     // ResponseEntity<List<AccountResponse>> getAllAccounts();
 
     @PutMapping("/accounts/account-number/{accountNumber}/decrease-balance")
-    void decreaseBalance(@PathVariable("accountNumber") String accountNumber, @RequestParam("amount") Double amount);
+    void decreaseBalance(@PathVariable("accountNumber") String accountNumber, @RequestParam("amount") BigDecimal amount);
 
     @PutMapping("/accounts/account-number/{accountNumber}/increase-balance")
-    void increaseBalance(@PathVariable("accountNumber") String accountNumber, @RequestParam("amount") Double amount);
+    void increaseBalance(@PathVariable("accountNumber") String accountNumber, @RequestParam("amount") BigDecimal amount);
 }

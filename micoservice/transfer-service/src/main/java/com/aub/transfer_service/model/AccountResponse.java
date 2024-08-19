@@ -1,14 +1,16 @@
 package com.aub.transfer_service.model;
 
+import java.math.BigDecimal;
+
 public class AccountResponse {
 
     private Long id;
     private String accountNumber;
     private String accountHolderName;
-    private Double balance;
+    private BigDecimal balance;
     private String accouyntType;
     private String status;
-    
+
     public Long getId() {
         return id;
     }
@@ -27,10 +29,10 @@ public class AccountResponse {
     public void setAccountHolderName(String accountHolderName) {
         this.accountHolderName = accountHolderName;
     }
-    public Double getBalance() {
+    public BigDecimal getBalance() {
         return balance;
     }
-    public void setBalance(Double balance) {
+    public void setBalance(BigDecimal balance) {
         this.balance = balance;
     }
     public String getAccouyntType() {
@@ -44,5 +46,5 @@ public class AccountResponse {
     }
     public void setStatus(String status) {
         this.status = status;
-    }  
+    } 
 }

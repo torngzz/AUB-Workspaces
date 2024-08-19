@@ -1,5 +1,6 @@
 package com.aub.transfer_service.controller;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +27,7 @@ public class TreansferController {
     public ResponseEntity<Transfer> createTransfer(
             @RequestParam String sourceAccountNumber, 
             @RequestParam String destinationAccountNumber, 
-            @RequestParam Double amount) {
+            @RequestParam BigDecimal amount) {
         Transfer transfer = transferService.createTransfer(sourceAccountNumber, destinationAccountNumber, amount);
         return new ResponseEntity<>(transfer, HttpStatus.CREATED);
     } 
@@ -57,5 +58,21 @@ public class TreansferController {
         return ResponseEntity.ok(transfers);
     }
 
-    
+    // @GetMapping("/total/source/{sourceAccountNumber}")
+    // public ResponseEntity<Double> getTotalAmountBySourceAccountNumber(@PathVariable String sourceAccountNumber) {
+    //     Double totalAmount = transferService.getTotalAmountBySourceAccountNumber(sourceAccountNumber);
+    //     return ResponseEntity.ok(totalAmount);
+    // }
+
+    // @GetMapping("/total/destination/{destinationAccountNumber}")
+    // public ResponseEntity<Double> getTotalAmountByDestinationAccountNumber(@PathVariable String destinationAccountNumber) {
+    //     Double totalAmount = transferService.getTotalAmountByDestinationAccountNumber(destinationAccountNumber);
+    //     return ResponseEntity.ok(totalAmount);
+    // }
+
+    @GetMapping("/total/{accountNumber}")
+    public ResponseEntity<BigDecimal> getTotalTransferByAccount(@PathVariable String accountNumber) {
+        BigDecimal totalTransfers = transferService.getTotalTransfersByAccount(accountNumber);
+        return ResponseEntity.ok(totalTransfers);
+    }
 }

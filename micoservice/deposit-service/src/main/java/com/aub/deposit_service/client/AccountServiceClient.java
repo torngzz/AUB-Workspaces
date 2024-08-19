@@ -1,6 +1,7 @@
 package com.aub.deposit_service.client;
 
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import org.springframework.cloud.openfeign.FeignClient;
@@ -23,7 +24,7 @@ public interface AccountServiceClient {
     ResponseEntity<List<AccountResponse>> getAllAccounts();
 
     @PutMapping("/accounts/update-balance/{accountNumber}")
-    void updateBalance(@PathVariable("accountNumber") String accountNumber, @RequestParam Double amount);
+    void updateBalance(@PathVariable("accountNumber") String accountNumber, @RequestParam BigDecimal amount);
 
 
     

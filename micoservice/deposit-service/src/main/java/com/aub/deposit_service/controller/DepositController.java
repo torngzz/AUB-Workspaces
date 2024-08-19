@@ -1,5 +1,6 @@
 package com.aub.deposit_service.controller;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +30,7 @@ public class DepositController {
     @PostMapping("/make-deposit")
     public ResponseEntity<Deposit> createDeposit(
             @RequestParam String accountNumber,
-            @RequestParam Double amount) {
+            @RequestParam BigDecimal amount) {
 
         Deposit deposit = depositService.createDeposit(accountNumber, amount);
         return new ResponseEntity<>(deposit, HttpStatus.CREATED);
@@ -57,6 +58,16 @@ public class DepositController {
     @GetMapping("/accounts")
     public ResponseEntity<List<AccountResponse>> getAllAccounts(){
         return accountServiceClient.getAllAccounts();
+    }
 
+    // @GetMapping("/api/deposits/total/{accountNumber}")
+    // public ResponseEntity<Double> getTotalDepositsByAccount(@PathVariable String accountNumber) {
+    //     Double totalDeposits = depositService.getTotalDepositsByAccount(accountNumber);
+    //     return ResponseEntity.ok(totalDeposits);
+    // }
+     @GetMapping("/total-deposits/{accountNumber}")
+    public ResponseEntity<BigDecimal> getTotalDepositsByAccount(@PathVariable String accountNumber) {
+        BigDecimal totalDeposits = depositService.getTotalDepositsByAccount(accountNumber);
+        return ResponseEntity.ok(totalDeposits);
     }
 }

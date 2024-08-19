@@ -1,5 +1,6 @@
 package com.aub.transfer_service.service;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -20,7 +21,7 @@ public class TransferService {
     @Autowired
     private AccountServiceClient accountServiceClient;
 
-     public Transfer createTransfer(String sourceAccountNumber, String destinationAccountNumber, Double amount) {
+     public Transfer createTransfer(String sourceAccountNumber, String destinationAccountNumber, BigDecimal amount) {
 
         // Check if the source account number is "0"
         // if ("0".equals(sourceAccountNumber)) {
@@ -41,9 +42,14 @@ public class TransferService {
         }
 
         // Check if the source account has sufficient balance
-        if (sourceAccount.getBalance() < amount) {
+        // if (sourceAccount.getBalance() < amount){
+        //     throw new RuntimeException("Insufficient balance in source account.");
+        // }
+        BigDecimal sourceBalance = sourceAccount.getBalance();
+        if (sourceBalance.compareTo(amount) < 0) {
             throw new RuntimeException("Insufficient balance in source account.");
         }
+   
 
          // Check if the source account balance is less than the destination account balance
         //  if (sourceAccount.getBalance() < destinationAccount.getBalance()) {
@@ -72,4 +78,34 @@ public class TransferService {
     public List<Transfer> getTransfersByDestinationAccountNumber(String destinationAccountNumber) {
         return transferRepository.findByDestinationAccountNumber(destinationAccountNumber);
     }  
+
+    // public Double getTotalAmountBySourceAccountNumber(String sourceAccountNumber) {
+    //     List<Transfer> transfers = transferRepository.findBySourceAccountNumber(sourceAccountNumber);
+    //     return transfers.stream()
+    //             .mapToDouble(Transfer::getAmount)
+    //             .sum();
+    // }
+
+    // public Double getTotalAmountByDestinationAccountNumber(String destinationAccountNumber) {
+    //     List<Transfer> transfers = transferRepository.findByDestinationAccountNumber(destinationAccountNumber);
+    //     return transfers.stream()
+    //             .mapToDouble(Transfer::getAmount)
+    //             .sum();
+    // }
+
+    public BigDecimal getTotalTransfersByAccount(String accountNumber) {
+        List<Transfer> outgoingTransfers = transferRepository.findBySourceAccountNumber(accountNumber);
+        BigDecimal totalOutgoing = outgoingTransfers.stream()
+                .map(Transfer::getAmount)
+                .reduce(BigDecimal.ZERO, BigDecimal::add); 
+
+        
+        List<Transfer> incomingTransfers = transferRepository.findByDestinationAccountNumber(accountNumber);
+
+        BigDecimal totalIncome = incomingTransfers.stream()
+                .map(Transfer::getAmount)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+
+                return totalIncome.subtract(totalOutgoing);      
+    }
 }

@@ -1,5 +1,6 @@
 package com.aub.deposit_service.service;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -19,7 +20,7 @@ public class DepositService {
     @Autowired
     private AccountServiceClient accountServiceClient;
 
-        public Deposit createDeposit(String accountNumber, Double amount) {
+        public Deposit createDeposit(String accountNumber, BigDecimal amount) {
         // Validate account number by calling account-service
         AccountResponse account = accountServiceClient.getAccountByNumber(accountNumber);
         if (account == null || account.getStatus().equals("INACTIVE")) {
@@ -62,4 +63,13 @@ public class DepositService {
     public Deposit getDepositById(Long id) {
         return depositRepository.findById(id).orElse(null);
     } 
+
+   public BigDecimal getTotalDepositsByAccount(String accountNumber) {
+        List<Deposit> deposits = depositRepository.findByAccountNumberAndAmountGreaterThan(accountNumber, BigDecimal.ZERO);
+        return deposits.stream()
+                .map(Deposit::getAmount)
+                .reduce(BigDecimal.ZERO, BigDecimal::add); 
+                 
+    }
+
 }
