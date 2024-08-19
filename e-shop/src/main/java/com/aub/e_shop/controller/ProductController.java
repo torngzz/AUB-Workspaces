@@ -10,12 +10,18 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.view.RedirectView;
 
 import com.aub.e_shop.model.Product;
 import com.aub.e_shop.service.CategoryService;
 import com.aub.e_shop.service.ProductService;
+
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 @Controller
 @RequestMapping("/products")
@@ -80,42 +86,96 @@ public class ProductController {
         }
     }
 
+    @PostMapping("/add-to-cart")
+    public RedirectView addToCart(
+        @RequestParam("productName") String productName,
+        @RequestParam("salePrice") String salePrice,
+        @RequestParam("totalPrice") String totalPrice,
+        @RequestParam("imageUrl") String imageUrl,
+        HttpServletResponse response,
+        HttpServletRequest request) { // Add HttpServletRequest parameter
+    
+        // Set cookies for product details
+        setCookie(response, "productName", productName);
+        setCookie(response, "salePrice", salePrice);
+        setCookie(response, "totalPrice", totalPrice);
+        setCookie(response, "imageUrl", imageUrl);
+    
+        // Optionally, also set/update cart item count here
+        int itemCount = Integer.parseInt(getCookie(request, "cartItemCount", "0")) + 1;
+        setCookie(response, "cartItemCount", String.valueOf(itemCount));
 
+        LOGGER.info("Added to cart: {} {} {} {}", productName, salePrice, totalPrice, imageUrl);
+    
+        return new RedirectView("/products/cart-page");
+    }
 
-    // @GetMapping("/category")
-    // public String getProductsByCategory(@RequestParam(name = "cate_id", required = false) Long categoryId, 
-    //                                 @RequestParam(name = "cate_name", required = false) String cateName,
-    //                                 Model model) {
-    //     model.addAttribute("cate_name", cateName);
-    //     // Add other logic to fetch products by category if needed
-    //     return "product";
-    // }
+    private void setCookie(HttpServletResponse response, String name, String value) {
+        Cookie cookie = new Cookie(name, value);
+        cookie.setPath("/");
+        cookie.setMaxAge(60 * 60 * 24); // 1 day
+        response.addCookie(cookie);
+    }
 
-    // @GetMapping("/category/{category_id}")
-    // public String getProductsByCategory(
-    //     @PathVariable("category_id") Long categoryId,
-    //     @RequestParam(name = "pageNumber", defaultValue = "0") int pageNumber,
-    //     @RequestParam(name = "pageSize", defaultValue = "8") int pageSize,
-    //     Model model
-    // ) {
-    //     Page<Product> pro = productService.findByCategoryId(categoryId, pageNumber, pageSize);
-    //     Optional<Category> categoryOpt = categoryService.getCategoryById(categoryId);
+    private String getCookie(HttpServletRequest request, String name, String defaultValue) {
+        Cookie[] cookies = request.getCookies();
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                if (cookie.getName().equals(name)) {
+                    return cookie.getValue();
+                }
+            }
+        }
+        return defaultValue;
+    }
 
-    //     if (categoryOpt.isPresent()) {
-    //         model.addAttribute("categorybyid", categoryOpt.get());
-    //     } else {
-    //         model.addAttribute("categorybyid", new Category());
-    //     }
+    @GetMapping("/cart-page")
+    public String viewCartPage(HttpServletRequest request, Model model) {
+        Cookie[] cookies = request.getCookies();
+        String productName = null;
+        String salePrice = null;
+        String totalPrice = null;
+        String imageUrl = null;
 
-    //     model.addAttribute("products", pro.toList());
-    //     model.addAttribute("categories", categoryService.getAllCategories());
-    //     model.addAttribute("currentPage", pageNumber);
-    //     model.addAttribute("pageSize", pageSize);
-    //     model.addAttribute("totalPages", pro.getTotalPages());
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                switch (cookie.getName()) {
+                    case "productName":
+                        productName = cookie.getValue();
+                        break;
+                    case "salePrice":
+                        salePrice = cookie.getValue();
+                        break;
+                    case "totalPrice":
+                        totalPrice = cookie.getValue();
+                        break;
+                    case "imageUrl":
+                        imageUrl = cookie.getValue();
+                        break;
+                }
+            }
+        }
 
-    //     LOGGER.info("This is my product. Total pages: " + pro.getTotalPages());
-    //     return "product";
-    // }
+        // String productName = getCookie(request, "productName", "N/A");
+        // String salePrice = getCookie(request, "salePrice", "0.00");
+        // String totalPrice = getCookie(request, "totalPrice", "0.00");
+        // String imageUrl = getCookie(request, "imageUrl", "");
+
+        // Log values for debugging
+        System.out.println("Product Name: " + productName);
+        System.out.println("Sale Price: " + salePrice);
+        System.out.println("Total Price: " + totalPrice);
+        System.out.println("Image URL: " + imageUrl);
+
+        LOGGER.info("Retrieved from cookies: {} {} {} {}", productName, salePrice, totalPrice, imageUrl);
+        
+        model.addAttribute("productName", productName);
+        model.addAttribute("salePrice", salePrice);
+        model.addAttribute("totalPrice", totalPrice);
+        model.addAttribute("imageUrl", imageUrl);
+
+        return "card-detail";
+    }
 
     
 
