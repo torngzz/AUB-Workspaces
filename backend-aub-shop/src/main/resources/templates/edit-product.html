@@ -34,11 +34,15 @@
                             </div>
                             <div class="form-group">
                                 <label for="image_url">Image</label>
-                                <img th:src="@{'/uploads/' + ${product.image_url}}" alt="Product Image" style="max-width: 100px; max-height: 100px;">                   
+                                <div>
+                                    <img th:src="@{'/uploads/' + ${product.image_url}}" alt="Product Image" style="max-width: 100px; max-height: 100px;">               
+                                </div>
                             </div>
                             <div class="form-group">
                                 <label for="image_url">Detail Image</label>
-                                <img th:src="@{'/uploads/' + ${product.image_url}}" alt="Product Image" style="max-width: 100px; max-height: 100px;">
+                                <div>
+                                    <img th:each="iamgedeatil : ${detailImageUrls}" th:src="@{'/uploads/' + ${iamgedeatil}}" alt="Product Image" style="max-width: 100px; max-height: 100px;">
+                                </div>
                             </div>
                             <div class="form-group">
                                 <label for="description">Description</label>

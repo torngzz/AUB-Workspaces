@@ -131,6 +131,9 @@ public class ProductController {
     @GetMapping("/view/{id}")
     public String viewproduct(@PathVariable("id") Long id, Model m){
         Optional<Product> product = productService.findById(id);
+        Product products = product.get();
+        String[] detailImageUrl = products.getDetailImageUrl().split(",");
+        m.addAttribute("detailImageUrls", detailImageUrl); 
         m.addAttribute("product", product.orElse(new Product()));
 
         return "view-product";
@@ -139,6 +142,9 @@ public class ProductController {
     @GetMapping("/edit/{id}")
     public String editProduct(@PathVariable("id") Long id, Model m) {
         Optional<Product> product = productService.findById(id);
+        Product products = product.get();
+        String[] detailImageUrl = products.getDetailImageUrl().split(",");
+        m.addAttribute("detailImageUrls", detailImageUrl); 
         m.addAttribute("product", product.orElse(new Product()));
         m.addAttribute("categories", categoryService.getAllCategories());
         return "edit-product";
@@ -157,6 +163,9 @@ public class ProductController {
     @GetMapping("/delete/{id}")
     public String deleteProduct(@PathVariable("id") Long id, Model m) {
         Optional<Product> product = productService.findById(id);
+        Product products = product.get();
+        String[] detailImageUrl = products.getDetailImageUrl().split(",");
+        m.addAttribute("detailImageUrls", detailImageUrl); 
         m.addAttribute("product", product.orElse(new Product()));
         m.addAttribute("categories", categoryService.getAllCategories());
         return "delete-product";

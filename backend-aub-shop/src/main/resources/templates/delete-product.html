@@ -37,11 +37,16 @@
                             </div>
                             <div class="form-group">
                                 <label for="image_url">Image</label>
-                                <img th:src="@{'/uploads/' + ${product.image_url}}" alt="Product Image" style="max-width: 100px; max-height: 100px;">
+                                <div>
+                                    <img th:src="@{'/uploads/' + ${product.image_url}}" alt="Product Image" style="max-width: 100px; max-height: 100px;">
+                                </div>
                             </div>
                             <div class="form-group">
                                 <label for="detailImageUrl">Detail Image</label>
-                                <img th:src="@{'/uploads/' + ${product.detailImageUrl}}" alt="Product Image" style="max-width: 100px; max-height: 100px;">
+                                <div>
+                                    <img th:each="iamgedeatil : ${detailImageUrls}" th:src="@{'/uploads/' + ${iamgedeatil}}" alt="Product Image" style="max-width: 100px; max-height: 100px;">
+                                </div>
+                                <!-- <img th:src="@{'/uploads/' + ${product.detailImageUrl}}" alt="Product Image" style="max-width: 100px; max-height: 100px;"> -->
                             </div>               
                             <div class="form-group">
                                 <label for="description">Description</label>
@@ -55,6 +60,7 @@
                         <form th:action="@{/products/delete}" method="post" onsubmit="return confirm('Are you sure you want to delete this product?');">
                             <input type="hidden" name="productId" th:value="${product.product_id}">
                             <button type="submit" class="btn btn-danger mt-3">Delete Product</button>
+                            <a th:href="@{/products}" class="btn btn-secondary mt-3">Cancel</a>
                         </form>
                     </div>
                 </div>
