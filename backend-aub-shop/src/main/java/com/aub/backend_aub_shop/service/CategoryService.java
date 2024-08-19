@@ -58,6 +58,7 @@ public Page<Category> findAll(String cate_name, int pageNumber, int pageSize) {
         LOGGER.info("My Category: "  + category.toString());
         Date d = new Date();
         category.setCreated_date(d);
+        category.setCreated_by("mengsry");
         return categoryRepository.save(category);
     } catch (Exception e) {
         LOGGER.error(" System error", e);
