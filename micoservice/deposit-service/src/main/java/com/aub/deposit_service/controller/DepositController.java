@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -27,20 +28,37 @@ public class DepositController {
     @Autowired
     private AccountServiceClient accountServiceClient;
 
+
+    // Use  @RequestParam 
+
+    // @PostMapping("/make-deposit")
+    // public ResponseEntity<Deposit> createDeposit(
+    //         @RequestParam String accountNumber,
+    //         @RequestParam BigDecimal amount) {
+
+    //     Deposit deposit = depositService.createDeposit(accountNumber, amount);
+    //     return new ResponseEntity<>(deposit, HttpStatus.CREATED);
+
+    //     // try {
+    //     //     Deposit deposit = depositService.createDeposit(accountNumber, amount);
+    //     //     return ResponseEntity.ok(deposit);
+    //     // } catch (RuntimeException e) {
+    //     //     return ResponseEntity.badRequest().body(null);
+    //     // }
+    // }
+
+    //use RequestBody
     @PostMapping("/make-deposit")
-    public ResponseEntity<Deposit> createDeposit(
-            @RequestParam String accountNumber,
-            @RequestParam BigDecimal amount) {
+    public ResponseEntity<Deposit> createDeposit(@RequestBody Deposit deposit) {
+        // Extract accountNumber and amount from the request body
+        String accountNumber = deposit.getAccountNumber();
+        BigDecimal amount = deposit.getAmount();
 
-        Deposit deposit = depositService.createDeposit(accountNumber, amount);
-        return new ResponseEntity<>(deposit, HttpStatus.CREATED);
+        // Create the deposit
+        Deposit createdeposit = depositService.createDeposit(accountNumber, amount);
 
-        // try {
-        //     Deposit deposit = depositService.createDeposit(accountNumber, amount);
-        //     return ResponseEntity.ok(deposit);
-        // } catch (RuntimeException e) {
-        //     return ResponseEntity.badRequest().body(null);
-        // }
+        // Return the response
+        return new ResponseEntity<>(createdeposit, HttpStatus.CREATED);
     }
 
     @GetMapping("/account/{accountNumber}")

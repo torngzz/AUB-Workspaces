@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -23,14 +24,17 @@ public class TreansferController {
     @Autowired
     private TransferService transferService;
 
-    @PostMapping
-    public ResponseEntity<Transfer> createTransfer(
-            @RequestParam String sourceAccountNumber, 
-            @RequestParam String destinationAccountNumber, 
-            @RequestParam BigDecimal amount) {
-        Transfer transfer = transferService.createTransfer(sourceAccountNumber, destinationAccountNumber, amount);
-        return new ResponseEntity<>(transfer, HttpStatus.CREATED);
-    } 
+    // @PostMapping
+    // public ResponseEntity<Transfer> createTransfer(
+    //         @RequestParam String sourceAccountNumber, 
+    //         @RequestParam String destinationAccountNumber, 
+    //         @RequestParam BigDecimal amount) {
+    //     Transfer transfer = transferService.createTransfer(sourceAccountNumber, destinationAccountNumber, amount);
+    //     return new ResponseEntity<>(transfer, HttpStatus.CREATED);
+    // } 
+
+
+
     // @PostMapping
     // public ResponseEntity<Transfer> createTransfer(
     //         @RequestParam String sourceAccountNumber, 
@@ -45,6 +49,61 @@ public class TreansferController {
     //         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null); // Customize as needed
     //     }
     // }
+
+    // @PostMapping
+    // public ResponseEntity<?> createTransfer(
+    //         @RequestParam String sourceAccountNumber, 
+    //         @RequestParam String destinationAccountNumber, 
+    //         @RequestParam BigDecimal amount) {
+
+    //     try {
+    //         // Attempt to create the transfer
+    //         Transfer transfer = transferService.createTransfer(sourceAccountNumber, destinationAccountNumber, amount);
+
+    //         // Return the transfer if successful
+    //         return new ResponseEntity<>(transfer, HttpStatus.CREATED);
+
+    //     } catch (RuntimeException ex) {
+    //         // Handle any runtime exceptions (e.g., validation errors, insufficient funds)
+    //         return ResponseEntity
+    //                 .status(HttpStatus.BAD_REQUEST)
+    //                 .body("Error: " + ex.getMessage());
+    //     } catch (Exception ex) {
+    //         // Handle any unexpected exceptions
+    //         return ResponseEntity
+    //                 .status(HttpStatus.INTERNAL_SERVER_ERROR)
+    //                 .body("An unexpected error occurred: " + ex.getMessage());
+    //     }
+    // }
+
+    @PostMapping
+    public ResponseEntity<?> createTransfer(@RequestBody Transfer transferRequest) {
+
+        try {
+            // Extract details from the request body
+            String sourceAccountNumber = transferRequest.getSourceAccountNumber();
+            String destinationAccountNumber = transferRequest.getDestinationAccountNumber();
+            BigDecimal amount = transferRequest.getAmount();
+
+            // Attempt to create the transfer
+            Transfer transfer = transferService.createTransfer(sourceAccountNumber, destinationAccountNumber, amount);
+
+            // Return the transfer if successful
+            return new ResponseEntity<>(transfer, HttpStatus.CREATED);
+
+        } catch (RuntimeException ex) {
+            // Handle any runtime exceptions (e.g., validation errors, insufficient funds)
+            return ResponseEntity
+                    .status(HttpStatus.BAD_REQUEST)
+                    .body("Error: " + ex.getMessage());
+        } catch (Exception ex) {
+            // Handle any unexpected exceptions
+            return ResponseEntity
+                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("An unexpected error occurred: " + ex.getMessage());
+        }
+    }
+
 
     @GetMapping("/source/{sourceAccountNumber}")
     public ResponseEntity<List<Transfer>> getTransfersBySourceAccountNumber(@PathVariable String sourceAccountNumber) {
