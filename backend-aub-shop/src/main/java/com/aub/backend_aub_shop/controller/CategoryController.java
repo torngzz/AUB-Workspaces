@@ -13,8 +13,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.aub.backend_aub_shop.dto.CategoryDTO;
 import com.aub.backend_aub_shop.model.Category;
 import com.aub.backend_aub_shop.service.CategoryService;
+
+import jakarta.servlet.http.HttpServletRequest;
 
 @Controller
 @RequestMapping("/categorys")
@@ -56,12 +59,12 @@ public class CategoryController {
         // model.addAttribute("categories", categoryService.getAllCategories());
 
         @RequestParam(name = "pageNumber", defaultValue = "0") int pageNumber,
-        @RequestParam(name = "pageSize", defaultValue = "8") int pageSize,
+        @RequestParam(name = "pageSize", defaultValue = "5") int pageSize,
         @RequestParam(name=   "categoryName",required=false, defaultValue="") String categoryName,
         Model model
         )
     {
-        Page<Category> categoryPage = categoryService.findAll(categoryName, pageNumber, pageSize);
+        Page<CategoryDTO> categoryPage = categoryService.findAll(categoryName, pageNumber, pageSize);
         model.addAttribute("categoryPage", categoryPage.toList());
         model.addAttribute("categoryName", categoryName);
         model.addAttribute("currentPage", pageNumber);
@@ -79,8 +82,8 @@ public class CategoryController {
     }
 
     @PostMapping("/save")
-    public String saveCategory(@ModelAttribute("category") Category category){
-        categoryService.saveCategory(category);
+    public String saveCategory(@ModelAttribute("category") Category category, HttpServletRequest httprequest){
+        categoryService.saveCategory(category,httprequest);
         return  "redirect:/categorys";
     }
 
@@ -92,8 +95,8 @@ public class CategoryController {
     }
 
      @PostMapping("/update/{id}")
-    public String updateCategory(@PathVariable("id") Long id, @ModelAttribute("category") Category categorys , Model m){
-        Category updateCategory = categoryService.updateCategory(categorys, id);
+    public String updateCategory(@PathVariable("id") Long id, @ModelAttribute("category") Category categorys , Model m , HttpServletRequest httprequest){
+        Category updateCategory = categoryService.updateCategory(categorys, id,httprequest);
         m.addAttribute("category",updateCategory);
         return "redirect:/categorys";
     }

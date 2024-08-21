@@ -10,6 +10,7 @@ import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.aub.backend_aub_shop.dto.ProductDTO;
 import com.aub.backend_aub_shop.model.Product;
 import com.aub.backend_aub_shop.repository.ProductRepository;
 import com.aub.backend_aub_shop.service.CategoryService;
@@ -47,13 +49,31 @@ public class ProductController {
 
     @GetMapping(value = {"", "/"})
     public String getAllProducts(
+        @RequestParam(name = "pageNumber", defaultValue = "0") int pageNumber,
+        @RequestParam(name = "pageSize", defaultValue = "10") int pageSize,
         @RequestParam(name = "productName", required = false, defaultValue = "") String productName,
         Model m) {
-        List<Product> products = productService.findByNameContainingIgnoreCase(productName);
+            
+        List<Product> products = productService.findByNameContainingIgnoreCase(productName, pageNumber, pageSize);
+        Page<ProductDTO> pro = productService.findAll(productName, pageNumber, pageSize);
+        pageNumber = pageNumber != 0 ? pageNumber : 1; // Set default to 1 if not provided
+        int totalPages = pro.getTotalPages();
+        
+        // If totalPages is zero, we need to handle it
+        if (totalPages == 0) {
+            totalPages = 1; // Setting totalPages to 1 to handle empty pages scenario
+        }
+        
         m.addAttribute("products", products);
         m.addAttribute("productName", productName);
+        // m.addAttribute("pageNumber", pageNumber);
+        m.addAttribute("pageSize", pageSize);
+        m.addAttribute("totalPages", totalPages);
+        m.addAttribute("currentPage", pageNumber);
+        logger.info("This is my product. Total pages: " + totalPages);
         return "product-list";
     }
+
 
     @GetMapping("/addProduct")
     public String addProduct(Model m) {

@@ -19,8 +19,8 @@ public class UserSessionUtils {
     }
 
     public static UserSessionManager getUserSessionManager(HttpSession session) {
-    // HttpServletRequest req = ((ServletRequestAttributes)RequestContextHolder.getRequestAttributes()).getRequest();
-    return (UserSessionManager) session.getAttribute("UserSessionManager");
+        // HttpServletRequest req = ((ServletRequestAttributes)RequestContextHolder.getRequestAttributes()).getRequest();
+        return (UserSessionManager) session.getAttribute("UserSessionManager");
     }
 
     public static Long getUserId(HttpSession session) {

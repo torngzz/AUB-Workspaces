@@ -1,44 +1,61 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" th:replace="~{layout :: layout}">
-<head>
-    <meta charset="UTF-8">
+  <head>
+    <meta charset="UTF-8" />
     <title th:replace="layout :: title">Product Management</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.5/font/bootstrap-icons.min.css">
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-</head>
-<style>
-    .search-box { margin-bottom: 15px; }
-    .table-container { margin-top: 20px; }
-    .btn-primary, .btn-danger { margin-right: 5px; }
-</style>
-<body>
-<div th:fragment="content" class="mt-5">
-    <h2>Product Management</h2>
-    <div class="search-box">
-        <form th:action="@{/products}" method="get">
-            <div class="row align-items-center">
-                <div class="col-1 d-flex justify-content-center">
-                    <p class="mb-0">Products</p>
-                </div>
-                <div class="col-5 m-0 p-0">
-                    <input type="text" th:name="productName" class="form-control w-100" placeholder="Search product by name..." th:value="${productName}">
-                </div>
-                <div class="col-1 m-0 p-0">
-                    <button type="submit" class="btn btn-primary w-100">Search</button>
-                </div>
-                <div class="col-2"></div>
-                <div class="col-3 d-flex justify-content-end">
-                    <a th:href="@{/products/addProduct}" class="btn btn-primary">
-                        <i class="bi bi-plus"></i> Add New Product
-                    </a>
-                </div>
+    <link
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" th:href="@{/style/css/styles.css}" />
+    <style>
+      table.table td,
+      table.table th {
+        white-space: nowrap; /* Prevent line breaks */
+      }
+      .table-container {
+        overflow-x: auto; /* Ensure the table is scrollable */
+        -webkit-overflow-scrolling: touch; /* For smooth scrolling on mobile */
+      }
+      @media (max-width: 768px) {
+        /* For small screens */
+        .col-md-2 {
+          flex: 0 0 100%; /* Make sidebar take full width on small screens */
+        }
+      }
+      @media (min-width: 769px) and (max-width: 1400px) {
+        /* For medium screens */
+        .col-md-2 {
+          flex: 0 0 100%; /* Make sidebar take full width on small screens */
+        }
+      }
+    </style>
+  </head>
+  <body class="bg-dark">
+    <div th:fragment="content" class="mt-5">
+      <h2 th:text="#{user-title}">Product Management</h2>
+      <div class="search-box m-2">
+        <form th:action="@{/products}" method="get" class="mx-2">
+          <div class="row">
+            <div class="col-5 m-0 p-0">
+                <input type="text" th:name="productName" class="form-control w-100" placeholder="Search product by name..." th:value="${productName}">
+
             </div>
+            <div class="col-3 m-0 p-0">
+              <button type="submit" class="btn btn-primary float-left" th:text="#{btn-search}"></button>
+            </div>
+            <div class="col-4">
+              <a th:href="@{/products/addUser}" class="btn btn-primary float-right text-nowrap">Add User</a>
+            </div>
+          </div>
         </form>
-    </div>
-    <div class="card shadow mb-4 mt-3">
+      </div>
+
+      <!-- DataTales Example -->
+      <div class="card shadow mb-4 mt-3">
         <div class="card-header py-3">
           <div class="float-left w-25">
-            <h4 class="m-0 font-weight-bold text-primary d-flex align-items-center">Products Data Table</h4>
+            <h4 class="m-0 font-weight-bold text-primary d-flex align-items-center">User Data Table</h4>
           </div>
           <!-- Page Size Dropdown -->
           <div class="form-group d-flex flex-row float-right m-0">
@@ -58,172 +75,94 @@
             <label for="pageSize" class="d-flex align-items-center m-0">items per Page: </label>
           </div>
         </div>
-
         <div class="card-body">
-            <div class="table-responsive">
-                <table class="table table-bordered table-hover">
-                <thead style="text-align: center">
-                    <tr>
-                        <th>Id</th>
-                        <th>Name</th>
-                        <th>Category</th>
-                        <th>Original-Price</th>
-                        <th>Sale-Price</th>
-                        <th>Image-Url</th>
-                        <th>Create-Date</th>
-                        <th>Create-By</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody style="text-align: center">
-                    <tr th:each="product : ${products}">
-                        <td th:text="${product.product_id}"></td>
-                        <td th:text="${product.Pro_name}"></td>
-                        <td th:text="${product.category.CategoryName}"></td>
-                        <td th:text="${product.original_price}"></td>
-                        <td th:text="${product.sale_price}"></td>
-                        <td>
-                            <img th:src="@{'/uploads/' + ${product.image_url}}" alt="Product Image" style="max-width: 100px; max-height: 100px;">
-                        </td>
-                        <td th:text="${product.created_date}"></td>
-                        <td th:text="${product.created_by}"></td>
-                        <td>
-                            <a th:href="@{'/products/view/' + ${product.product_id}}" class="btn btn-info">View</a>
-                            <a th:href="@{'/products/edit/' + ${product.product_id}}" class="btn btn-primary">Edit</a>
-                            <a th:href="@{'/products/delete/' + ${product.product_id}}" class="btn btn-danger">Delete</a>
-                            <!-- <button type="button" class="btn btn-danger deleteButton" data-product-id="${product.product_id}">Delete</button> -->
-                        </td>
-                    </tr>
-                </tbody>
-                </table>
-            </div>
-        </div>
+          <div class="table-responsive">
+            <table class="table table-bordered table-hover">
+              <thead style="text-align: center">
+                <tr>
+                    <th>Id</th>
+                    <th>Name</th>
+                    <th>Category</th>
+                    <th>Original-Price</th>
+                    <th>Sale-Price</th>
+                    <th>Image-Url</th>
+                    <th>Create-Date</th>
+                    <th>Create-By</th>
+                    <th>Actions</th>
+                </tr>
 
-        <div class="pagenumber float-right">
+              </thead>
+              <tbody style="text-align: center">
+                <tr th:each="product : ${products}">
+                    <td th:text="${product.product_id}"></td>
+                    <td th:text="${product.Pro_name}"></td>
+                    <td th:text="${product.category.CategoryName}"></td>
+                    <td th:text="${product.original_price}"></td>
+                    <td th:text="${product.sale_price}"></td>
+                    <td>
+                        <img th:src="@{'/uploads/' + ${product.image_url}}" alt="Product Image" style="max-width: 100px; max-height: 100px;">
+                    </td>
+                    <td th:text="${product.created_date}"></td>
+                    <td th:text="${product.createByUsername}"></td>
+                    <td>
+                        <a th:href="@{'/products/view/' + ${product.product_id}}" class="btn btn-info">View</a>
+                        <a th:href="@{'/products/edit/' + ${product.product_id}}" class="btn btn-primary">Edit</a>
+                        <a th:href="@{'/products/delete/' + ${product.product_id}}" class="btn btn-danger">Delete</a>
+                    </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="pagenumber float-right">
             <nav aria-label="Page navigation">
                 <div class="d-flex justify-content-center align-items-center">
                     <ul class="pagination">
-                        <!-- Previous Button -->
-                        <li th:class="${currentPage == 0} ? 'page-item disabled' : 'page-item'">
-                            <a class="page-link" th:href="@{/users(pageNumber=${currentPage - 1}, pageSize=${pageSize})}" aria-label="Previous">
+                        <li th:classappend="${currentPage <= 0} ? 'disabled' : ''" class="page-item">
+                            <a class="page-link" th:href="@{/products(pageNumber=${currentPage - 1}, pageSize=${pageSize})}" aria-label="Previous">
                                 Previous
                             </a>
                         </li>
-
-                        <!-- First Page -->
-                        <li th:class="${currentPage == 0} ? 'page-item active' : 'page-item'">
-                            <a class="page-link" th:href="@{/users(pageNumber=0, pageSize=${pageSize})}">1</a>
-                        </li>
-
-                        <!-- Ellipses before current page if necessary -->
-                        <li th:if="${currentPage > 2}" class="page-item disabled">
-                            <span class="page-link">...</span>
-                        </li>
-
-                        <!-- Pages around the current page -->
-                        <li th:each="pageNum : ${#numbers.sequence(currentPage - 1, currentPage + 1)}"
-                            th:if="${pageNum > 0 and pageNum < totalPages - 1}"
-                            th:class="${pageNum == currentPage} ? 'page-item active' : 'page-item'">
-                            <a class="page-link" th:href="@{/users(pageNumber=${pageNum}, pageSize=${pageSize})}"
-                            th:text="${pageNum + 1}"></a>
-                        </li>
-
-                        <!-- Ellipses after current page if necessary -->
-                        <li th:if="${currentPage < totalPages - 3}" class="page-item disabled">
-                            <span class="page-link">...</span>
-                        </li>
-
-                        <!-- Last Page -->
-                        <li th:class="${currentPage == totalPages - 1} ? 'page-item active' : 'page-item'">
-                            <a class="page-link" th:href="@{/users(pageNumber=${totalPages - 1}, pageSize=${pageSize})}"
-                            th:text="${totalPages}"></a>
+        
+                        <li th:each="pageNum : ${#numbers.sequence(0, totalPages + 1)}"
+                            th:classappend="${pageNum == currentPage} ? 'active' : ''" class="page-item">
+                            <a class="page-link" th:href="@{/products(pageNumber=${pageNum}, pageSize=${pageSize})}" th:text="${pageNum + 1}"></a>
                         </li>
 
                         <!-- Next Button -->
                         <li th:class="${currentPage == totalPages - 1} ? 'page-item disabled' : 'page-item'">
-                            <a class="page-link" th:href="@{/users(pageNumber=${currentPage + 1}, pageSize=${pageSize})}" aria-label="Next">
-                                Next
-                            </a>
-                        </li>
+                        <a class="page-link" th:href="@{/products(pageNumber=${currentPage + 1}, pageSize=${pageSize})}" aria-label="Next">
+                            Next
+                        </a>
+                    </li>
                     </ul>
                 </div>
             </nav>
         </div>
+
+      </div>
     </div>
-</div>
-
-    
-    <!-- Confirmation Modal -->
-    <!-- <div class="modal fade" id="confirmationModal" tabindex="-1" role="dialog" aria-labelledby="confirmationModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="confirmationModalLabel">Confirmation</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <p>Are you sure you want to delete this product?</p>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-danger" id="confirmDeleteButton">Delete</button>
-                </div>
-            </div>
-        </div>
-    </div> -->
-
-
-<script>
-    function goToPage(pageNumber) {
-      if (pageNumber < 0 || pageNumber >= totalPages) {
-        return; // Prevent invalid page numbers
+  </div>
+    <script>
+      function goToPage(pageNumber) {
+        if (pageNumber < 0 || pageNumber >= totalPages) {
+          return; // Prevent invalid page numbers
+        }
+        const params = new URLSearchParams(window.location.search);
+        params.set("pageNumber", pageNumber);
+        params.set(
+          "pageSize",
+          document.querySelector('select[name="pageSize"]')
+            ? document.querySelector('select[name="pageSize"]').value
+            : 10
+        );
+        window.location.search = params.toString();
       }
-      const params = new URLSearchParams(window.location.search);
-      params.set("pageNumber", pageNumber);
-      params.set(
-        "pageSize",
-        document.querySelector('select[name="pageSize"]')
-          ? document.querySelector('select[name="pageSize"]').value
-          : 10
-      );
-      window.location.search = params.toString();
-    }
 
-    // Ensure totalPages is defined for validation within goToPage
-    const totalPages = /*[[${totalPages}]]*/ 1;
-  </script>
+      // Ensure totalPages is defined for validation within goToPage
+      const totalPages = /*[[${totalPages}]]*/ 1;
+    </script>
 
-    <!-- <form id="deleteForm" th:action="@{/products/delete/{id}(id=${product.product_id})}" method="get" style="display:none;">
-        <input type="hidden" name="productId" value="delete">
-    </form> -->
-
-<!-- <script>
-    $(document).ready(function() {
-        $('#deleteButton').on('click', function () {
-                $('#confirmationModal').modal('show');
-            });
-
-            $('#confirmDeleteButton').on('click', function () {
-                alert();
-                $('#deleteForm').submit();
-            });
-
-        $('.deleteButton').click(function(e) {
-            e.preventDefault();
-            var productId = $(this).data("product-id");
-            if (cmonfirm('Are you sure you want to delete?')) {
-                $("#productId").val(idVal);
-                $("#deleteForm").submit();
-
-                var deleteForm = $('#deleteForm');
-                var action = deleteForm.attr('th:action').replace('productId', productId);
-                deleteForm.attr('action', action);
-                deleteForm.submit();
-            }
-        });
-    });
-</script> -->
-</body>
+    <th:block th:include="~{layout :: footer}"></th:block>
+  </body>
 </html>

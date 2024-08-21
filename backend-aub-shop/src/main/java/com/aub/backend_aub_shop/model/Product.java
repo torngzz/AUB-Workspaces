@@ -35,15 +35,8 @@ public class Product {
     private Long categoryId;
 
     // private MultipartFile image_url;
-    // @Column(name = "image")
-    private String image_url;
-
-    // @Column(name = "created_date")
-    @DateTimeFormat
-    private Date created_date;
-
-    // @Column(name = "created_by")
-    private Long created_by;
+    // private String createByUsername;
+    // private String updateByUsername;
 
     private String description;
 
@@ -56,8 +49,43 @@ public class Product {
     // private Category category;
    
     private String createbyUsername;
-    
+
    
+    // @Column(name = "image")
+    private String image_url;
+
+    // @Column(name = "created_date")
+    @DateTimeFormat
+    private Date created_date;
+
+    // @Column(name = "created_by")
+    private Long created_by;
+    private Long updateBy;
+
+    public Long getUpdateBy() {
+        return updateBy;
+    }
+
+    public void setUpdateBy(Long updateBy) {
+        this.updateBy = updateBy;
+    }
+
+    // public String getCreateByUsername() {
+    //     return createByUsername;
+    // }
+
+    // public void setCreateByUsername(String createByUsername) {
+    //     this.createByUsername = createByUsername;
+    // }
+
+    // public String getUpdateByUsername() {
+    //     return updateByUsername;
+    // }
+
+    // public void setUpdateByUsername(String updateByUsername) {
+    //     this.updateByUsername = updateByUsername;
+    // }
+
     public Category getCategory() {
         return category;
     }
