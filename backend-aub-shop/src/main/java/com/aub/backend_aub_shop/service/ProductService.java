@@ -27,6 +27,7 @@ import jakarta.servlet.http.HttpSession;
 
 @Service("productService")
 public class ProductService {
+    private static final Logger LOGGER = LoggerFactory.getLogger(ProductService.class);
     @Autowired
     private ProductRepository productRepository;
     
@@ -35,14 +36,23 @@ public class ProductService {
     
     @Autowired
     private UserRepository userRepository;
-    
-    private static final Logger LOGGER = LoggerFactory.getLogger(ProductService.class);
+     
 
     @Transactional(readOnly = true)
-    public Page<ProductDTO> findAll(String username, int pageNumber, int pageSize) {
+    public Page<ProductDTO> findAll(String productName, int pageNumber, int pageSize) {
         Pageable pageable = PageRequest.of(pageNumber, pageSize, Sort.by("productName"));
-        Page<Product> products = productRepository.findByCreatebyUsernameContaining(username, pageable);
-        
+
+
+       
+        Page<Product> products = productRepository.findByProductNameContainingIgnoreCase(productName, pageable);
+
+        for( Product p : products){
+            LOGGER.info("This is my product" + p.toString());
+
+        }
+        LOGGER.info("This is my product" + products.get().toString());
+
+
         // Map products to include the username
         return products.map(product -> {
             ProductDTO dto = new ProductDTO();
@@ -53,8 +63,9 @@ public class ProductService {
             dto.setSale_price(product.getSale_price());
             dto.setImage_url(product.getImage_url());
             dto.setCreated_date(product.getCreated_date());
-            dto.setCreateByUsername(productService.getUsernameById(product.getCreated_by()));   
-            dto.setCreateByUsername(productService.getUsernameById(product.getUpdateBy()));                     
+            dto.setCreateByUsername(getUsernameById(product.getCreated_by()));  
+            dto.setUpdateByUsername(getUsernameById(product.getUpdateBy()));            
+            dto.setUpdated_date(product.getUpdated_date());         
             // String createByUsername = productService.getUsernameById(product.getCreated_by());
             // product.setCreatebyUsername(createByUsername);
             return dto;
@@ -72,11 +83,10 @@ public class ProductService {
         // return products;
     }
 
-    public String getUsernameById(Long userId) {
-        // Assuming getUsernameById should use a different repository or method to fetch username.
-        // Adjust as needed based on your actual user management.
-        // return productRepository.findById(userId)
-            // .map(Product::getCreatebyUsername)
+   
+    private String getUsernameById(Long userId) { 
+
+        LOGGER.info(" THIS IS USER ID: " + userId);
              UserModel user = userRepository.findById(userId)
             .orElseThrow(() -> new RuntimeException("User not found"));
         return user.getUsername();
@@ -115,6 +125,8 @@ public class ProductService {
             LOGGER.info("Saving product: " + product);
             product.setCreated_date(new Date());
             product.setCreated_by(sessionId);
+            product.setUpdateBy(sessionId);
+            product.setUpdated_date(new Date());
             return productRepository.save(product);
         } catch (Exception e) {
             LOGGER.error("Error saving product", e);
@@ -136,29 +148,37 @@ public class ProductService {
         }
     }
 
-    public Product updateProduct(Product product, Long id) {
-        try { 
-            LOGGER.info("Updating product: " + product);
-            Optional<Product> optionalProduct = productRepository.findById(id);
-            if (optionalProduct.isPresent()) {
-                Product pro = optionalProduct.get();
-                pro.setPro_name(product.getPro_name());
-                pro.setCategory(product.getCategory());
-                pro.setSale_price(product.getSale_price());
-                pro.setOriginal_price(product.getOriginal_price());
-                pro.setCategory_id(product.getCategory_id());
-                pro.setImage_url(product.getImage_url());
-                pro.setCreated_by(product.getCreated_by());
-                pro.setDescription(product.getDescription());
-                pro.setDetailImageUrl(product.getDetailImageUrl());
-                return productRepository.save(pro);
-            } else {
-                LOGGER.warn("Product with ID " + id + " not found for update.");
-                return null;
-            }
-        } catch (Exception e) {
-            LOGGER.error("Error updating product", e); 
-            throw new RuntimeException("Error updating product", e);
+    public Product updateProduct(Product product, Long id, HttpServletRequest request) {
+
+        Optional<Product> optionalProduct = productRepository.findById(id);
+        HttpSession session = request.getSession();
+        Long sessionId = UserSessionUtils.getUserId(session);
+    
+        if (sessionId == null) {
+            throw new IllegalStateException("User ID not found in session. Cannot create user.");
         }
+        
+        if (optionalProduct.isPresent()) {
+            Product existingProduct = optionalProduct.get();
+            existingProduct.setPro_name(product.getPro_name());
+            existingProduct.setCategory(product.getCategory());
+            existingProduct.setSale_price(product.getSale_price());
+            existingProduct.setOriginal_price(product.getOriginal_price());
+            existingProduct.setCategory_id(product.getCategory_id());
+            existingProduct.setImage_url(product.getImage_url());
+            // existingProduct.setCreated_by(product.getCreated_by());
+            existingProduct.setDescription(product.getDescription());
+            existingProduct.setDetailImageUrl(product.getDetailImageUrl());
+            existingProduct.setUpdated_date(new Date());
+            existingProduct.setUpdateBy(sessionId);
+            
+                LOGGER.info("Existing Product", existingProduct.toString());
+                return productRepository.save(existingProduct);
+            } else {
+            LOGGER.warn("Product with ID " + id + " not found for update.");
+            return null;
+        }
+    
     }
+    
 }

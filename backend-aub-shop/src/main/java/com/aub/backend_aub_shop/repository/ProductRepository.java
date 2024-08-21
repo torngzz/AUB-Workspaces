@@ -16,7 +16,7 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     // @Query("SELECT p FROM Product p WHERE LOWER(p.name) LIKE LOWER(CONCAT('%', :name, '%'))")
     Page<Product> findByProductNameContainingIgnoreCase(@Param("name") String name, Pageable pageable);
 
-    Page<Product> findByCreatebyUsernameContaining(@Param("username") String username, Pageable pageable);
+  ///  Page<Product> findByCreate_byContaining(@Param("createBy") String createBy, Pageable pageable);
 
     @Modifying
     @Transactional

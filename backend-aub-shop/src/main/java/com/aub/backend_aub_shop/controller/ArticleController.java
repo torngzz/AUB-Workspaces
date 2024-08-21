@@ -89,35 +89,35 @@ public String addArticle(@ModelAttribute ArticleModel article,
         return "Article/edit-article";
     }
     @PostMapping("/update/{id}")
-public String updateArticle(@PathVariable("id") Long id,
-                            @ModelAttribute ArticleModel article,
-                            @RequestParam("image") MultipartFile file) {
-    // Fetch the existing article to ensure `createdDate` and `imageUrl` are not overwritten
-    ArticleModel existingArticle = articleService.findById(id);
-    
-    article.setCreatedDate(existingArticle.getCreatedDate()); // Preserve existing date
-    article.setCreatedBy(existingArticle.getCreatedBy()); // Preserve existing user
+    public String updateArticle(@PathVariable("id") Long id,
+                                @ModelAttribute ArticleModel article,
+                                @RequestParam("image") MultipartFile file) {
+        // Fetch the existing article to ensure `createdDate` and `imageUrl` are not overwritten
+        ArticleModel existingArticle = articleService.findById(id);
+        
+        article.setCreatedDate(existingArticle.getCreatedDate()); // Preserve existing date
+        article.setCreatedBy(existingArticle.getCreatedBy()); // Preserve existing user
 
-    // Check if a new image was uploaded
-    if (!file.isEmpty()) {
-        try {
-            // Save the new image
-            Path fileNameAndPath = Paths.get(UPLOAD_DIR, file.getOriginalFilename());
-            Files.write(fileNameAndPath, file.getBytes());
-            article.setImageUrl(file.getOriginalFilename()); // Update the image URL with the new filename
-        } catch (IOException e) {
-            e.printStackTrace();
-            return "redirect:/Article/edit-article"; // Handle the error gracefully
+        // Check if a new image was uploaded
+        if (!file.isEmpty()) {
+            try {
+                // Save the new image
+                Path fileNameAndPath = Paths.get(UPLOAD_DIR, file.getOriginalFilename());
+                Files.write(fileNameAndPath, file.getBytes());
+                article.setImageUrl(file.getOriginalFilename()); // Update the image URL with the new filename
+            } catch (IOException e) {
+                e.printStackTrace();
+                return "redirect:/Article/edit-article"; // Handle the error gracefully
+            }
+        } else {
+            // Retain the existing image URL if no new file is uploaded
+            article.setImageUrl(existingArticle.getImageUrl());
         }
-    } else {
-        // Retain the existing image URL if no new file is uploaded
-        article.setImageUrl(existingArticle.getImageUrl());
-    }
 
-    article.setId(id); // Set the ID for update
-    articleService.save(article);
-    return "redirect:/Article/list";
-}
+        article.setId(id); // Set the ID for update
+        articleService.save(article);
+        return "redirect:/Article/list";
+    }
     
 //     @PostMapping("/update/{id}")
 // public String updateArticle(@PathVariable("id") Long id, @ModelAttribute ArticleModel article) {

@@ -108,7 +108,7 @@ public Page<CategoryDTO> findAll(String cate_name, int pageNumber, int pageSize)
        Long sessionId = UserSessionUtils.getUserId(session);
        if (sessionId == null) {
           throw new IllegalStateException("User ID not found in session. Cannot create user.");
-      }
+        }
 
         try
         { 

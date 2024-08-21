@@ -33,7 +33,7 @@
   </head>
   <body class="bg-dark">
     <div th:fragment="content" class="mt-5">
-      <h2 th:text="#{user-title}">Product Management</h2>
+      <h2>Product Management</h2>
       <div class="search-box m-2">
         <form th:action="@{/products}" method="get" class="mx-2">
           <div class="row">
@@ -45,7 +45,7 @@
               <button type="submit" class="btn btn-primary float-left" th:text="#{btn-search}"></button>
             </div>
             <div class="col-4">
-              <a th:href="@{/products/addUser}" class="btn btn-primary float-right text-nowrap">Add User</a>
+              <a th:href="@{/products/addProduct}" class="btn btn-primary float-right text-nowrap">Add Product</a>
             </div>
           </div>
         </form>
@@ -55,7 +55,7 @@
       <div class="card shadow mb-4 mt-3">
         <div class="card-header py-3">
           <div class="float-left w-25">
-            <h4 class="m-0 font-weight-bold text-primary d-flex align-items-center">User Data Table</h4>
+            <h4 class="m-0 font-weight-bold text-primary d-flex align-items-center">Product Data Table</h4>
           </div>
           <!-- Page Size Dropdown -->
           <div class="form-group d-flex flex-row float-right m-0">
@@ -86,24 +86,28 @@
                     <th>Original-Price</th>
                     <th>Sale-Price</th>
                     <th>Image-Url</th>
-                    <th>Create-Date</th>
-                    <th>Create-By</th>
+                    <th>Created-Date</th>
+                    <th>Created-By</th>
+                    <th>Updated-By</th>
+                    <th>Updated-Date</th>
                     <th>Actions</th>
                 </tr>
 
               </thead>
               <tbody style="text-align: center">
-                <tr th:each="product : ${products}">
+                <tr th:each="product : ${productDto}">
                     <td th:text="${product.product_id}"></td>
-                    <td th:text="${product.Pro_name}"></td>
+                    <td th:text="${product.productName}"></td>
                     <td th:text="${product.category.CategoryName}"></td>
                     <td th:text="${product.original_price}"></td>
                     <td th:text="${product.sale_price}"></td>
                     <td>
                         <img th:src="@{'/uploads/' + ${product.image_url}}" alt="Product Image" style="max-width: 100px; max-height: 100px;">
                     </td>
-                    <td th:text="${product.created_date}"></td>
                     <td th:text="${product.createByUsername}"></td>
+                    <td th:text="${product.created_date}"></td>
+                    <td th:text="${product.updateByUsername}"></td>
+                    <td th:text="${product.updated_date}"></td>
                     <td>
                         <a th:href="@{'/products/view/' + ${product.product_id}}" class="btn btn-info">View</a>
                         <a th:href="@{'/products/edit/' + ${product.product_id}}" class="btn btn-primary">Edit</a>
@@ -114,36 +118,63 @@
             </table>
           </div>
 
-          <div class="pagenumber float-right">
-            <nav aria-label="Page navigation">
-                <div class="d-flex justify-content-center align-items-center">
-                    <ul class="pagination">
-                        <li th:classappend="${currentPage <= 0} ? 'disabled' : ''" class="page-item">
-                            <a class="page-link" th:href="@{/products(pageNumber=${currentPage - 1}, pageSize=${pageSize})}" aria-label="Previous">
-                                Previous
-                            </a>
-                        </li>
-        
-                        <li th:each="pageNum : ${#numbers.sequence(0, totalPages + 1)}"
-                            th:classappend="${pageNum == currentPage} ? 'active' : ''" class="page-item">
-                            <a class="page-link" th:href="@{/products(pageNumber=${pageNum}, pageSize=${pageSize})}" th:text="${pageNum + 1}"></a>
-                        </li>
-
-                        <!-- Next Button -->
-                        <li th:class="${currentPage == totalPages - 1} ? 'page-item disabled' : 'page-item'">
-                        <a class="page-link" th:href="@{/products(pageNumber=${currentPage + 1}, pageSize=${pageSize})}" aria-label="Next">
-                            Next
-                        </a>
-                    </li>
-                    </ul>
-                </div>
-            </nav>
+          <div class="mt-2">
+            <div class="pagenumber float-right">
+                <nav aria-label="Page navigation">
+                    <div class="d-flex justify-content-center align-items-center">
+                        <ul class="pagination">
+                            <!-- Previous Button -->
+                            <li th:class="${currentPage == 0} ? 'page-item disabled' : 'page-item'">
+                                <a class="page-link" th:href="@{/products(pageNumber=${currentPage - 1}, pageSize=${pageSize})}" aria-label="Previous">
+                                    Previous
+                                </a>
+                            </li>
+            
+                            <!-- First Page -->
+                            <li th:class="${currentPage == 0} ? 'page-item active' : 'page-item'">
+                                <a class="page-link" th:href="@{/products(pageNumber=0, pageSize=${pageSize})}">1</a>
+                            </li>
+            
+                            <!-- Ellipses before current page if necessary -->
+                            <li th:if="${currentPage > 2}" class="page-item disabled">
+                                <span class="page-link">...</span>
+                            </li>
+            
+                            <!-- Pages around the current page -->
+                            <li th:each="pageNum : ${#numbers.sequence(currentPage - 1, currentPage + 1)}"
+                                th:if="${pageNum > 0 and pageNum < totalPages - 1}"
+                                th:class="${pageNum == currentPage} ? 'page-item active' : 'page-item'">
+                                <a class="page-link" th:href="@{/products(pageNumber=${pageNum}, pageSize=${pageSize})}"
+                                  th:text="${pageNum + 1}"></a>
+                            </li>
+            
+                            <!-- Ellipses after current page if necessary -->
+                            <li th:if="${currentPage < totalPages - 3}" class="page-item disabled">
+                                <span class="page-link">...</span>
+                            </li>
+            
+                            <!-- Last Page -->
+                            <li th:if="${totalPages > 1}" th:class="${currentPage == totalPages - 1} ? 'page-item active' : 'page-item'">
+                                <a class="page-link" th:href="@{/products(pageNumber=${totalPages - 1}, pageSize=${pageSize})}"
+                                  th:text="${totalPages}"></a>
+                            </li>
+            
+                            <!-- Next Button -->
+                            <li th:class="${currentPage == totalPages - 1} ? 'page-item disabled' : 'page-item'">
+                                <a class="page-link" th:href="@{/products(pageNumber=${currentPage + 1}, pageSize=${pageSize})}" aria-label="Next">
+                                    Next
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </nav>
+            </div>            
         </div>
 
       </div>
     </div>
   </div>
-    <script>
+    <!-- <script>
       function goToPage(pageNumber) {
         if (pageNumber < 0 || pageNumber >= totalPages) {
           return; // Prevent invalid page numbers
@@ -161,7 +192,7 @@
 
       // Ensure totalPages is defined for validation within goToPage
       const totalPages = /*[[${totalPages}]]*/ 1;
-    </script>
+    </script> -->
 
     <th:block th:include="~{layout :: footer}"></th:block>
   </body>
