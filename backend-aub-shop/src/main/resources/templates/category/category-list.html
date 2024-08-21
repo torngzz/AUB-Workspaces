@@ -78,8 +78,10 @@
                         <th>ID</th>
                         <th>Name</th>
                         <th>description</th>
-                        <th>created_date</th>
-                        <th>created_by</th>
+                        <th>Create By</th>
+                        <th>Create Date</th>
+                        <th>Update By</th>
+                        <th>Update Date</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
@@ -88,8 +90,10 @@
                         <td th:text="${c.id}"></td>
                         <td th:text="${c.categoryName}"></td>    
                         <td th:text="${c.description}"></td>
-                        <td th:text="${c.created_date}"></td>
                         <td th:text="${c.created_by}"></td>
+                        <td th:text="${c.created_date}"></td>
+                        <td th:text="${c.updated_by}"></td>
+                        <td th:text="${c.update_date}"></td>
                         <td>
                             <a th:href="@{/categorys/edit/{id}(id=${c.id})}" class="btn btn-primary">Edit</a>
                             <!-- <a th:href="@{/categorys/delete/{id}(id=${c.id})}" class="btn btn-danger">Delete</a> -->

@@ -10,8 +10,5 @@ import com.aub.backend_aub_shop.model.Category;
 
 public interface CategoryRepository extends JpaRepository<Category, Long>{
    
-    public Page<Category> findByCategoryNameContainingIgnoreCase(@Param("cate_name")String cate_name,
-    Pageable pageable);
-    
-    
+    public Page<Category> findByCategoryNameContainingIgnoreCase(@Param("cate_name")String cate_name, Pageable pageable);  
 }
