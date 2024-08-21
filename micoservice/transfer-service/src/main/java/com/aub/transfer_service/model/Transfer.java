@@ -1,5 +1,6 @@
 package com.aub.transfer_service.model;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 import jakarta.persistence.Entity;
@@ -7,7 +8,6 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-
 @Entity
 @Table(name="TBL_TRANSFER")
 public class Transfer {
@@ -17,7 +17,7 @@ public class Transfer {
 
     private String sourceAccountNumber;  //Sender DebitAccount
     private String destinationAccountNumber; //Receiver CreditAccount
-    private Double amount; //
+    private BigDecimal amount; //
     private LocalDateTime timestamp;
     private String status;
     
@@ -39,10 +39,10 @@ public class Transfer {
     public void setDestinationAccountNumber(String destinationAccountNumber) {
         this.destinationAccountNumber = destinationAccountNumber;
     }
-    public Double getAmount() {
+    public BigDecimal getAmount() {
         return amount;
     }
-    public void setAmount(Double amount) {
+    public void setAmount(BigDecimal amount) {
         this.amount = amount;
     }
     public LocalDateTime getTimestamp() {

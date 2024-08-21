@@ -1,7 +1,5 @@
 package com.aub.backend_aub_shop.model;
 
-
-
 import java.util.Date;
 
 import org.springframework.format.annotation.DateTimeFormat;
@@ -22,11 +20,10 @@ public class Product {
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
 
-    
     private Long product_id;
 
-    // @Column(name = "pro_name")
-    private String name;
+    @Column(name = "pro_name")
+    private String productName;
 
     // @Column(name = "original_price")
     private Double original_price;
@@ -37,6 +34,7 @@ public class Product {
     @Column(name = "category_id", insertable = false, updatable = false)
     private Long categoryId;
 
+    // private MultipartFile image_url;
     // @Column(name = "image")
     private String image_url;
 
@@ -45,7 +43,7 @@ public class Product {
     private Date created_date;
 
     // @Column(name = "created_by")
-    private String created_by;
+    private Long created_by;
 
     private String description;
 
@@ -56,8 +54,10 @@ public class Product {
     // @ManyToOne
     // @JoinColumn(name = "category_id")
     // private Category category;
-
-
+   
+    private String createbyUsername;
+    
+   
     public Category getCategory() {
         return category;
     }
@@ -73,7 +73,7 @@ public class Product {
 
     public Product(String name, double price, Long category, String image, String description) {
 
-        this.name = name;
+        this.productName = name;
         this.sale_price = price;
         this.categoryId = category;
         this.detailImageUrl = image;
@@ -83,11 +83,28 @@ public class Product {
     public String getProductDetails() {
         StringBuilder details = new StringBuilder();
         details.append("Product ID: ").append(product_id).append("\n");
-        details.append("Name: ").append(name).append("\n");
+        details.append("Name: ").append(productName).append("\n");
         details.append("Category: ").append(categoryId).append("\n");
         details.append("Price: ").append(sale_price).append("\n");
         details.append("Description: ").append(description).append("\n");
         return details.toString();
+    }
+
+    // public void setImage_url(MultipartFile image)
+    // {
+    //     this.image_url = image;
+    // }
+    // public MultipartFile getImage_url()
+    // {
+    //     return image_url;
+    // }
+
+    public String getPro_name() {
+        return productName;
+    }
+
+    public void setPro_name(String productName) {
+        this.productName = productName;
     }
 
     public String getDetailImage() {
@@ -131,11 +148,11 @@ public class Product {
         this.created_date = created_date;
     }
 
-    public String getCreated_by() {
+    public Long getCreated_by() {
         return created_by;
     }
 
-    public void setCreated_by(String created_by) {
+    public void setCreated_by(Long created_by) {
         this.created_by = created_by;
     }
 
@@ -163,13 +180,7 @@ public class Product {
         this.product_id = product_id;
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
+ 
     public String getDetailImageUrl() {
         return detailImageUrl;
     }
@@ -177,6 +188,32 @@ public class Product {
     public void setDetailImageUrl(String detailImageUrl) {
         this.detailImageUrl = detailImageUrl;
     }
- 
 
+    public void setImageUrl(String imageUrl) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    public String getProductName() {
+        return productName;
+    }
+
+    public void setProductName(String productName) {
+        this.productName = productName;
+    }
+
+    public Long getCategoryId() {
+        return categoryId;
+    }
+
+    public void setCategoryId(Long categoryId) {
+        this.categoryId = categoryId;
+    }
+
+    public String getCreatebyUsername() {
+        return createbyUsername;
+    }
+
+    public void setCreatebyUsername(String createbyUsername) {
+        this.createbyUsername = createbyUsername;
+    }
 }

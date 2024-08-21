@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.aub.account_service.model.Account;
+import com.aub.account_service.repository.AccountRepository;
 import com.aub.account_service.service.AccountService;
 
 @RestController
@@ -23,6 +24,9 @@ import com.aub.account_service.service.AccountService;
 public class AccountController {
     @Autowired
     private AccountService accountService;
+
+    @Autowired 
+    private AccountRepository accountRepository;
 
     // @PostMapping("/save")
     // public ResponseEntity<Account> createAccount(@RequestBody Account account){
@@ -73,9 +77,31 @@ public class AccountController {
         accountService.deleteAccount(id);
         return ResponseEntity.noContent().build();
     }  
+    //when deposit update balance in account
     @PutMapping("/update-balance/{accountNumber}")
     public ResponseEntity<Account> updateBalance(@PathVariable String accountNumber, @RequestParam Double amount) {
         Account updatedAccount = accountService.updateBalance(accountNumber, amount);
         return ResponseEntity.ok(updatedAccount);
     }
+
+    //two function work when transfer between account
+    @PutMapping("/account-number/{accountNumber}/decrease-balance")
+    public void decreaseBalance(@PathVariable("accountNumber") String accountNumber, @RequestParam("amount") Double amount) {
+        Account account = accountRepository.findByAccountNumber(accountNumber);
+        if (account != null) {
+            account.setBalance(account.getBalance() - amount);
+            accountRepository.save(account);
+        }
+    }
+
+    @PutMapping("/account-number/{accountNumber}/increase-balance")
+    public void increaseBalance(@PathVariable("accountNumber") String accountNumber, @RequestParam("amount") Double amount) {
+        Account account = accountRepository.findByAccountNumber(accountNumber);
+        if (account != null) {
+            account.setBalance(account.getBalance() + amount);
+            accountRepository.save(account);
+        }
+    }
+    //end
+
 }

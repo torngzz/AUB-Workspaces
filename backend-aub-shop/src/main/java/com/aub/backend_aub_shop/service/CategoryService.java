@@ -13,11 +13,15 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.aub.backend_aub_shop.model.Category;
+import com.aub.backend_aub_shop.model.Product;
+import com.aub.backend_aub_shop.model.UserModel;
 import com.aub.backend_aub_shop.repository.CategoryRepository;
 
 @Service("categoryService")
 public class CategoryService {
     @Autowired CategoryRepository categoryRepository;
+
+
     private static final Logger LOGGER = LoggerFactory.getLogger(CategoryService.class);
 
 /**
@@ -30,11 +34,17 @@ public class CategoryService {
 public Page<Category> findAll(String cate_name, int pageNumber, int pageSize) {
     
     Pageable pageable = PageRequest.of(pageNumber, pageSize);
+
+
+    Product pro = new Product();
         if (cate_name == null || cate_name.trim().isEmpty()) {
             return categoryRepository.findAll(pageable);
         }
-        return categoryRepository.findByNameContainingIgnoreCase(cate_name, pageable);
+        return categoryRepository.findByCategoryNameContainingIgnoreCase(cate_name, pageable);
     }
+
+  
+
     public Optional<Category> findById(Long id){
         return categoryRepository.findById(id);
     }
@@ -73,7 +83,7 @@ public Page<Category> findAll(String cate_name, int pageNumber, int pageSize) {
             LOGGER.error(" System error", e);
         if (optionalCategory.isPresent()){
                 Category ca = optionalCategory.get();
-                ca.setName(category.getName());
+                ca.setCategoryName(category.getCategoryName());
                 ca.setDescription(category.getDescription());
                 ca.setCreated_date(category.getCreated_date());
                 ca.setCreated_by(category.getCreated_by());

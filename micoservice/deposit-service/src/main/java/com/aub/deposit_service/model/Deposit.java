@@ -1,5 +1,6 @@
 package com.aub.deposit_service.model;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 import jakarta.persistence.Entity;
@@ -15,7 +16,7 @@ public class Deposit {
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Long id;
     private String accountNumber;
-    private Double amount;
+    private BigDecimal amount;
     private LocalDateTime timestamp;
     private String status;
 
@@ -31,10 +32,10 @@ public class Deposit {
     public void setAccountNumber(String accountNumber) {
         this.accountNumber = accountNumber;
     }
-    public Double getAmount() {
+    public BigDecimal getAmount() {
         return amount;
     }
-    public void setAmount(Double amount) {
+    public void setAmount(BigDecimal amount) {
         this.amount = amount;
     }
     public LocalDateTime getTimestamp() {

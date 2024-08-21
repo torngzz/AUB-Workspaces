@@ -60,6 +60,9 @@ public class ProductController {
         model.addAttribute("totalPages", totalPages);
 
         LOGGER.info("This is my product. Total pages: " + totalPages);
+            // Logging the image URLs
+        pro.forEach(product -> LOGGER.info("Product ID: " + product.getProduct_id() + ", Image URL: " + product.getImage_url()));
+
         return "product";
     }
 
