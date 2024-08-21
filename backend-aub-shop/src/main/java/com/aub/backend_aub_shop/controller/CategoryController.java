@@ -59,7 +59,7 @@ public class CategoryController {
         // model.addAttribute("categories", categoryService.getAllCategories());
 
         @RequestParam(name = "pageNumber", defaultValue = "0") int pageNumber,
-        @RequestParam(name = "pageSize", defaultValue = "8") int pageSize,
+        @RequestParam(name = "pageSize", defaultValue = "5") int pageSize,
         @RequestParam(name=   "categoryName",required=false, defaultValue="") String categoryName,
         Model model
         )
