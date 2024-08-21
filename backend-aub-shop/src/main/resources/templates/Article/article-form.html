@@ -42,64 +42,136 @@
 </head>
 <body>
     <div th:fragment="content" class="mt-5">
-        <h1 class="text-white mb-4">Article List</h1>
-        <a href="#" th:href="@{/Article/addArticle}" class="btn btn-primary mb-3">Add New Article</a>
-        <div class="table-container">
-            <table class="table table-bordered table-hover">
-                <thead class="thead-dark">
-                    <tr>
-                        <th>ID</th>
-                        <th class="text-nowrap">Title</th>
-                        <th>Short Description</th>
-                        <th>Long Description</th>
-                        <th class="text-nowrap">Created By</th>
-                        <th class="text-nowrap">Created Date</th>
-                        <th>Image URL</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody style="text-align: center">
-                    <tr th:each="article : ${articles}">
-                        <td th:text="${article.id}"></td>
-                        <td class="text-nowrap" th:text="${article.title}"></td>
-                        <td th:text="${article.shortDescription}"></td>
-                        <td th:text="${article.longDescription}"></td>
-                        <td class="text-nowrap" th:text="${article.createdBy}"></td>
-                        <td class="text-nowrap" th:text="${#dates.format(article.createdDate, 'yyyy-MM-dd HH:mm:ss')}"></td>
-                        <td>
-                            <img th:src="@{${article.imageUrl}}" alt="Article Image" style="width: 100px; height: auto;">
-                        </td>
-                        <td class="text-nowrap">
-                            <a th:href="@{/Article/details/{id}(id=${article.id})}" class="btn btn-info btn-sm btn-action">View</a>
-                            <a th:href="@{/Article/edit/{id}(id=${article.id})}" class="btn btn-warning btn-sm btn-action">Edit</a>
-                            <a th:href="@{/Article/delete/{id}(id=${article.id})}" class="btn btn-danger btn-sm btn-action" onclick="return confirm('Are you sure you want to delete this Article?')">Delete</a>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
+        <h2>Article Management</h2>
+        <div class="search-box m-2">
+          <form th:action="@{/Article}" method="get" class="mx-2">
+            <div class="row">
+              <div class="col-5 m-0 p-0">
+                <input
+                  type="text"
+                  name="username"
+                  class="form-control w-100"
+                  placeholder="Search user by article..."
+                  th:value="${article}"
+                />
+              </div>
+              <div class="col-3 m-0 p-0">
+                <button type="submit" class="btn btn-primary float-left" th:text="#{btn-search}"></button>
+              </div>
+              <div class="col-4">
+                <a href="#" th:href="@{/Article/addArticle}" class="btn btn-primary mb-3 float-right text-nowrap">Add New Article</a>
+              </div>
+            </div>
+          </form>
         </div>
-        <div class="pagination-container">
-            <nav aria-label="Page navigation">
-                <ul class="pagination justify-content-center">
-                    <li class="page-item" th:if="${currentPage > 0}">
-                        <a class="page-link" th:href="@{/Article/list(pageNumber=${currentPage - 1}, pageSize=${pageSize})}" aria-label="Previous">
-                            <span aria-hidden="true">&laquo;</span>
-                        </a>
-                    </li>
-                    <li th:each="pageNum : ${#numbers.sequence(0, totalPages-1)}" th:class="${pageNum == currentPage} ? 'page-item active' : 'page-item'">
-                        <a class="page-link" th:href="@{/Article/list(pageNumber=${pageNum}, pageSize=${pageSize})}" th:text="${pageNum + 1}"></a>
-                    </li>
-                    <li class="page-item" th:if="${currentPage < totalPages - 1}">
-                        <a class="page-link" th:href="@{/Article/list(pageNumber=${currentPage + 1}, pageSize=${pageSize})}" aria-label="Next">
-                            <span aria-hidden="true">&raquo;</span>
-                        </a>
-                    </li>
-                </ul>
-            </nav>
+        <!-- DataTales Example -->
+      <div class="card shadow mb-4 mt-3">
+        <div class="card-header py-3">
+          <div class="float-left w-25">
+            <h4 class="m-0 font-weight-bold text-primary d-flex align-items-center">User Data Table</h4>
+          </div>
+          <!-- Page Size Dropdown -->
+          <div class="form-group d-flex flex-row float-right m-0">
+            <label for="pageSize" class="d-flex align-items-center m-0">Show</label>
+            <form th:action="@{/users}" method="get" class="mx-1">
+              <select
+                class="form-control"
+                name="pageSize"
+                id="pageSize"
+                onchange="this.form.submit()">
+                <option value="10" th:text="10" th:selected="${pageSize == 10}"></option>
+                <option value="20" th:text="20" th:selected="${pageSize == 20}"></option>
+                <option value="50" th:text="50" th:selected="${pageSize == 50}"></option>
+                <option value="100" th:text="100" th:selected="${pageSize == 100}"></option>
+              </select>
+            </form>
+            <label for="pageSize" class="d-flex align-items-center m-0">items per Page: </label>
+          </div>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <div class="table-container">
+                    <table class="table table-bordered table-hover">
+                        <thead class="thead-dark">
+                            <tr>
+                                <th>ID</th>
+                                <th class="text-nowrap">Title</th>
+                                <th>Short Description</th>
+                                <th>Long Description</th>
+                                <th class="text-nowrap">Created By</th>
+                                <th class="text-nowrap">Created Date</th>
+                                <th>Image URL</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody style="text-align: center">
+                            <tr th:each="article : ${articles}">
+                                <td th:text="${article.id}"></td>
+                                <td class="text-nowrap" th:text="${article.title}"></td>
+                                <td th:text="${article.shortDescription}"></td>
+                                <td th:text="${article.longDescription}"></td>
+                                <td class="text-nowrap" th:text="${article.createdBy}"></td>
+                                <td class="text-nowrap" th:text="${#dates.format(article.createdDate, 'yyyy-MM-dd HH:mm:ss')}"></td>
+                                <td>
+                                    <img th:src="@{'/uploads/' + ${article.imageUrl}}" alt="Article Image" style="width: 100px; height: auto;">
+                                </td>
+                                <td class="text-nowrap">
+                                    <a th:href="@{/Article/details/{id}(id=${article.id})}" class="btn btn-info btn-sm btn-action">View</a>
+                                    <a th:href="@{/Article/edit/{id}(id=${article.id})}" class="btn btn-warning btn-sm btn-action">Edit</a>
+                                    <a th:href="@{/Article/delete/{id}(id=${article.id})}" class="btn btn-danger btn-sm btn-action" onclick="return confirm('Are you sure you want to delete this Article?')">Delete</a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="pagenumber float-right">
+                <nav aria-label="Page navigation">
+                    <div class="d-flex justify-content-center align-items-center">
+                        <ul class="pagination">
+                            <li th:classappend="${currentPage <= 0} ? 'disabled' : ''" class="page-item">
+                                <a class="page-link" th:href="@{/Article(pageNumber=${currentPage - 1}, pageSize=${pageSize})}" aria-label="Previous">
+                                    Previous
+                                </a>
+                            </li>
+            
+                            <li th:each="pageNum : ${#numbers.sequence(0, totalPages + 1)}"
+                                th:classappend="${pageNum == currentPage} ? 'active' : ''" class="page-item">
+                                <a class="page-link" th:href="@{/Article(pageNumber=${pageNum}, pageSize=${pageSize})}" th:text="${pageNum + 1}"></a>
+                            </li>
+    
+                            <!-- Next Button -->
+                            <li th:class="${currentPage == totalPages - 1} ? 'page-item disabled' : 'page-item'">
+                            <a class="page-link" th:href="@{/Article(pageNumber=${currentPage + 1}, pageSize=${pageSize})}" aria-label="Next">
+                                Next
+                            </a>
+                        </li>
+                        </ul>
+                    </div>
+                </nav>
         </div>
     </div>
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        function goToPage(pageNumber) {
+          if (pageNumber < 0 || pageNumber >= totalPages) {
+            return; // Prevent invalid page numbers
+          }
+          const params = new URLSearchParams(window.location.search);
+          params.set("pageNumber", pageNumber);
+          params.set(
+            "pageSize",
+            document.querySelector('select[name="pageSize"]')
+              ? document.querySelector('select[name="pageSize"]').value
+              : 10
+          );
+          window.location.search = params.toString();
+        }
+  
+        // Ensure totalPages is defined for validation within goToPage
+        const totalPages = /*[[${totalPages}]]*/ 1;
+      </script>
 </body>
 </html>
