@@ -49,6 +49,13 @@ public class TransferService {
         if (sourceBalance.compareTo(amount) < 0) {
             throw new RuntimeException("Insufficient balance in source account.");
         }
+
+          // Validate that the source and destination account currencies are the same
+        String sourceCurrency = sourceAccount.getCurrency();
+        String destinationCurrency = destinationAccount.getCurrency();
+        if (!sourceCurrency.equals(destinationCurrency)) {
+            throw new RuntimeException("Transfer cannot be made between accounts with different currencies.");
+        }
    
 
          // Check if the source account balance is less than the destination account balance

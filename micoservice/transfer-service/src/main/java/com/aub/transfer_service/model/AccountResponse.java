@@ -10,6 +10,7 @@ public class AccountResponse {
     private BigDecimal balance;
     private String accouyntType;
     private String status;
+    private String currency;
 
     public Long getId() {
         return id;
@@ -47,4 +48,10 @@ public class AccountResponse {
     public void setStatus(String status) {
         this.status = status;
     } 
+    public String getCurrency() {
+        return currency;
+    }
+    public void setCurrency(String currency) {
+        this.currency = currency;
+    }
 }
