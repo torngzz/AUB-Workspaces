@@ -13,7 +13,9 @@ public class AccountService {
     @Autowired
     private AccountRepository accountRepository;
 
-   
+    // private static final String CCY[] = {"KHR","USD"};
+    private static final String[] ALLOWED_CURRENCIES = {"KHR", "USD"};
+
     /**
      * 
      * @param account
@@ -28,6 +30,19 @@ public class AccountService {
             throw new Exception("Account number must be exactly 6 digits");
         }
 
+         // Validate currency (must be KHR or USD)
+         boolean validCurrency = false;
+         for (String currency : ALLOWED_CURRENCIES) {
+             if (currency.equals(account.getCurrency())) {
+                 validCurrency = true;
+                 break;
+             }
+         }
+ 
+         if (!validCurrency) {
+             throw new Exception("Invalid currency. Only 'KHR' or 'USD' are allowed.");
+         }
+
         // Check if the account number already exists
         if (accountRepository.findByAccountNumber(account.getAccountNumber()) != null) {
             throw new Exception("Account with number " + account.getAccountNumber() + " already exists");
@@ -41,7 +56,8 @@ public class AccountService {
      * @return
      */
     public Account getAccountById(Long id){
-        return accountRepository.findById(id).orElse(null);
+        return accountRepository.findById(id).orElse(
+            null);
     }
 
     /**

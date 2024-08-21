@@ -18,6 +18,7 @@ public class Account {
     private Double balance;
     private String accouyntType;
     private String status;
+    private String currency;
     
     public Long getId() {
         return id;
@@ -55,10 +56,16 @@ public class Account {
     public void setStatus(String status) {
         this.status = status;
     }
-    
+    public String getCurrency() {
+        return currency;
+    }
+    public void setCurrency(String currency) {
+        this.currency = currency;
+    }
     @Override
     public String toString() {
         return "Account [id=" + id + ", accountNumber=" + accountNumber + ", accountHolderName=" + accountHolderName
-                + ", balance=" + balance + ", accouyntType=" + accouyntType + ", status=" + status + "]";
-    }  
+                + ", balance=" + balance + ", accouyntType=" + accouyntType + ", status=" + status + ", currency="
+                + currency + "]";
+    }
 }
