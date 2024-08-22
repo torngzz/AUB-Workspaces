@@ -45,7 +45,7 @@
               <button type="submit" class="btn btn-primary float-left" th:text="#{btn-search}"></button>
             </div>
             <div class="col-4">
-              <a th:href="@{/products/addProduct}" class="btn btn-primary float-right text-nowrap">Add Product</a>
+              <a th:href="@{/products/addProduct}" class="btn btn-primary float-right text-nowrap">Add New Product</a>
             </div>
           </div>
         </form>
@@ -113,8 +113,15 @@
                         <a th:href="@{'/products/edit/' + ${product.product_id}}" class="btn btn-primary">Edit</a>
                         <a th:href="@{'/products/delete/' + ${product.product_id}}" class="btn btn-danger">Delete</a>
                     </td>
-                </tr>
+                </tr>          
               </tbody>
+
+              <tfoot>
+                <tr th:if="${#lists.isEmpty(productDto)}" class="text-center">
+                  <td colspan="11">No Product</td>
+                </tr>
+              </tfoot>
+              
             </table>
           </div>
 

@@ -82,7 +82,7 @@
       <div class="card shadow mb-4 mt-3">
         <div class="card-header py-3">
           <div class="float-left w-25">
-            <h4 class="m-0 font-weight-bold text-primary d-flex align-items-center">User Data Table</h4>
+            <h4 class="m-0 font-weight-bold text-primary d-flex align-items-center">Article Data Table</h4>
           </div>
           <!-- Page Size Dropdown -->
           <div class="form-group d-flex flex-row float-right m-0">
@@ -165,6 +165,12 @@
                           </tr>
                       </tbody>
 
+                      <tfoot>
+                        <tr th:if="${#lists.isEmpty(articles)}" class="text-center">
+                          <td colspan="11">No Article</td>
+                      </tr>
+                      </tfoot>
+                      
                     </table>
                   </div>
 
