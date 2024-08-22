@@ -43,95 +43,119 @@
         p {
             font-size: 1.2rem;
         }
+      
     </style>
 </head>
 <body>
-<<<<<<< HEAD
-    <div class="container" th:fragment="content">
-=======
+
     <div th:fragment="content" class="container">
->>>>>>> af2586b737a7923c119b2a9a4ae54777c190fa89
-        <h1>Product Details</h1>
-        <div class="row">
-            <div class="col-md-6">
-                <div class="main-product-image">
-                    <img width="300px" th:src="${productdetail.image_url}" alt="Product Image" id="main-product-image">
+        <div class="card">  
+            <input type="hidden" id="productId" th:value="${productdetail.product_id}" />
+            <h4 class="card-header bg-primary text-white">Product Details</h4>
+            <div class="card-body">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="main-product-image">
+                        <img width="300px" th:src="@{'/uploads/' + ${productdetail.image_url}}" alt="Product Image" id="main-product-image">
+                    </div>
+                    <!-- <div class="additional-pictures">
+                        <img width="150px" th:each="@{'/uploads/' + ${productdetail.detailImageUrls}}" class="detail-image" th:src="${imagedetail}" alt="Additional Image" onclick="switchImage(this)">
+                    </div> -->
+                    <div class="additional-pictures">
+                        <!-- <img th:each="imagedetail : ${detailImageUrls}" th:src="@{'/uploads/' + ${imagedetail}}" alt="Product Image" style="max-width: 100px; max-height: 100px;"> -->
+                        <img th:each="imagedetail : ${detailImageUrls}" 
+                        th:src="@{'/uploads/' + ${imagedetail}}" 
+                        alt="Product Image" 
+                        style="max-width: 100px; max-height: 100px;" 
+                        onclick="switchImage(this)">
+                    </div>
                 </div>
-                <div class="additional-pictures">
-                    <img width="150px" th:each="imagedetail : ${detailImageUrls}" class="detail-image" th:src="${imagedetail}" alt="Additional Image" onclick="switchImage(this)">
-                </div>
-            </div>
-            <div class="col-md-6 product-details">
-                <h2 th:text="${productdetail.pro_name}"></h2>
-                <p><span>Category: </span><span th:text="${productdetail.category_id}"></span></p>
-                <p><span>Price: $</span><span th:text="${productdetail.sale_price}" id="sale-price"></span></p>
-                <p th:text="${productdetail.description}"></p>
-                
-                <div class="add-item">
-                    <div class="d-flex align-items-center">
-                        <div class="w-100 mb-3">
-                            <div class="row">
-                                <div class="col-6 m-0 p-0">
-                                    <div class="input-group mr-2 flex-grow m-0 p-0">
-                                        <div class="input-group-prepend">
-                                            <button type="button" class="btn btn-outline-primary" id="decrease-product-qty">-</button>
-                                        </div>
-                                        <input type="text" value="1" class="border-primary form-control text-center font-weight-bold" id="product-qty">
-                                        <div class="input-group-append">
-                                            <button type="button" class="btn btn-outline-primary" id="increase-product-qty">+</button>
+                <div class="col-md-6 product-details">
+                    <div class="mb-3 text-right">
+                        <p><i class="fas fa-eye"></i> <span th:text="${productdetail.viewCount}"></span></p>
+                    </div>
+
+                    <h2 th:text="${productdetail.pro_name}" id="name-of-product"></h2>
+                    <!-- <p><span>Category: </span><span th:text="${productdetail.category_id}"></span></p> -->
+                    <h4><span>Price: $</span><span th:text="${productdetail.sale_price}" id="sale-price"></span></h4>
+                    <p th:text="${productdetail.description}"></p>
+                    
+                    <div class="add-item">
+                        <div class="d-flex align-items-center">
+                            <div class="w-100 mb-3">
+                                <div class="row">
+                                    <div class="col-md-8">
+                                        <h4 class="total-price text-danger">Total Price: $<span id="total-price">0.00</span></h4>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="input-group flex-grow btnincrement">
+                                            <div class="input-group-prepend">
+                                                <button type="button" class="btn btn-outline-primary" id="decrease-product-qty">-</button>
+                                            </div>
+                                            <input type="text" value="1" class="border-primary form-control text-center font-weight-bold" id="product-qty">
+                                            <div class="input-group-append">
+                                                <button type="but   ton" class="btn btn-outline-primary" id="increase-product-qty">+</button>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                                <div class="col-6">
-                                    <button type="submit" class="btn btn-success btn-block">
-                                        <i class="fas fa-cart-plus"></i> Add to Cart
-                                    </button>
+                                    <div class="col-md-12 mt-4">
+                                        <button type="submit" class="btn btn-success btn-block " id="add-to-cart-btn">
+                                            <i class="fas fa-cart-plus"></i> Add to Cart
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-                <p class="total-price">Total Price: $<span id="total-price">0.00</span></p>
             </div>
         </div>
-
-        <div class="btn-container">
-            <a href="/aubshop/products" class="btn btn-danger">Back to Product List</a>
-        </div>
     </div>
+
+        <div class="btn-container mt-3">
+            <a href="/aubshop/products" class="btn btn-secondary">Back to Product List</a>
+        </div>
+
     
+   <script src="https://code.jquery.com/jquery-3.6.0.min.js" crossorigin="anonymous"></script>
    <script th:fragment="scripts">
-        document.addEventListener('DOMContentLoaded', function() {
-            const qtyInput = document.getElementById('product-qty');
-            const decreaseButton = document.getElementById('decrease-product-qty');
-            const increaseButton = document.getElementById('increase-product-qty');
-            const salePriceElement = document.getElementById('sale-price');
-            const salePrice = parseFloat(salePriceElement.textContent.trim()) || 0.00;
+        //function switch image
+        function switchImage(image) {
+            $('#main-product-image').attr('src', $(image).attr('src'));
+        }
+        window.switchImage = switchImage;
+        
+        $(document).ready(function() {
+            const $qtyInput = $('#product-qty');
+            const $decreaseButton = $('#decrease-product-qty');
+            const $increaseButton = $('#increase-product-qty');
+            const $salePriceElement = $('#sale-price');
+            const salePrice = parseFloat($salePriceElement.text().trim()) || 0.00;
 
             console.log("Initial Sale Price:", salePrice); // Debugging
 
             function updateQuantity(change) {
-                let currentQty = parseInt(qtyInput.value, 10);
-                const maxValue = parseInt(qtyInput.getAttribute('max-value'), 10) || Infinity;
+                let currentQty = parseInt($qtyInput.val(), 10);
+                const maxValue = parseInt($qtyInput.attr('max-value'), 10) || Infinity;
                 if (change === 'increase' && currentQty < maxValue) {
-                    qtyInput.value = currentQty + 1;
+                    $qtyInput.val(currentQty + 1);
                 } else if (change === 'decrease' && currentQty > 1) {
-                    qtyInput.value = currentQty - 1;
+                    $qtyInput.val(currentQty - 1);
                 }
                 updateTotalPrice();
             }
 
             function updateTotalPrice() {
-                let currentQty = parseInt(qtyInput.value, 10);
+                let currentQty = parseInt($qtyInput.val(), 10);
                 let totalPrice = currentQty * salePrice;
-                document.getElementById('total-price').innerText = totalPrice.toFixed(2);
+                $('#total-price').text(totalPrice.toFixed(2));
             }
 
-            decreaseButton.addEventListener('click', function() {
+            $decreaseButton.on('click', function() {
                 updateQuantity('decrease');
             });
 
-            increaseButton.addEventListener('click', function() {
+            $increaseButton.on('click', function() {
                 updateQuantity('increase');
             });
 
@@ -139,12 +163,121 @@
             updateTotalPrice();
 
             console.log("Product details page loaded.");
+
+            function setCookie(name, value, days) {
+                let expires = "";
+                if (days) {
+                    let date = new Date();
+                    date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+                    expires = "; expires=" + date.toUTCString();
+                }
+                document.cookie = name + "=" + (value || "") + expires + "; path=/";
+            }
+            function test(){
+                var a = {};
+
+            }
+            function getCookie(name) {
+                let nameEQ = name + "=";
+                let ca = document.cookie.split(';');
+                for (let i = 0; i < ca.length; i++) {
+                    let c = ca[i];
+                    while (c.charAt(0) === ' ') c = c.substring(1, c.length);
+                    if (c.indexOf(nameEQ) === 0) return c.substring(nameEQ.length, c.length);
+                }
+                return null;
+            }
+
+            // function updateCartItemCount(newCount) {
+            //     $('#cart-item-count').text(newCount);
+            //     setCookie('cartItemCount', newCount, 7); // Store for 7 days
+            // }
+
+            // Initialize cart item count from cookie
+            const storedCount = getCookie('cartItemCount');
+            if (storedCount) {
+                $('#cart-item-count').text(storedCount);
+            }
+            $('#add-to-cart-btn').on('click', function() {
+                var productId = $("#productId").val();
+
+                const qty = parseInt($('#product-qty').val(), 10) || 1; // Default to 1 if qty is not set
+                var productDetails = getCookie("cartProduct");
+                if (productDetails) {
+                    productDetails = JSON.parse(productDetails);
+                }
+
+                if (productDetails == null || productDetails === "" || typeof productDetails === 'undefined') {
+                    productDetails = [];
+                    productDetails.push({
+                        product_id : productId,
+                        image: $('#main-product-image').attr('src'),
+                        name: $('#name-of-product').text().trim(),
+                        salePrice: salePrice,
+                        totalPrice: (salePrice * qty).toFixed(2),
+                        quantity: qty
+                    });
+                }else{
+                    if (typeof productDetails === 'object' && !Array.isArray(productDetails)) {
+                        productDetails = [productDetails];
+                    }
+                    console.log("Is productDetails an array?", Array.isArray(productDetails));
+                    console.log("Product details:", productDetails);
+
+                    var isFound = false;
+                    productDetails.forEach(function(product) {
+                        console.log("Product ID from array:", product.product_id);
+                        console.log("Current Product ID:", productId);
+                        console.log("Comparison result:", product.product_id == productId);
+
+                        console.log("product.product_id == productId " + product.product_id == productId)
+                        if(product.product_id == productId){
+                            console.log("product.product_id == productId " + product.product_id == productId)
+                            product.quantity += qty;
+                            isFound = true;
+                            return;
+                        }
+                    });
+                    if (!isFound){
+                        productDetails.push({
+                        product_id : productId,
+                        image: $('#main-product-image').attr('src'),
+                        name: $('#name-of-product').text().trim(),
+                        salePrice: salePrice,
+                        totalPrice: (salePrice * qty).toFixed(2),
+                        quantity: qty
+                    });
+
+                }
+            }
+            console.log(productDetails);
+            
+            // Store product details as JSON string in cookies
+            setCookie('cartProduct', JSON.stringify(productDetails), 7);
+
+            // Update the cart item count
+            let cartItemCount = parseInt(getCookie('cartItemCount')) || 0;
+            cartItemCount += qty;
+            setCookie('cartItemCount', cartItemCount, 7);
+            $('#cart-item-count').text(cartItemCount);
+
+
+
+
+  
         });
 
-        function switchImage(image) {
-            var mainImage = document.getElementById('main-product-image');
-            mainImage.src = image.src;
-        }
+
+ 
+    
+
+    });
+
+    
+
+
+      
+    
     </script>
 
 </body>

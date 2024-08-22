@@ -284,19 +284,19 @@
                             });
                             dropdownMenu.append(categoryLink);
                         });
-                    },
-              error: function(xhr, status, error) {
-                  console.error('Error fetching categories:', error); // Debug statement
-              }
-          });
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error fetching categories:', error); // Debug statement
+                }
+            });
+            function deleteCookie(name) {
+                var expires = "Thu, 01 Jan 1970 00:00:00 UTC";
+                document.cookie = name + "=; expires=" + expires + "; path=/";
+            }
 
           
-    });
-    function deleteCookie(name) {
-        var expires = "Thu, 01 Jan 1970 00:00:00 UTC";
-        document.cookie = name + "=; expires=" + expires + "; path=/";
-    }
-                
-</script>
+        });
+
+    </script>
 </body>
 </html>

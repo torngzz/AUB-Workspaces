@@ -2,6 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org" th:replace="~{layout :: layout}">
 <head>
     <title>Cart Detail</title>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <style>
         li {
             list-style-type: none;
@@ -23,6 +24,12 @@
             border: 1px solid #ccc;
             border-radius: 4px;
         }
+        .modal {
+            z-index: 1050;
+        }
+        .modal-backdrop {
+            z-index: 1040;
+        }
     </style>
 </head>
 <body>
@@ -37,8 +44,32 @@
             <input type="text" id="txt-acc-number" >
         </li>
         <button id="pay-now-btn" class="btn btn-primary btn-lg btn-block mt-4">Pay Now</button>
+
+            <!-- Modal -->
+            <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <!-- Modal Header -->
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="myModalLabel">Payment Status</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <!-- Modal Body -->
+                        <div class="modal-body" id="modal-body">
+                            Payment Successful!
+                        </div>
+                        <!-- Modal Footer -->
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
         
         <script src="https://code.jquery.com/jquery-3.6.0.min.js" crossorigin="anonymous"></script>
+        
         <script>
            $(document).ready(function() {
                 // Retrieve and parse the cookie
@@ -56,7 +87,7 @@
 
                 // Iterate over product details to generate the invoice list
                 productDetails.forEach(function(product) {
-                    var totalPrice = parseFloat(product.totalPrice);
+                    var totalPrice = product.quantity * parseFloat(product.salePrice);
                     grandTotal += totalPrice;
 
                     // Create the HTML for each product
@@ -115,14 +146,22 @@
                         success: function(response) {
                             console.log(response)
                             deleteCookie("cartProduct");
+                            deleteCookie("cartItemCount");
                          
-                            //if sucess clear cook
-                            alert("Payment Successfuly!")
+                            // Show the modal with the success message
+                            $('#modal-body').text("Payment Successful!");
+                            $('#myModal').modal('show');
+                            
+                            // Automatically redirect after the modal shows for 3 seconds
+                            setTimeout(function() {
+                                window.location.href = "[[@{/home}]]";
+                            }, 3000); // 3 seconds delay before redirecting
                         },
                         error: function(xhr, status, error) {
                             // Handle error
                             console.error("Error processing payment:", error);
-                            alert("An error occurred while processing your payment. Please try again.");
+                            $('#modal-body').text("An error occurred while processing your payment. Please try again.");
+                            $('#myModal').modal('show');
                         }
                     });
                 });
@@ -145,7 +184,11 @@
                 return null;
             }
 
-        </script>
+            $('#myModal').on('hidden.bs.modal', function () {
+                window.location.href = "[[@{/home}]]"; // Redirect to the home page
+            });
+
+        </script>.
     </div>
          
     
