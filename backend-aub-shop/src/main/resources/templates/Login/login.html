@@ -90,7 +90,7 @@
                                     <div th:if="${param.error == 'accessDenied'}" class="alert alert-danger mt-3" role="alert">
                                         Access Denied: You do not have permission to access the requested page.
                                     </div>
-                                    <form th:action="@{/login}" method="post">
+                                    <form th:action="@{/loging}" method="post">
                                         <div class="form-group">
                                         </div>
                                         <div class="form-horizontal">
@@ -100,7 +100,7 @@
                                                   type="text"
                                                   class="form-control"
                                                   id="username"
-                                                  name="username"
+                                                    name="username"
                                                   placeholder="Enter username"
                                                   required
                                                 />
@@ -119,16 +119,17 @@
                                                 />
                                                 <i class="fas fa-eye-slash fa-fw fa-sm password-toggle-icon"></i>
                                             </div>
+                                            
+                                            <hr />
 
-                                            <div class="form-group">
+                                            <!-- <div class="form-group">
                                                 <div class="custom-control custom-checkbox small">
                                                     <input type="checkbox" class="custom-control-input" id="customCheck">
                                                     <label class="custom-control-label" for="customCheck">
                                                         Remember Me
                                                     </label>
                                                 </div>
-                                            </div>
-
+                                            </div> -->
 
                                             <div class="form-group">
                                                 <div class="col-md-offset-2">
@@ -136,10 +137,9 @@
                                                 </div>
                                             </div>
 
-                                            <hr />
-                                            <div class="text-center">
+                                            <!-- <div class="text-center">
                                               <a href="" class="small">Forgot Password?</a>
-                                            </div>
+                                            </div> -->
                                         </div>
                                     </form>
                                 </div>
@@ -154,21 +154,21 @@
         $(document).ready(function () {
             const passwordInput = document.querySelector('.password-input');
             const toggleIcon = document.querySelector('.password-toggle-icon');
+            
+        toggleIcon.addEventListener('click', function () {
+            const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+            passwordInput.setAttribute('type', type);
 
-            toggleIcon.addEventListener('click', function () {
-                const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
-                passwordInput.setAttribute('type', type);
+            this.classList.toggle('fa-eye');
+            this.classList.toggle('fa-eye-slash');
+        });
 
-                this.classList.toggle('fa-eye');
-                this.classList.toggle('fa-eye-slash');
-            });
-
-            function login() {
-                var loginObj = {
-                    Username: $('#Username').val(),
-                    Password: $('#Password').val()
-                };
-              }
+        function login() {
+            var loginObj = {
+                Username: $('#Username').val(),
+                Password: $('#Password').val()
+            };
+            }
         })
     </script>
 </body>

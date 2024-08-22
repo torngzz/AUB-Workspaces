@@ -23,8 +23,31 @@
             color: #fff !important;
         }
         .nav-link:hover {
-            color: #7386d5 !important;
-            background-color: #fff !important;
+            /* color: #fff !important; */
+            background-color: #0d6efd;
+            /* background-color: #fff !important; */
+        }
+
+        .btn-sidebar:focus,
+        .btn-sidebar:active,
+        .btn-sidebar:focus-visible {
+            border: 0px transparent !important;
+            outline: none !important;
+            box-shadow: none !important;
+        }
+        
+        .btn-sidebar:hover{
+            background-color: #0d6efd !important;
+        }
+        ul {
+            list-style: none; /* Remove default list style */
+        }
+        .dropdown-menu {
+            min-width: 100%; /* Ensures dropdown menu matches the width of the button */
+        }
+        /* Hide dropdown icon for buttons with the custom class */
+        .no-dropdown-icon::after {
+            display: none; /* Hide the default dropdown icon */
         }
     </style>
 </head>
@@ -35,35 +58,46 @@
                 <div class="navbar-brand d-none d-md-block">
                     <h3>Admin Dashboard</h3>
                 </div>
-                <div class="dropdown w-25">
-                    <button class="btn btn-light dropdown-toggle float-right" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        Settings
-                    </button>
-                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
-                        <div class="btn-group dropleft">
-                            <button id="dropdownLeft" class="dropdown-item dropdown-toggle w-100 border-light" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                Change Language
-                            </button>
-                            <div class="dropdown-menu">
-                                <a class="dropdown-item" href="#" onclick="changeLanguage('en')">English</a>
-                                <a class="dropdown-item" href="#" onclick="changeLanguage('kh')">Khmer</a>
-                                <a class="dropdown-item" href="#" onclick="changeLanguage('th')">Thai</a>
-                            </div>
-                        </div>
-                        <button type="button" class="dropdown-item" data-toggle="modal" data-target="#exampleModal">
-                            Change Password
+                <div class="d-flex align-items-center">
+                    <!-- Button with dropdown menu -->  
+                    <div class="dropdown">
+                        <button class="btn btn-light text-white d-flex align-items-center dropdown-toggle no-dropdown-icon" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <!-- Username text -->
+                            <span class="text-primary" th:text="${session.username}"></span>
+                            <!-- User icon -->
+                            <i class="fa-solid fa-user ms-2 text-primary rounded-pill ml-2"></i>
                         </button>
 
-                        <div class="dropdown-divider"></div>
+                        <!-- Dropdown menu -->
+                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
+                            <!-- Change Language Button -->
+                            <div class="btn-group dropleft">
+                                <button id="dropdownLeft" class="dropdown-item dropdown-toggle w-100 border-light" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Change Language
+                                </button>
+                                <div class="dropdown-menu">
+                                    <a class="dropdown-item" href="#" onclick="changeLanguage('en')">English</a>
+                                    <a class="dropdown-item" href="#" onclick="changeLanguage('kh')">Khmer</a>
+                                    <a class="dropdown-item" href="#" onclick="changeLanguage('th')">Thai</a>
+                                </div>
+                            </div>
+                            <!-- Change Password Button -->
+                            <button type="button" class="dropdown-item ml-3" data-toggle="modal" data-target="#changePWDModal">
+                                Change Password
+                            </button>
 
-                        <!-- <a class="dropdown-item" th:href="@{/login?logout}">Logout</a> -->
-                        <a class="dropdown-item" th:href="@{/logout}">Logout</a>
+                            <div class="dropdown-divider"></div>
+
+                            <!-- Logout Link -->
+                            <a class="dropdown-item ml-3" th:href="@{/logout}">Logout</a>
+                        </div>
                     </div>
                 </div>
             </div>
         </header>
+
         <!-- Modal -->
-        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal fade" id="changePWDModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -82,6 +116,7 @@
                         </div>
 
                         <form id="changePasswordForm" th:action="@{/change-password}" method="post">
+                            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
                             <div class="form-group">
                                 <label for="oldPassword">Old Password</label>
                                 <input type="password" id="oldPassword" name="oldPassword" class="form-control" required>
@@ -94,7 +129,7 @@
                                 <label for="cfPassword">Confirm New Password</label>
                                 <input type="password" id="cfPassword" name="cfPassword" class="form-control" required>
                             </div>
-                            <input type="submit" value="Reset" class="btn btn-primary btn-user btn-block w-25 float-right">
+                            <input type="submit" id="btn-changePWD" value="Reset" class="btn btn-primary btn-user btn-block w-25 float-right">
                         </form>
                     </div>
                 </div>
@@ -105,29 +140,55 @@
             <div class="row">
                 <nav id="sidebar" class="col-lg-2 d-none d-lg-block bg-dark text-white">
                     <div class="sidebar-sticky">
-                        <ul class="nav flex-column mt-5 pt-5">
-                            <li class="">
-                                <p class="text-primary h6">User Management</p>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link rounded-pill" th:href="@{/users}">User</a>
-                            </li>
-                            <li class="text-primary h6">
-                                <p class="">Product Management</p>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link rounded-pill" th:href="@{/products}">Product</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link rounded-pill" th:href="@{/categorys}">Category</a>
-                            </li>
-                            <li class=" h6">
-                                <p class="text-primary">Article Management</p>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link rounded-pill" th:href="@{/Article/list}">Article</a>
-                            </li>
-                        </ul>
+                        <div class="mt-5 pt-5">
+                            <button class="w-100 btn btn-sidebar text-left text-white" type="button" data-toggle="collapse" data-target="#collapseUser" aria-expanded="false" aria-controls="collapseExample">
+                                <div class="d-flex align-items-center justify-content-between">
+                                    User Management
+                                    <i class="fa-solid fa-angle-right float-right"></i>
+                                </div>
+                            </button>
+                            <div class="collapse mt-1" id="collapseUser">
+                                <ul class="">
+                                    <li class="nav-item text-left d-flex justify-content-start">
+                                        <a class="nav-link rounded-pill w-75" th:href="@{/users}">User</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <div class="">
+                            <button class="w-100 btn btn-sidebar text-left text-white" type="button" data-toggle="collapse" data-target="#collapseProduct" aria-expanded="false" aria-controls="collapseExample">
+                                <div class="d-flex align-items-center justify-content-between">
+                                    Product Management
+                                    <i class="fa-solid fa-angle-right float-right"></i>
+                                </div>
+                            </button>
+                            <div class="collapse mt-1" id="collapseProduct">
+                                <ul class="">
+                                    <li class="nav-item">
+                                        <a class="nav-link rounded-pill w-75" th:href="@{/products}">Product</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link rounded-pill w-75" th:href="@{/categorys}">Category</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="">
+                            <button class="w-100 btn btn-sidebar text-left text-white" type="button" data-toggle="collapse" data-target="#collapseArticle" aria-expanded="false" aria-controls="collapseExample">
+                                <div class="d-flex align-items-center justify-content-between">
+                                    Article Management
+                                    <i class="fa-solid fa-angle-right float-right"></i>
+                                </div>
+                            </button>
+                            <div class="collapse mt-1" id="collapseArticle">
+                                <ul class="">
+                                    <li class="nav-item">
+                                        <a class="nav-link rounded-pill w-75" th:href="@{/Article/list}">Article</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
                     </div>
                 </nav>
                 <main role="main" class="col-lg-10 px-4">
@@ -138,47 +199,49 @@
             </div>
         </div>
     </div>
+    
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://kit.fontawesome.com/4000b889e3.js" crossorigin="anonymous"></script>
     <script>
         $(document).ready(function () {
-        // Prevent the main dropdown from closing when interacting with the nested dropdown
-        $('#dropdownLeft').on('click', function (e) {
-            e.stopPropagation(); // Prevent the click event from bubbling up
-            $(this).next('.dropdown-menu').toggle(); // Toggle the nested dropdown
-        });
+                // Prevent the main dropdown from closing when interacting with the nested dropdown
+                $('#dropdownLeft').on('click', function (e) {
+                    e.stopPropagation(); // Prevent the click event from bubbling up
+                    $(this).next('.dropdown-menu').toggle(); // Toggle the nested dropdown
+                });
 
-        // Close nested dropdown if clicking outside
-        $(document).on('click', function (e) {
-            if (!$(e.target).closest('#dropdownLeft').length) {
-                $('.dropdown-menu').hide(); // Hide all dropdown menus
-            }
-        });
-
-        // Ensure clicking on the main dropdown toggles its menu
-        $('#dropdownMenuButton').on('click', function (e) {
-            e.stopPropagation(); // Prevent the click event from bubbling up
-            $(this).next('.dropdown-menu').toggle(); // Toggle the main dropdown
-        });
-
-            // Handle form submission via AJAX
-            $('#changePasswordForm').on('submit', function (e) {
-                e.preventDefault(); // Prevent default form submission
-                $.ajax({
-                    url: $(this).attr('action'),
-                    type: $(this).attr('method'),
-                    data: $(this).serialize(),
-                    success: function (response) {
-                        alert(response); // Show success message
-                        $('#exampleModal').modal('hide'); // Close the modal
-                    },
-                    error: function (xhr) {
-                        alert(xhr.responseText); // Show error message
+                // Close nested dropdown if clicking outside
+                $(document).on('click', function (e) {
+                    if (!$(e.target).closest('#dropdownLeft').length) {
+                        $('.dropdown-menu').hide(); // Hide all dropdown menus
                     }
                 });
+
+            // Ensure clicking on the main dropdown toggles its menu
+            $('#dropdownMenuButton').on('click', function (e) {
+                e.stopPropagation(); // Prevent the click event from bubbling up
+                $(this).next('.dropdown-menu').toggle(); // Toggle the main dropdown
             });
 
+            // // Handle form submission via AJAX
+            // $('#changePasswordForm').on('submit', function (e) {
+            //     alert();
+            //     e.preventDefault(); // Prevent default form submission
+            //     $.ajax({
+            //         url: $(this).attr('action'),
+            //         type: $(this).attr('method'),
+            //         data: $(this).serialize(),
+            //         success: function (response) {
+            //             alert(response); // Show success message
+            //             $('#exampleModal').modal('hide'); // Close the modal
+            //         },
+            //         error: function (xhr) {
+            //             alert(xhr.responseText); // Show error message
+            //         }
+            //     });
+            // });
         });
         
         function changeLanguage(lang) {

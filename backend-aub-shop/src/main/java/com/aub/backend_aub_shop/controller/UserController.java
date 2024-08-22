@@ -8,7 +8,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -67,14 +66,15 @@ public class UserController {
     }
 
     @PostMapping("/save")
-    public String saveUser(@ModelAttribute("user") UserModel userModel, HttpServletRequest httpRequest) 
+    public String saveUser(@ModelAttribute("user") UserModel userModel, HttpServletRequest httpRequest, Model m) 
     {
         try{
             userService.create(httpRequest, userModel);
             return "redirect:/users";
         }
-        catch(IllegalArgumentException e){
-            return "redirect:/users/error";   
+        catch (IllegalArgumentException e) {
+            m.addAttribute("usernameError", e.getMessage());
+            return "UserManagement/add-user";  // Name of your Thymeleaf template file without the ".html" extension
         }
     }
 
@@ -113,22 +113,5 @@ public class UserController {
     @GetMapping("/error")
     public String errorPage(){
         return "error/page-404";
-    }
-
-    @PostMapping("/change-password")
-    public String changePassword(@RequestParam("oldPassword") String oldPassword,
-                                @RequestParam("newPassword") String newPassword,
-                                @RequestParam("cfPassword") String confirmPassword,
-                                Model model) {
-
-        String username = SecurityContextHolder.getContext().getAuthentication().getName();
-
-        try {
-            userService.changePassword(username, oldPassword, newPassword, confirmPassword);
-            model.addAttribute("successMessage", "Password changed successfully.");
-        } catch (IllegalArgumentException e) {
-            model.addAttribute("errorMessage", e.getMessage());
-        }
-        return "redirect:/"; // Redirects to the homepage or current page
     }
 }

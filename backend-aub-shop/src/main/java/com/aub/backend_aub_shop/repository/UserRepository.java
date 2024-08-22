@@ -5,6 +5,8 @@ import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import com.aub.backend_aub_shop.model.UserModel;
@@ -27,4 +29,7 @@ public interface UserRepository extends JpaRepository<UserModel, Long> {
     boolean existsByEmail(String email);
 
     boolean existsByPhone(String phone);
+
+    @Query("SELECT u.status FROM UserModel u WHERE u.status = 1 AND u.username = :username")
+    int checkStatus(@Param("username") String username);
 }

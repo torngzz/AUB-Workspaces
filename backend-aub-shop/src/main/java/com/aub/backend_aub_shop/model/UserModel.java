@@ -38,6 +38,7 @@ public class UserModel implements UserDetails {
     private Date updatedDate;
     private Long newPassword;
     private Long cfPassword;
+    private int status;
 
     @OneToMany(mappedBy = "user")
     private List<ArticleModel> articles;
@@ -176,5 +177,12 @@ public class UserModel implements UserDetails {
     public void setCfPassword(Long cfPassword) {
         this.cfPassword = cfPassword;
     }
+    
+    public int getStatus() {
+        return status;
+    }
 
+    public void setStatus(int status) {
+        this.status = status;
+    }
 }

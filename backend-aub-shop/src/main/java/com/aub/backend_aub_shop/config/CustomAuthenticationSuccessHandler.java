@@ -29,7 +29,6 @@ import jakarta.servlet.http.HttpSession;
 public class CustomAuthenticationSuccessHandler implements AuthenticationSuccessHandler {
     private static final Logger LOGGER = LoggerFactory.getLogger(CustomAuthenticationSuccessHandler.class);
 
-    // @Autowired
     private UserService userService;
 
     @Autowired
@@ -47,11 +46,14 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
 
             LOGGER.info("User {} successfully authenticated.", userDetails.getUsername());
 
+            // Store username in session
+            session.setAttribute("username", userDetails.getUsername());
+
+            // Get user data from the database
             UserModel user = userService.findUserByUsername(userDetails.getUsername());
-            UserSessionManager userSession = new UserSessionManager(user.getId(), user.getUsername());
 
             // Set user data in session
-            session.setAttribute("UserSessionManager", userSession);
+            session.setAttribute("UserSessionManager", new UserSessionManager(user.getId(), user.getUsername()));
 
             // Extract user roles and set them in session
             List<String> roles = extractUserRoles(authentication);

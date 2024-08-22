@@ -4,6 +4,7 @@ import java.security.SecureRandom;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.regex.Pattern;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -55,32 +56,65 @@ public class UserService implements UserDetailsService {
     //     return passwordEncoder.encode(plainPassword);
     // }
 
+    // @Transactional
+    // public UserModel create(HttpServletRequest request, UserModel user) {
+    //     checkForDuplicateUser(user);
+
+    //     HttpSession session = request.getSession();
+    //     Long userId = UserSessionUtils.getUserId(session);
+
+    //     if (userId == null) {
+    //         LOGGER.info("User ID not found in session. Cannot create user.");
+    //     }
+
+    //     String rawPassword = generateRandomPassword();
+    //     String encryptedPassword = passwordEncoder.encode(rawPassword);// Encrypt the generated password
+    //     emailService.sendEmail(user.getEmail(), "AUB E-Shop Password","Your password to login to AUB E-Shop is : " + rawPassword);
+        
+    //     user.setCreatedDate(new Date());
+    //     user.setUpdatedDate(new Date());
+    //     user.setPassword(encryptedPassword); 
+    //     user.setCreatedBy(userId);
+    //     user.setUpdatedBy(userId);
+        
+    //     return userRepo.save(user);
+    // }
+    private static final Pattern LETTERS_ONLY_PATTERN = Pattern.compile("^[a-zA-Z]+$");
+    // private static final Pattern LETTERS_ONLY_PATTERN = Pattern.compile("^[a-zA-Z]+$");
+
     @Transactional
     public UserModel create(HttpServletRequest request, UserModel user) {
+        // Validate the username
+        validateUsername(user.getUsername());
+
         checkForDuplicateUser(user);
 
         HttpSession session = request.getSession();
         Long userId = UserSessionUtils.getUserId(session);
 
         if (userId == null) {
-            throw new IllegalStateException("User ID not found in session. Cannot create user.");
+            LOGGER.info("User ID not found in session. Cannot create user.");
         }
 
         String rawPassword = generateRandomPassword();
-        String encryptedPassword = passwordEncoder.encode(rawPassword);// Encrypt the generated password
-        emailService.sendEmail(user.getEmail(), "AUB E-Shop Password","Your password to login to AUB E-Shop is : " + rawPassword);
-        
+        String encryptedPassword = passwordEncoder.encode(rawPassword);
+        emailService.sendEmail(user.getEmail(), "AUB E-Shop Password", "Your password to login to AUB E-Shop is : " + rawPassword);
+
         user.setCreatedDate(new Date());
         user.setUpdatedDate(new Date());
         user.setPassword(encryptedPassword); 
         user.setCreatedBy(userId);
         user.setUpdatedBy(userId);
-        
-        // LOGGER.info("The password is " + rawPassword);
-        // LOGGER.info("The encryted password is " + rawPassword);
+
         return userRepo.save(user);
     }
 
+    private void validateUsername(String username) {
+        if (username == null || !LETTERS_ONLY_PATTERN.matcher(username).matches()) {
+            throw new IllegalArgumentException("Username must only contain letters.");
+        }
+    }
+    
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         LOGGER.info("Loading user by username: {}", username);
@@ -162,6 +196,7 @@ public class UserService implements UserDetailsService {
         return userRepo.save(userModel);
     }
 
+    //Used in Create Process
     private void checkForDuplicateUser(UserModel user) {
         if (userRepo.existsByUsername(user.getUsername())) {
             throw new IllegalArgumentException("This username already exists!");
@@ -174,6 +209,7 @@ public class UserService implements UserDetailsService {
         }
     }
 
+    //Used for Update Process
     private void checkForDuplicateUser(UserModel user, Long id) {
         Optional<UserModel> existingUser = userRepo.findByUsernameOrEmailOrPhoneAndIdNot(user.getUsername(), user.getEmail(), user.getPhone(), id);
         if (existingUser.isPresent()) {
@@ -190,28 +226,5 @@ public class UserService implements UserDetailsService {
                 }
             }
         }
-    }
-
-    public void changePassword(String username, String oldPassword, String newPassword, String confirmPassword) {
-        // Check if user exists
-        UserModel user = userRepo.findByUsername(username)
-                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
-
-        // Verify that the old password is correct
-        if (!passwordEncoder.matches(oldPassword, user.getPassword())) {
-            throw new IllegalArgumentException("Old password is incorrect");
-        }
-
-        // Check if the new password matches the confirm password
-        if (!newPassword.equals(confirmPassword)) {
-            throw new IllegalArgumentException("New password and confirm password do not match");
-        }
-
-        // Update the user's password and set the updated date
-        user.setPassword(passwordEncoder.encode(newPassword));
-        user.setUpdatedDate(new Date());
-
-        // Save the updated user object
-        userRepo.save(user);
     }
 }
