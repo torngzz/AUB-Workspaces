@@ -61,7 +61,7 @@
                     <!-- <div class="additional-pictures">
                         <img width="150px" th:each="@{'/uploads/' + ${productdetail.detailImageUrls}}" class="detail-image" th:src="${imagedetail}" alt="Additional Image" onclick="switchImage(this)">
                     </div> -->
-                    <div class="additional-pictures">
+                    <div class="additional-pictures mt-2">
                         <!-- <img th:each="imagedetail : ${detailImageUrls}" th:src="@{'/uploads/' + ${imagedetail}}" alt="Product Image" style="max-width: 100px; max-height: 100px;"> -->
                         <img th:each="imagedetail : ${detailImageUrls}" 
                         th:src="@{'/uploads/' + ${imagedetail}}" 
@@ -264,18 +264,7 @@
 
   
         });
-
-
- 
-    
-
     });
-
-    
-
-
-      
-    
     </script>
 
 </body>

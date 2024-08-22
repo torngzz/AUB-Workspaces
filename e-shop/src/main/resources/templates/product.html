@@ -1,108 +1,187 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" th:replace="~{layout :: layout}">
 <head>
-    <!-- <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"> -->
     <title>Product</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" integrity="sha384-k6RqeWeci5ZR/Lv4MR0sA0FfDOMzNlT4BTxEPCcMQzFdlBp1S1OqEO9xsQzEO0qM" crossorigin="anonymous">
-        <style>
-            .myfont > p {
-                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-                font-size: 10px !important;
-                font-weight: bold;
-            }
-            .pagenumber {
-                text-align: center;
-                font-size: 30px !important;
-            }
-            .btnproduct a{
-                font-size: 30px !important;
-                color: dimgrey;
-            }
-          </style>
-
+    <style>
+        .myfont > p {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-size: 10px !important;
+            font-weight: bold;
+        }
+        .pagenumber {
+            text-align: center;
+            font-size: 30px !important;
+        }
+        .btnproduct a{
+            font-size: 30px !important;
+            color: dimgrey;
+        }
+    </style>
 </head>
 <body>
     <div th:fragment="content" class="container">
 
         <div class="d-flex align-items-center bg-gradient-dark mt-3"> 
             <div class="btnproduct">         
-                <!-- <a href="#allproduct" class="btn btn-sm btn-info">Product</a>  -->
                 <a th:href="@{/products}" class="pr-3" id="cate_id">Product</a>
             </div> 
             <div class="btnproduct">   
                 <a class="mb-0 fw-bold">
                     <span th:if="${category == null}" th:text="'All'">All</span>
                     <span th:if="${category != null}" th:text="${category.categoryName}">Category Name</span>
-                </a>
-                
-                <!-- <a class="mb-0 fw-bold"><span th:text="${cate_name != null ? cate_name : 'All'}"></span></a> -->
-                
-            </div> 
-           
+                </a>                
+            </div>              
         </div>    
         
-        <div class="row" id="cate_id">
-            <div th:each="product : ${products}" class="col-md-3 col-sm-4 my-3">
-                <div class="card shadow h-100 w-100 d-flex flex-column">
+        <div class="row mt-2" id="cate_id">
+            <div th:each="product : ${products}" class="col-md-4 col-sm-4 mb-3">
+                <div class="card shadow h-100 w-100">
                     <a th:href="@{/products/details/{id}(id=${product.product_id})}">
-                        <div class="card-body h-100 w-100 flex-grow-1 min-height: 0">
+                        <div class="card-body h-100 w-100">
                             <div>
                                 <img th:src="@{'/uploads/' + ${product.image_url}}" class="h-100 w-100" alt="Product Image">
                             </div>
                             <div class="p-2 text-dark fw-bold">
-                                <p>Name: <span th:text="${product.Pro_name}"></span></p>
+                                <p>Name: <span th:text="${product.pro_name}"></span></p>
                                 <p>Price: $<span th:text="${product.sale_price}"></span></p>
                             </div>
                         </div>
                     </a>
                     <div class="card-footer">
-                        <form th:action="@{/products/details/{id}(id=${product.product_id})}" method="get" class="btn-sm text-center">
-                            <input type="hidden" th:name="product_id" th:value="${product.product_id}" />
-                            <button type="submit" class="btn btn-success btn-block">
+                        <form th:action="@{/cart/add}" method="post" class="btn-sm text-center">
+                            <input type="hidden" th:name="productId" th:value="${product.product_id}" />
+                            <a type="button" class="btn btn-success btn-block" th:href="@{/products/details/{id}(id=${product.product_id})}">
                                 <i class="fas fa-cart-plus"></i> Add to Cart
-                            </button>
+                              </a>
+                            <!-- <button type="submit" class="btn btn-success btn-block">
+                                <i class="fas fa-cart-plus"></i> <span th:text="#{add-to-cart}">Add to Cart</span>
+                            </button> -->
                         </form>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="pagenumber mt-3">
-            <nav aria-label="Page navigation">
-                <div class="row">
-                    <div class="col-5"></div>
-                    <div class="col-5">
-                        <ul class="pagination text-center">
-                            <li th:class="${currentPage == null || currentPage == 0} ? 'page-item disabled' : 'page-item'">
-                                <a class="page-link" th:href="@{/products(pageNumber=${currentPage != null ? currentPage - 1 : 0}, pageSize=${pageSize})}">
-                                    <span aria-hidden="true">&laquo;</span>
-                                    <span class="sr-only">Previous</span>
+        
+        <!-- Pagination -->
+        <div class="mt-3">
+            <div class="pagenumber">
+                <nav aria-label="Page navigation">
+                    <div class="d-flex justify-content-center align-items-center">
+                        <ul class="pagination">
+                            <!-- Previous Button -->
+                            <li th:class="${currentPage == 0} ? 'page-item disabled' : 'page-item'">
+                                <a class="page-link" th:href="@{/products(pageNumber=${currentPage - 1}, pageSize=${pageSize})}" aria-label="Previous">
+                                    Previous
                                 </a>
                             </li>
-        
-                            <li th:if="${totalPages != null && totalPages > 0}" th:each="pageNum : ${#numbers.sequence(0, totalPages - 1)}" th:class="${currentPage == pageNum} ? 'page-item active' : 'page-item'">
-                                <a class="page-link" th:href="@{/products(pageNumber=${pageNum}, pageSize=${pageSize})}" th:text="${pageNum + 1}"></a>
+
+                            <!-- First Page -->
+                            <li th:class="${currentPage == 0} ? 'page-item active' : 'page-item'">
+                                <a class="page-link" th:href="@{/products(pageNumber=0, pageSize=${pageSize})}">1</a>
                             </li>
 
-                            <li th:class="${currentPage == null || currentPage == totalPages - 1} ? 'page-item disabled' : 'page-item'">
-                                <a class="page-link" th:href="@{/products(pageNumber=${currentPage != null ? currentPage + 1 : 0}, pageSize=${pageSize})}" aria-label="Next">
-                                    <span aria-hidden="true">&raquo;</span>
-                                    <span class="sr-only">Next</span>
+                            <!-- Pages around the current page -->
+                            <li th:each="pageNum : ${#numbers.sequence(currentPage - 1, currentPage + 1)}"
+                                th:if="${pageNum > 0 and pageNum < totalPages - 1}"
+                                th:class="${pageNum == currentPage} ? 'page-item active' : 'page-item'">
+                                <a class="page-link" th:href="@{/products(pageNumber=${pageNum}, pageSize=${pageSize})}"
+                                  th:text="${pageNum + 1}"></a>
+                            </li>
+
+                            <!-- Last Page -->
+                            <li th:if="${totalPages > 1}" th:class="${currentPage == totalPages - 1} ? 'page-item active' : 'page-item'">
+                                <a class="page-link" th:href="@{/products(pageNumber=${totalPages - 1}, pageSize=${pageSize})}"
+                                  th:text="${totalPages}"></a>
+                            </li>
+
+                            <!-- Next Button -->
+                            <li th:class="${currentPage == totalPages - 1} ? 'page-item disabled' : 'page-item'">
+                                <a class="page-link" th:href="@{/products(pageNumber=${currentPage + 1}, pageSize=${pageSize})}" aria-label="Next">
+                                    Next
                                 </a>
                             </li>
                         </ul>
                     </div>
-                    <div class="col-1"></div>
-                </div>
-            </nav>
+                </nav>
+            </div>
         </div>
 
-        <div th:insert="~{::scripts}"></div>
+    </div>
 
-<!-- <div th:fragment="scripts"> -->
+    <!-- <div th:insert="~{::scripts}"></div> -->
 
-<!-- </div> -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" crossorigin="anonymous"></script>
+    <script th:fragment="scripts">
+        $(document).ready(function() {
+            $('#add-to-cart-btn').on('click', function() {
+                    var productId = $("#productId").val();
+
+                    const qty = parseInt($('#product-qty').val(), 10) || 1; // Default to 1 if qty is not set
+                    var productDetails = getCookie("cartProduct");
+                    if (productDetails) {
+                        productDetails = JSON.parse(productDetails);
+                    }
+
+                    if (productDetails == null || productDetails === "" || typeof productDetails === 'undefined') {
+                        productDetails = [];
+                        productDetails.push({
+                            product_id : productId,
+                            image: $('#main-product-image').attr('src'),
+                            name: $('#name-of-product').text().trim(),
+                            salePrice: salePrice,
+                            totalPrice: (salePrice * qty).toFixed(2),
+                            quantity: qty
+                        });
+                    }else{
+                        if (typeof productDetails === 'object' && !Array.isArray(productDetails)) {
+                            productDetails = [productDetails];
+                        }
+                        console.log("Is productDetails an array?", Array.isArray(productDetails));
+                        console.log("Product details:", productDetails);
+
+                        var isFound = false;
+                        productDetails.forEach(function(product) {
+                            console.log("Product ID from array:", product.product_id);
+                            console.log("Current Product ID:", productId);
+                            console.log("Comparison result:", product.product_id == productId);
+                            
+
+                            console.log("product.product_id == productId " + product.product_id == productId)
+                            if(product.product_id == productId){
+                                console.log("product.product_id == productId " + product.product_id == productId)
+                                product.quantity += qty;
+                                isFound = true;
+                                return;
+                            }
+                        });
+                        if (!isFound){
+                            productDetails.push({
+                            product_id : productId,
+                            image: $('#main-product-image').attr('src'),
+                            name: $('#name-of-product').text().trim(),
+                            salePrice: salePrice,
+                            totalPrice: (salePrice * qty).toFixed(2),
+                            quantity: qty
+                        });
+
+                    }
+                }
+                console.log(productDetails);
+                
+                // Store product details as JSON string in cookies
+                setCookie('cartProduct', JSON.stringify(productDetails), 7);
+
+                // Update the cart item count
+                let cartItemCount = parseInt(getCookie('cartItemCount')) || 0;
+                cartItemCount += qty;
+                setCookie('cartItemCount', cartItemCount, 7);
+                $('#cart-item-count').text(cartItemCount);
+
+    
+            });
+        });
+    </script>
 
 </body>
 </html>

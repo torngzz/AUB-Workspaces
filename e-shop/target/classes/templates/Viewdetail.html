@@ -61,7 +61,7 @@
                     <!-- <div class="additional-pictures">
                         <img width="150px" th:each="@{'/uploads/' + ${productdetail.detailImageUrls}}" class="detail-image" th:src="${imagedetail}" alt="Additional Image" onclick="switchImage(this)">
                     </div> -->
-                    <div class="additional-pictures">
+                    <div class="additional-pictures mt-2">
                         <!-- <img th:each="imagedetail : ${detailImageUrls}" th:src="@{'/uploads/' + ${imagedetail}}" alt="Product Image" style="max-width: 100px; max-height: 100px;"> -->
                         <img th:each="imagedetail : ${detailImageUrls}" 
                         th:src="@{'/uploads/' + ${imagedetail}}" 
@@ -112,9 +112,9 @@
         </div>
     </div>
 
-        <div class="btn-container mt-3">
-            <a href="/aubshop/products" class="btn btn-secondary">Back to Product List</a>
-        </div>
+    <div class="btn-container mt-3">
+        <a href="/aubshop/products" class="btn btn-secondary">Back to Product List</a>
+    </div>
 
     
    <script src="https://code.jquery.com/jquery-3.6.0.min.js" crossorigin="anonymous"></script>
@@ -123,7 +123,6 @@
         function switchImage(image) {
             $('#main-product-image').attr('src', $(image).attr('src'));
         }
-        window.switchImage = switchImage;
         
         $(document).ready(function() {
             const $qtyInput = $('#product-qty');
@@ -154,6 +153,7 @@
             $decreaseButton.on('click', function() {
                 updateQuantity('decrease');
             });
+            
 
             $increaseButton.on('click', function() {
                 updateQuantity('increase');
@@ -229,6 +229,7 @@
                         console.log("Product ID from array:", product.product_id);
                         console.log("Current Product ID:", productId);
                         console.log("Comparison result:", product.product_id == productId);
+                        
 
                         console.log("product.product_id == productId " + product.product_id == productId)
                         if(product.product_id == productId){
@@ -261,24 +262,11 @@
             setCookie('cartItemCount', cartItemCount, 7);
             $('#cart-item-count').text(cartItemCount);
 
-
-
-
   
         });
-
-
- 
-    
-
     });
-
-    
-
-
-      
-    
     </script>
 
 </body>
 </html>
+
