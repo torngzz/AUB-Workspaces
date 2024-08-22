@@ -112,9 +112,9 @@
         </div>
     </div>
 
-        <div class="btn-container mt-3">
-            <a href="/aubshop/products" class="btn btn-secondary">Back to Product List</a>
-        </div>
+    <div class="btn-container mt-3">
+        <a href="/aubshop/products" class="btn btn-secondary">Back to Product List</a>
+    </div>
 
     
    <script src="https://code.jquery.com/jquery-3.6.0.min.js" crossorigin="anonymous"></script>
@@ -153,6 +153,7 @@
             $decreaseButton.on('click', function() {
                 updateQuantity('decrease');
             });
+            
 
             $increaseButton.on('click', function() {
                 updateQuantity('increase');
@@ -228,6 +229,7 @@
                         console.log("Product ID from array:", product.product_id);
                         console.log("Current Product ID:", productId);
                         console.log("Comparison result:", product.product_id == productId);
+                        
 
                         console.log("product.product_id == productId " + product.product_id == productId)
                         if(product.product_id == productId){
@@ -260,9 +262,6 @@
             setCookie('cartItemCount', cartItemCount, 7);
             $('#cart-item-count').text(cartItemCount);
 
-
-
-
   
         });
 
@@ -281,3 +280,4 @@
 
 </body>
 </html>
+
