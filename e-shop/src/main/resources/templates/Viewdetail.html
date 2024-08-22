@@ -50,15 +50,24 @@
 
     <div th:fragment="content" class="container">
         <div class="card">  
+            <input type="hidden" id="productId" th:value="${productdetail.product_id}" />
             <h4 class="card-header bg-primary text-white">Product Details</h4>
             <div class="card-body">
             <div class="row">
                 <div class="col-md-6">
                     <div class="main-product-image">
-                        <img width="300px" th:src="${productdetail.image_url}" alt="Product Image" id="main-product-image">
+                        <img width="300px" th:src="@{'/uploads/' + ${productdetail.image_url}}" alt="Product Image" id="main-product-image">
                     </div>
+                    <!-- <div class="additional-pictures">
+                        <img width="150px" th:each="@{'/uploads/' + ${productdetail.detailImageUrls}}" class="detail-image" th:src="${imagedetail}" alt="Additional Image" onclick="switchImage(this)">
+                    </div> -->
                     <div class="additional-pictures">
-                        <img width="150px" th:each="imagedetail : ${detailImageUrls}" class="detail-image" th:src="${imagedetail}" alt="Additional Image" onclick="switchImage(this)">
+                        <!-- <img th:each="imagedetail : ${detailImageUrls}" th:src="@{'/uploads/' + ${imagedetail}}" alt="Product Image" style="max-width: 100px; max-height: 100px;"> -->
+                        <img th:each="imagedetail : ${detailImageUrls}" 
+                        th:src="@{'/uploads/' + ${imagedetail}}" 
+                        alt="Product Image" 
+                        style="max-width: 100px; max-height: 100px;" 
+                        onclick="switchImage(this)">
                     </div>
                 </div>
                 <div class="col-md-6 product-details">
@@ -110,6 +119,11 @@
     
    <script src="https://code.jquery.com/jquery-3.6.0.min.js" crossorigin="anonymous"></script>
    <script th:fragment="scripts">
+        //function switch image
+        function switchImage(image) {
+            $('#main-product-image').attr('src', $(image).attr('src'));
+        }
+        
         $(document).ready(function() {
             const $qtyInput = $('#product-qty');
             const $decreaseButton = $('#decrease-product-qty');
@@ -183,16 +197,59 @@
             if (storedCount) {
                 $('#cart-item-count').text(storedCount);
             }
-
             $('#add-to-cart-btn').on('click', function() {
-            const qty = parseInt($('#product-qty').val(), 10) || 1; // Default to 1 if qty is not set
-            const productDetails = {
-                image: $('#main-product-image').attr('src'),
-                name: $('#name-of-product').text().trim(),
-                salePrice: salePrice,
-                totalPrice: (salePrice * qty).toFixed(2),
-                quantity: qty
-            };
+                var productId = $("#productId").val();
+
+                const qty = parseInt($('#product-qty').val(), 10) || 1; // Default to 1 if qty is not set
+                var productDetails = getCookie("cartProduct");
+                if (productDetails) {
+                    productDetails = JSON.parse(productDetails);
+                }
+
+                if (productDetails == null || productDetails === "" || typeof productDetails === 'undefined') {
+                    productDetails = [];
+                    productDetails.push({
+                        product_id : productId,
+                        image: $('#main-product-image').attr('src'),
+                        name: $('#name-of-product').text().trim(),
+                        salePrice: salePrice,
+                        totalPrice: (salePrice * qty).toFixed(2),
+                        quantity: qty
+                    });
+                }else{
+                    if (typeof productDetails === 'object' && !Array.isArray(productDetails)) {
+                        productDetails = [productDetails];
+                    }
+                    console.log("Is productDetails an array?", Array.isArray(productDetails));
+                    console.log("Product details:", productDetails);
+
+                    var isFound = false;
+                    productDetails.forEach(function(product) {
+                        console.log("Product ID from array:", product.product_id);
+                        console.log("Current Product ID:", productId);
+                        console.log("Comparison result:", product.product_id == productId);
+
+                        console.log("product.product_id == productId " + product.product_id == productId)
+                        if(product.product_id == productId){
+                            console.log("product.product_id == productId " + product.product_id == productId)
+                            product.quantity += qty;
+                            isFound = true;
+                            return;
+                        }
+                    });
+                    if (!isFound){
+                        productDetails.push({
+                        product_id : productId,
+                        image: $('#main-product-image').attr('src'),
+                        name: $('#name-of-product').text().trim(),
+                        salePrice: salePrice,
+                        totalPrice: (salePrice * qty).toFixed(2),
+                        quantity: qty
+                    });
+
+                }
+            }
+            console.log(productDetails);
             
             // Store product details as JSON string in cookies
             setCookie('cartProduct', JSON.stringify(productDetails), 7);
@@ -202,13 +259,15 @@
             cartItemCount += qty;
             setCookie('cartItemCount', cartItemCount, 7);
             $('#cart-item-count').text(cartItemCount);
+
+
+
+
+  
         });
 
 
-        function switchImage(image) {
-            $('#main-product-image').attr('src', $(image).attr('src'));
-        }
-        
+ 
     
 
     });

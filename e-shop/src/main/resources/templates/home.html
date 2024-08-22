@@ -94,15 +94,15 @@
       <div th:each="product : ${products}" class="col-md-4 col-sm-4 mb-3">
           <div class="card shadow h-100 w-100">
               <a th:href="@{/products/details/{id}(id=${product.product_id})}">
-                  <div class="card-body h-100 w-100">
-                      <div>
-                          <img th:src="${product.image_url}" class="h-100 w-100" alt="Product Image">
-                      </div>
-                      <div class="p-2 text-dark fw-bold">
-                          <p>Name: <span th:text="${product.Pro_name}"></span></p>
-                          <p>Price: $<span th:text="${product.sale_price}"></span></p>
-                      </div>
+                <div class="card-body h-100 w-100">
+                  <div>
+                    <img th:src="@{'/uploads/' + ${product.image_url}}" class="h-100 w-100" alt="Product Image">
                   </div>
+                  <div class="p-2 text-dark fw-bold">
+                    <p>Name: <span th:text="${product.Pro_name}"></span></p>
+                    <p>Price: $<span th:text="${product.sale_price}"></span></p>
+                  </div>
+                </div>
               </a>
               <div class="card-footer">
                   <form th:action="@{/cart/add}" method="post" class="btn-sm text-center">

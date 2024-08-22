@@ -202,14 +202,41 @@
 
     $(document).ready(function()
     {
-        let cartItemCount = localStorage.getItem('cartItemCount') || 0;
+        $('#cart-item-count').text(getCookie());
+
+        function getCookie(name) {
+            const nameEQ = name + "=";
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                let c = cookies[i];
+                while (c.charAt(0) === ' ') c = c.substring(1);
+                if (c.indexOf(nameEQ) === 0) return c.substring(nameEQ.length, c.length);
+            }
+            return null;
+        }
+
+        // Function to set a cookie
+        function setCookie(name, value, days) {
+            const expires = new Date();
+            expires.setTime(expires.getTime() + (days * 24 * 60 * 60 * 1000));
+            document.cookie = name + "=" + (value || "") + ";expires=" + expires.toUTCString() + ";path=/";
+        }
+
+        // Initial cart item count
+        let cartItemCount = parseInt(getCookie('cartItemCount')) || 0;
         $('#cart-item-count').text(cartItemCount);
 
-        // Function to update cart item count
         function updateCartItemCount(newCount) {
-            $('#cart-item-count').text(newCount);
-            localStorage.setItem('cartItemCount', newCount);
+            cartItemCount = newCount;
+            $('#cart-item-count').text(cartItemCount);
+            setCookie('cartItemCount', cartItemCount, 7);
         }
+
+        // Function to update cart item count
+        // function updateCartItemCount(newCount) {
+        //     $('#cart-item-count').text(newCount);
+        //     localStorage.setItem('cartItemCount', newCount);
+        // }
 
         $("#language").change(function(){
             langVal = $(this).val();
@@ -265,6 +292,10 @@
 
           
     });
+    function deleteCookie(name) {
+        var expires = "Thu, 01 Jan 1970 00:00:00 UTC";
+        document.cookie = name + "=; expires=" + expires + "; path=/";
+    }
                 
 </script>
 </body>

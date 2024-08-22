@@ -24,7 +24,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.aub.backend_aub_shop.dto.ProductDTO;
 import com.aub.backend_aub_shop.model.Product;
-import com.aub.backend_aub_shop.repository.ProductRepository;
 import com.aub.backend_aub_shop.service.CategoryService;
 import com.aub.backend_aub_shop.service.ProductService;
 
@@ -41,8 +40,7 @@ public class ProductController {
     @Autowired
     private CategoryService categoryService;
 
-    @Autowired
-    private ProductRepository productRepository;
+   
 
     // private static final String UPLOAD_DIR = "C:/Users/rithy/OneDrive/Documents/GitHub/AUB-Workspaces/backend-aub-shop/src/main/resources/static/uploads";
    
@@ -65,6 +63,7 @@ public class ProductController {
         }
         
         m.addAttribute("products", products);
+        m.addAttribute("productDto", pro.toList());
         m.addAttribute("productName", productName);
         // m.addAttribute("pageNumber", pageNumber);
         m.addAttribute("pageSize", pageSize);
@@ -118,35 +117,6 @@ public class ProductController {
     
         return "redirect:/products";
     }
-    // @PostMapping("/save")
-    // public String saveProduct(@ModelAttribute("product") Product product,
-    //                           Model model,
-    //                           @RequestParam("image") MultipartFile file,
-    //                           @RequestParam("detailimage1") MultipartFile file1,
-    //                           @RequestParam("detailimage2") MultipartFile file2,
-    //                           @RequestParam("detailimage3") MultipartFile file3,
-    //                           RedirectAttributes redirectAttributes,
-    //                           HttpServletRequest httprequest) throws IOException {
-    
-    //     StringBuilder fileNames = new StringBuilder();
-    //     Path fileNameAndPath = Paths.get(UPLOAD_DIR, file.getOriginalFilename());
-    //     fileNames.append(file.getOriginalFilename());
-    //     Files.write(fileNameAndPath, file.getBytes());
-
-    //     StringBuilder detailImageUrls = new StringBuilder();
-    //     // Remove the trailing comma
-    //     if (detailImageUrls.length() > 0) {
-    //         detailImageUrls.setLength(detailImageUrls.length() - 1);
-    //     }
-
-    //     // Set the detail image URLs in the product
-    //     product.setDetailImageUrl(detailImageUrls.toString());
-    //     // Set the image URL in the product
-    //     product.setImage_url(file.getOriginalFilename());
-    //     //model.addAttribute("msg", "Uploaded images: " + fileNames.toString());
-    //     productService.saveProduct(product,httprequest);
-    //     return "redirect:/products";    
-    // }
     
     @GetMapping("/view/{id}")
     public String viewproduct(@PathVariable("id") Long id, Model m){
@@ -155,14 +125,18 @@ public class ProductController {
         String[] detailImageUrl = products.getDetailImageUrl().split(",");
         m.addAttribute("detailImageUrls", detailImageUrl); 
         m.addAttribute("product", product.orElse(new Product()));
+        m.addAttribute("categories", categoryService.getAllCategories());
 
         return "view-product";
     }
 
     @GetMapping("/edit/{id}")
-    public String editProduct(@PathVariable("id") Long id, Model m) {
+    public String editProduct(@PathVariable("id") Long id, 
+                              Model m) {
+
         Optional<Product> product = productService.findById(id);
-        Product products = product.get();
+        Product products = product.get();        
+
         String[] detailImageUrl = products.getDetailImageUrl().split(",");
         m.addAttribute("detailImageUrls", detailImageUrl); 
         m.addAttribute("product", product.orElse(new Product()));
@@ -170,15 +144,74 @@ public class ProductController {
         return "edit-product";
     }
 
-    @PostMapping("/update")
-    public String updateProduct(@RequestParam("productId") Long productId,
+    @PostMapping("/update/{id}")
+    public String updateProduct(@PathVariable("id") Long productId,
                                 @ModelAttribute("product") Product product,
-                                Model m) {
-        Product updateProduct = productService.updateProduct(product, productId);
-        m.addAttribute("product", updateProduct);
-       
-        return "redirect:/products";
+                                @RequestParam("image") MultipartFile file,
+                                @RequestParam(value = "detailImages", required = false) MultipartFile[] detailImages,
+                                Model m,
+                                HttpServletRequest httprequest) throws IOException {
+    
+        Optional<Product> pro = productService.findById(productId);
+        if (pro.isPresent()) {
+            Product existingProduct = pro.get();
+    
+            // Handle the main image upload
+            if (!file.isEmpty()) {
+                try {
+                    String fileName = file.getOriginalFilename();
+                    Path filePath = Paths.get(UPLOAD_DIR, fileName);
+                    Files.write(filePath, file.getBytes());
+                    product.setImage_url(fileName); // Set the new image URL
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    m.addAttribute("errorMessage", "Error saving the file.");
+                    return "redirect:/products/edit-product"; // Redirect to edit page with an error
+                }
+            } else {
+                // Retain the existing image URL if no new file is uploaded
+                product.setImage_url(existingProduct.getImage_url());
+            }
+    
+            // Handle detail images
+            StringBuilder detailImageUrls = new StringBuilder();
+            if (existingProduct.getDetailImageUrl() != null) {
+                detailImageUrls.append(existingProduct.getDetailImageUrl());
+                if (detailImages != null && detailImages.length > 0) {
+                    detailImageUrls.append(",");
+                }
+            }
+    
+            if (detailImages != null && detailImages.length > 0) {
+                for (MultipartFile detailImage : detailImages) {
+                    if (!detailImage.isEmpty()) {
+                        String detailFileName = detailImage.getOriginalFilename();
+                        Path detailImagePath = Paths.get(UPLOAD_DIR, detailFileName);
+                        Files.write(detailImagePath, detailImage.getBytes());
+                        detailImageUrls.append(detailFileName).append(",");
+                    }
+                }
+                if (detailImageUrls.length() > 0) {
+                    detailImageUrls.setLength(detailImageUrls.length() - 1); // Remove the trailing comma
+                }
+            }
+            
+            product.setDetailImageUrl(detailImageUrls.toString());
+    
+            // Update the product in the database
+            Product updatedProduct = productService.updateProduct(product, productId, httprequest);
+            m.addAttribute("product", updatedProduct);
+    
+            return "redirect:/products";
+        } else {
+            // Handle the case where the product is not found
+            m.addAttribute("errorMessage", "Product not found.");
+            return "redirect:/products";
+        }
     }
+    
+
+    
 
     @GetMapping("/delete/{id}")
     public String deleteProduct(@PathVariable("id") Long id, Model m) {

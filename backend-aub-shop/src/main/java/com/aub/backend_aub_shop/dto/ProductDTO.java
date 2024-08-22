@@ -14,7 +14,7 @@ import jakarta.persistence.ManyToOne;
 public class ProductDTO {
     private Long product_id;
 
-    @Column(name = "pro_name")
+  
     private String productName;
     // @Column(name = "original_price")
     private Double original_price;
@@ -22,7 +22,7 @@ public class ProductDTO {
     // @Column(name = "sale_price")    
     private Double sale_price;
 
-    @Column(name = "category_id", insertable = false, updatable = false)
+    // @Column(name = "category_id", insertable = false, updatable = false)
     private Long categoryId;
 
     // private MultipartFile image_url;
@@ -43,7 +43,15 @@ public class ProductDTO {
     private Long updateBy;
     private String createByUsername;
     private String updateByUsername;
+    @DateTimeFormat
+    private Date updated_date;
 
+    public Date getUpdated_date() {
+        return updated_date;
+    }
+    public void setUpdated_date(Date updated_date) {
+        this.updated_date = updated_date;
+    }
     public Long getProduct_id() {
         return product_id;
     }

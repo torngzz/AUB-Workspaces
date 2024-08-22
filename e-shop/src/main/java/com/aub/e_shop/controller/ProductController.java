@@ -1,27 +1,31 @@
 package com.aub.e_shop.controller;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.servlet.view.RedirectView;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.aub.e_shop.model.Product;
+import com.aub.e_shop.model.ProductOrder;
 import com.aub.e_shop.service.CategoryService;
 import com.aub.e_shop.service.ProductService;
 
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 
 @Controller
 @RequestMapping("/products")
@@ -89,49 +93,6 @@ public class ProductController {
         }
     }
 
-    @PostMapping("/add-to-cart")
-    public RedirectView addToCart(
-        @RequestParam("productName") String productName,
-        @RequestParam("salePrice") String salePrice,
-        @RequestParam("totalPrice") String totalPrice,
-        @RequestParam("imageUrl") String imageUrl,
-        HttpServletResponse response,
-        HttpServletRequest request) { // Add HttpServletRequest parameter
-    
-        // Set cookies for product details
-        setCookie(response, "productName", productName);
-        setCookie(response, "salePrice", salePrice);
-        setCookie(response, "totalPrice", totalPrice);
-        setCookie(response, "imageUrl", imageUrl);
-    
-        // Optionally, also set/update cart item count here
-        int itemCount = Integer.parseInt(getCookie(request, "cartItemCount", "0")) + 1;
-        setCookie(response, "cartItemCount", String.valueOf(itemCount));
-
-        LOGGER.info("Added to cart: {} {} {} {}", productName, salePrice, totalPrice, imageUrl);
-    
-        return new RedirectView("/products/cart-page");
-    }
-
-    private void setCookie(HttpServletResponse response, String name, String value) {
-        Cookie cookie = new Cookie(name, value);
-        cookie.setPath("/");
-        cookie.setMaxAge(60 * 60 * 24); // 1 day
-        response.addCookie(cookie);
-    }
-
-    private String getCookie(HttpServletRequest request, String name, String defaultValue) {
-        Cookie[] cookies = request.getCookies();
-        if (cookies != null) {
-            for (Cookie cookie : cookies) {
-                if (cookie.getName().equals(name)) {
-                    return cookie.getValue();
-                }
-            }
-        }
-        return defaultValue;
-    }
-
     @GetMapping("/cart-page")
     public String viewCartPage(HttpServletRequest request, Model model) {
         Cookie[] cookies = request.getCookies();
@@ -159,11 +120,6 @@ public class ProductController {
             }
         }
 
-        // String productName = getCookie(request, "productName", "N/A");
-        // String salePrice = getCookie(request, "salePrice", "0.00");
-        // String totalPrice = getCookie(request, "totalPrice", "0.00");
-        // String imageUrl = getCookie(request, "imageUrl", "");
-
         // Log values for debugging
         System.out.println("Product Name: " + productName);
         System.out.println("Sale Price: " + salePrice);
@@ -179,7 +135,17 @@ public class ProductController {
 
         return "card-detail";
     }
-
+        @PostMapping("/process-payment")
+        @ResponseBody
+        public ResponseEntity<String> processPayment(
+            @RequestBody List<ProductOrder> products,
+            @RequestHeader("accountNumber") String accountNumber
+            ) 
+            {
+                LOGGER.info("Account::>>>>>>"+ accountNumber);
+            String responseMessage = productService.processPayment(products,accountNumber);
+            return ResponseEntity.ok(responseMessage);
+        }
     
 
 }

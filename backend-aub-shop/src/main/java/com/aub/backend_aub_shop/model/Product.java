@@ -48,7 +48,7 @@ public class Product {
     // @JoinColumn(name = "category_id")
     // private Category category;
    
-    private String createbyUsername;
+    // private String createbyUsername;
 
    
     // @Column(name = "image")
@@ -61,6 +61,17 @@ public class Product {
     // @Column(name = "created_by")
     private Long created_by;
     private Long updateBy;
+    @DateTimeFormat
+    private Date updated_date;
+
+
+    public Date getUpdated_date() {
+        return updated_date;
+    }
+
+    public void setUpdated_date(Date updated_date) {
+        this.updated_date = updated_date;
+    }
 
     public Long getUpdateBy() {
         return updateBy;
@@ -237,11 +248,7 @@ public class Product {
         this.categoryId = categoryId;
     }
 
-    public String getCreatebyUsername() {
-        return createbyUsername;
-    }
+   
 
-    public void setCreatebyUsername(String createbyUsername) {
-        this.createbyUsername = createbyUsername;
-    }
+   
 }
