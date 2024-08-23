@@ -24,7 +24,7 @@
                         <div class="row no-gutters">
                             <!-- Image Column -->
                             <div class="col-md-4">
-                                <img th:src="${article.imageUrl}" class="card-img" alt="Article Image">
+                                <img th:src="@{'/uploads/' + ${article.imageUrl}}" class="h-100 w-100" alt="Product Image">
                             </div>
                             <!-- Content Column -->
                             <div class="col-md-8">
@@ -39,33 +39,58 @@
                 </div>
             </div>
 
-            <nav aria-label="Page navigation">
-                <div class="row">
-                    <div class="col-5"></div>
-                    <div class="col-5">
-                        <ul class="pagination text-center">
-                            <li th:class="${currentPage == null || currentPage == 0} ? 'page-item disabled' : 'page-item'">
-                                <a class="page-link" th:href="@{/Article/list(pageNumber=${currentPage != null ? currentPage - 1 : 0}, pageSize=${pagesize})}">
-                                    <span aria-hidden="true">&laquo;</span>
-                                    <span class="sr-only">Previous</span>
-                                </a>
-                            </li>
-        
-                            <li th:if="${totalPages != null && totalPages > 0}" th:each="pageNum : ${#numbers.sequence(0, totalPages - 1)}" th:class="${currentPage == pageNum} ? 'page-item active' : 'page-item'">
-                                <a class="page-link" th:href="@{/Article/list(pageNumber=${pageNum}, pageSize=${pagesize})}" th:text="${pageNum + 1}"></a>
-                            </li>
-
-                            <li th:class="${currentPage == null || currentPage == totalPages - 1} ? 'page-item disabled' : 'page-item'">
-                                <a class="page-link" th:href="@{/Article/list(pageNumber=${currentPage != null ? currentPage + 1 : 0}, pageSize=${pagesize})}" aria-label="Next">
-                                    <span aria-hidden="true">&raquo;</span>
-                                    <span class="sr-only">Next</span>
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
-                    <div class="col-1"></div>
-                </div>
-            </nav>
+            <div class="mt-2">
+                <div class="pagenumber float-right">
+                    <nav aria-label="Page navigation">
+                        <div class="d-flex justify-content-center align-items-center">
+                            <ul class="pagination">
+                                <!-- Previous Button -->
+                                <li th:class="${currentPage == 0} ? 'page-item disabled' : 'page-item'">
+                                    <a class="page-link" th:href="@{/Article(pageNumber=${currentPage - 1}, pageSize=${pageSize})}" aria-label="Previous">
+                                        Previous
+                                    </a>
+                                </li>
+                
+                                <!-- First Page -->
+                                <li th:class="${currentPage == 0} ? 'page-item active' : 'page-item'">
+                                    <a class="page-link" th:href="@{/Article(pageNumber=0, pageSize=${pageSize})}">1</a>
+                                </li>
+                
+                                <!-- Ellipses before current page if necessary -->
+                                <li th:if="${currentPage > 2}" class="page-item disabled">
+                                    <span class="page-link">...</span>
+                                </li>
+                
+                                <!-- Pages around the current page -->
+                                <li th:each="pageNum : ${#numbers.sequence(currentPage - 1, currentPage + 1)}"
+                                    th:if="${pageNum > 0 and pageNum < totalPages - 1}"
+                                    th:class="${pageNum == currentPage} ? 'page-item active' : 'page-item'">
+                                    <a class="page-link" th:href="@{/Article(pageNumber=${pageNum}, pageSize=${pageSize})}"
+                                      th:text="${pageNum + 1}"></a>
+                                </li>
+                
+                                <!-- Ellipses after current page if necessary -->
+                                <li th:if="${currentPage < totalPages - 3}" class="page-item disabled">
+                                    <span class="page-link">...</span>
+                                </li>
+                
+                                <!-- Last Page -->
+                                <li th:if="${totalPages > 1}" th:class="${currentPage == totalPages - 1} ? 'page-item active' : 'page-item'">
+                                    <a class="page-link" th:href="@{/Article(pageNumber=${totalPages - 1}, pageSize=${pageSize})}"
+                                      th:text="${totalPages}"></a>
+                                </li>
+                
+                                <!-- Next Button -->
+                                <li th:class="${currentPage == totalPages - 1} ? 'page-item disabled' : 'page-item'">
+                                    <a class="page-link" th:href="@{/Article(pageNumber=${currentPage + 1}, pageSize=${pageSize})}" aria-label="Next">
+                                        Next
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </nav>
+                </div>       
+            </div>
         </div>
     </div>
 

@@ -62,7 +62,7 @@ public class ProductService {
 
     public List<Product> findTopViewProducts()
     {
-        return productRepository.findAll(PageRequest.of(0, 6)).getContent();
+        return productRepository.findAll(PageRequest.of(0, 3)).getContent();
     }
 
     public void incrementViewCount(Long id) {

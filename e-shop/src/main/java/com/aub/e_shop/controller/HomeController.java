@@ -31,7 +31,7 @@ public class HomeController {
         // List<Product> product = productService.findTopViewProducts();
 
         Pageable articPageable = PageRequest.of(0, 3);
-        Pageable pageable = PageRequest.of(0, 6); // For top 6 viewed products
+        Pageable pageable = PageRequest.of(0, 3); // For top 6 viewed products
         List<Product> topViewedProducts = productRepository.findTop6ByViewCount(pageable);
         List<Article> topViewArticles = articleRepository.findTopViewArticles(articPageable);
         model.addAttribute("articles", topViewArticles);

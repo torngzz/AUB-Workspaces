@@ -38,9 +38,7 @@
         .dropdown-item:hover {
             color: #456AD8;
         }
-        .mycart {
-            padding-top: 5px;
-        }
+
         #lang option:first-child{
             display: none;
         }
@@ -126,6 +124,18 @@
     border-top: 0;
     border-bottom: 5px solid #000000;
 }
+
+#cart-item-count{
+    position: absolute;
+    top: 10%;
+    right: 215px;
+    background: red !important;
+    border-radius: 100%;
+    width: 18px;
+    height: 20px;
+    font-size: 14px;
+    text-align: center;
+}
     </style>
 </head>
 <body>
@@ -151,30 +161,22 @@
                     <li class="nav-item">
                         <a th:text="#{promotion}" th:href="@{/Article/list}" class="nav-link text-white">PROMOTION</a>
                     </li>
-                    <li class="nav-item">
-                        <a th:text="#{contact}" class="nav-link text-white" href="#footerSection">CONTACT US</a>
-                    </li>
+                    
                     <li class="nav-item nav-item-cart mycart">
-                        <a href="/aubshop/products/cart-page" class="nav-link">
+                        <a href="/aubshop/products/cart-page">
                             <i class="nav-link fa-solid fa-cart-shopping text-white"></i>
                             <span id="cart-item-count" class="text-white">0</span>
                         </a>
                     </li>
 
-                    <select name="lang" id="language" class="form-control w-25">
-                        <option th:text="#{language}" value="">Language</option>
-                        <option th:text="#{english}" value="en"><img src="../image/cambodiaflag.png" alt="">English</option>
-                        <option th:text="#{khmer}" value="kh"><img src="../image/cambodiaflag.png" alt="">Khmer</option>
-                        <option th:text="#{thai}" value="th"><img src="../image/cambodiaflag.png" alt="">Thai</option>
-                    </select>
- 
-
-                        <!-- <a th:href="@{/home?lang=en}" class="nav-link text-white dropdown-toggle" id="languageDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">English</a>
-                        <div class="dropdown-menu" aria-labelledby="productDropdown" id="productDropdownMenu">
-                            <a th:href="@{/home?lang=kh}" class="dropdown-item">Khmer</a>
-                            <a th:href="@{/home?lang=th}" class="dropdown-item">Thai</a>
-                        </div>  -->
-               
+                    <li class="nav-item ml-5">
+                        <select name="lang" id="language" class="form-control w-100">
+                            <option th:text="#{language}" value="">Language</option>
+                            <option th:text="#{english}" value="en"><img src="../image/cambodiaflag.png" alt="">English</option>
+                            <option th:text="#{khmer}" value="kh"><img src="../image/cambodiaflag.png" alt="">Khmer</option>
+                            <option th:text="#{thai}" value="th"><img src="../image/cambodiaflag.png" alt="">Thai</option>
+                        </select> 
+                    </li>              
                 </ul>
             </div>
         </div>

@@ -18,7 +18,7 @@
         <div class="container">
             <div class="row">
                 <div class="col-md-4">
-                    <img th:src="@{${article.imageUrl}}" class="img-fluid rounded" alt="Article Image">
+                    <img th:src="@{'/uploads/' + ${article.imageUrl}}" class="w-100" alt="Product Image">
                 </div>
                 <div class="col-md-8 d-flex flex-column">
                     <div>

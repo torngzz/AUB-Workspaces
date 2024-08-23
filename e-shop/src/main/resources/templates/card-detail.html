@@ -8,14 +8,12 @@
             list-style-type: none;
             margin-bottom: 10px;
             padding: 0;
-
         }
 
         label {
             display: inline-block;
             width: 120px;
             font-weight: bold;
-            
         }
 
         input[type="text"] {
@@ -24,50 +22,53 @@
             border: 1px solid #ccc;
             border-radius: 4px;
         }
+
+        /* Ensure the modal is above the navbar */
         .modal {
-            z-index: 1050;
+            z-index: 1059; /* Increase z-index of the modal */
         }
         .modal-backdrop {
-            z-index: 1040;
+            z-index: 1055; /* Ensure the backdrop is just below the modal */
         }
+        
     </style>
 </head>
 <body>
     <div th:fragment="content" class="container" id="invoice-list">
         <h1>Cart Detail</h1>
         <div class="list-group" id="product-items">
-            
+            <!-- Product items will be populated here -->
         </div>
         <h4 class="mt-4">Grand Total: $<span id="grand-total">0.00</span></h4>
         <li class="mt-4">
             <label for="txt-acc-number">Account Pay:</label>
-            <input type="text" id="txt-acc-number" >
+            <input type="text" id="txt-acc-number" required>
         </li>
         <button id="pay-now-btn" class="btn btn-primary btn-lg btn-block mt-4">Pay Now</button>
 
-            <!-- Modal -->
-            <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-                <div class="modal-dialog" role="document">
-                    <div class="modal-content">
-                        <!-- Modal Header -->
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="myModalLabel">Payment Status</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                        <!-- Modal Body -->
-                        <div class="modal-body" id="modal-body">
-                            Payment Successful!
-                        </div>
-                        <!-- Modal Footer -->
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        </div>
+        <!-- Modal -->
+        <div class="modal fade z-index-800" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <!-- Modal Header -->
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="myModalLabel">Payment Status</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <!-- Modal Body -->
+                    <div class="modal-body" id="modal-body">
+                        Payment Successful!
+                    </div>
+                    <!-- Modal Footer -->
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                     </div>
                 </div>
             </div>
-        
+        </div>
+
         <script src="https://code.jquery.com/jquery-3.6.0.min.js" crossorigin="anonymous"></script>
         
         <script>
@@ -117,7 +118,7 @@
                 // Event listener for Pay Now button
                 $('#pay-now-btn').on('click', function() {
                     
-                    var accountNumber= $('#txt-acc-number').val();
+                    var accountNumber = $('#txt-acc-number').val();
 
                     var productDetails = getCookie("cartProduct");
                     if (productDetails) {
@@ -167,6 +168,7 @@
                 });
 
             });
+
             function deleteCookie(name) {
                 var expires = "Thu, 01 Jan 1970 00:00:00 UTC";
                 document.cookie = name + "=; expires=" + expires + "; path=/";
@@ -187,10 +189,7 @@
             $('#myModal').on('hidden.bs.modal', function () {
                 window.location.href = "[[@{/home}]]"; // Redirect to the home page
             });
-
-        </script>.
+        </script>
     </div>
-         
-    
 </body>
 </html>
