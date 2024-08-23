@@ -12,4 +12,6 @@ public interface ArticleRepository extends JpaRepository<Article, Long>{
     @Query("SELECT a FROM Article a ORDER BY a.viewCount DESC")
     List<Article> findTopViewArticles(Pageable pageable);
 
+    // List<Article> findAll(Pageable pageable);
+
 }

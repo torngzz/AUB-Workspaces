@@ -122,14 +122,21 @@
                         <tbody style="text-align: center">
                           <tr th:each="article : ${articles}">
                               <td th:text="${article.id}"></td>
-                              <td class="text-nowrap" th:text="${article.title}" 
-                                th:attr="title=${article.title}"></td>
+                              <td style="       
+                                  overflow: hidden;            
+                                  text-overflow: ellipsis;      
+                                  max-height: 3em;              
+                                  max-width: 280px;             
+                                  white-space: nowrap;  
+                                  word-wrap: break-word;"
+                                  class="text-nowrap" th:text="${article.title}" 
+                                  th:attr="title=${article.title}"></td>
                       
                               <td style="       
                                   overflow: hidden;            
                                   text-overflow: ellipsis;      
                                   max-height: 3em;              
-                                  max-width: 300px;             
+                                  max-width: 280px;             
                                   white-space: nowrap;  
                                   word-wrap: break-word;"
                                   class="truncate-text"
@@ -141,7 +148,7 @@
                                   overflow: hidden;            
                                   text-overflow: ellipsis;      
                                   max-height: 3em;              
-                                  max-width: 300px;             
+                                  max-width: 280px;             
                                   white-space: nowrap;  
                                   word-wrap: break-word;"
                                   class="multiline-truncate"
