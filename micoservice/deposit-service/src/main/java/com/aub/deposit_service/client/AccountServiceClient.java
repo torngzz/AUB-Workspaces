@@ -25,7 +25,5 @@ public interface AccountServiceClient {
 
     @PutMapping("/accounts/update-balance/{accountNumber}")
     void updateBalance(@PathVariable("accountNumber") String accountNumber, @RequestParam BigDecimal amount);
-
-
-    
+  
 }

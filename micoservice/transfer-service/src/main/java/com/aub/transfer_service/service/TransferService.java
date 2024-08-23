@@ -12,6 +12,8 @@ import com.aub.transfer_service.model.AccountResponse;
 import com.aub.transfer_service.model.Transfer;
 import com.aub.transfer_service.repository.TransferRepository;
 
+import feign.FeignException;
+
 @Service
 public class TransferService {
 
@@ -21,67 +23,63 @@ public class TransferService {
     @Autowired
     private AccountServiceClient accountServiceClient;
 
-     public Transfer createTransfer(String sourceAccountNumber, String destinationAccountNumber, BigDecimal amount) {
+    public Transfer createTransfer(String sourceAccountNumber, String destinationAccountNumber, BigDecimal amount) {
 
-        // Check if the source account number is "0"
-        // if ("0".equals(sourceAccountNumber)) {
-        //     throw new IllegalArgumentException("Source account number cannot be 0.");
-        // }
+            try {
+            // Validate source account
+            AccountResponse sourceAccount = accountServiceClient.getAccountByNumber(sourceAccountNumber);
+            if (sourceAccount == null || sourceAccount.getStatus().equals("INACTIVE")) {
+                throw new RuntimeException("Source account '" + sourceAccountNumber + "' not found or inactive.");
+            }
 
-        // Validate source account
-       AccountResponse sourceAccount = accountServiceClient.getAccountByNumber(sourceAccountNumber);
-        if (sourceAccount == null || sourceAccount.getStatus().equals("INACTIVE")) {
-            throw new RuntimeException("Source account not found or inactive.");
+            // Validate destination account
+            AccountResponse destinationAccount = accountServiceClient.getAccountByNumber(destinationAccountNumber);
+            if (destinationAccount == null || destinationAccount.getStatus().equals("INACTIVE")) {
+                throw new RuntimeException("Destination account '" + destinationAccountNumber + "' not found or inactive.");
+            }
+
+            // Check if the source account has sufficient balance
+            BigDecimal sourceBalance = sourceAccount.getBalance();
+            if (sourceBalance.compareTo(amount) < 0) {
+                throw new RuntimeException("Insufficient balance in source account '" + sourceAccountNumber + "'.");
+            }
+
+            // Validate that the source and destination account currencies are the same
+            String sourceCurrency = sourceAccount.getCurrency();
+            String destinationCurrency = destinationAccount.getCurrency();
+            if (!sourceCurrency.equals(destinationCurrency)) {
+                throw new RuntimeException("Currency mismatch: Source account is in " + sourceCurrency + ", destination account is in " + destinationCurrency + ".");
+            }
+
+            // Check if the source and destination account numbers are the same
+            if (sourceAccountNumber.equals(destinationAccountNumber)) {
+                throw new RuntimeException("Transfer cannot be made to the same account. Source and destination account numbers must be different.");
+            }
+
+            // Proceed with transfer
+            Transfer transfer = new Transfer();
+            transfer.setSourceAccountNumber(sourceAccountNumber);
+            transfer.setDestinationAccountNumber(destinationAccountNumber);
+            transfer.setAmount(amount);
+            transfer.setTimestamp(LocalDateTime.now());
+            transfer.setStatus("COMPLETED");
+
+            // Update balances
+            accountServiceClient.decreaseBalance(sourceAccountNumber, amount);
+            accountServiceClient.increaseBalance(destinationAccountNumber, amount);
+
+            // Save and return the transfer
+            return transferRepository.save(transfer);
+
+        } catch (FeignException.NotFound e) {
+            // Handle 404 Not Found error from account service
+            throw new RuntimeException("Account not found: " + e.getMessage());
+        } catch (FeignException e) {
+            // Handle other errors from account service
+            throw new RuntimeException("Error communicating with account service: " + e.getMessage());
         }
-        //Satus: “ACTIVE”,”INACTIVE”
-        // Validate destination account
-        // AccountServiceClient.AccountResponse destinationAccount = accountServiceClient.getAccountByNumber(destinationAccountNumber);
-        AccountResponse destinationAccount = accountServiceClient.getAccountByNumber(destinationAccountNumber);
-        if (destinationAccount == null || destinationAccount.getStatus().equals("INACTIVE")) {
-            throw new RuntimeException("Destination account not found or inactive.");
-        }
-
-        // Check if the source account has sufficient balance
-        // if (sourceAccount.getBalance() < amount){
-        //     throw new RuntimeException("Insufficient balance in source account.");
-        // }
-        BigDecimal sourceBalance = sourceAccount.getBalance();
-        if (sourceBalance.compareTo(amount) < 0) {
-            throw new RuntimeException("Insufficient balance in source account.");
-        }
-
-        // Validate that the source and destination account currencies are the same
-        String sourceCurrency = sourceAccount.getCurrency();
-        String destinationCurrency = destinationAccount.getCurrency();
-        if (!sourceCurrency.equals(destinationCurrency)) {
-            throw new RuntimeException("Transfer cannot be made between accounts with different currencies.");
-        }
-
-        // Check if the source and destination account numbers are the same
-        if (sourceAccountNumber.equals(destinationAccountNumber)) {
-            throw new RuntimeException("Transfer cannot be made to the same account. Source and destination account numbers must be different.");
-        }
-   
-
-         // Check if the source account balance is less than the destination account balance
-        //  if (sourceAccount.getBalance() < destinationAccount.getBalance()) {
-        //     throw new IllegalArgumentException("Source account balance is less than destination account balance.");
-        // }
-
-        // Proceed with transfer
-        Transfer transfer = new Transfer();
-        transfer.setSourceAccountNumber(sourceAccountNumber);
-        transfer.setDestinationAccountNumber(destinationAccountNumber);
-        transfer.setAmount(amount);
-        transfer.setTimestamp(LocalDateTime.now());
-        transfer.setStatus("COMPLETED");
-
-        // Update balances
-        accountServiceClient.decreaseBalance(sourceAccountNumber, amount);
-        accountServiceClient.increaseBalance(destinationAccountNumber, amount);
-
-        return transferRepository.save(transfer);
     }
+
 
     public List<Transfer> getTransfersBySourceAccountNumber(String sourceAccountNumber) {
         return transferRepository.findBySourceAccountNumber(sourceAccountNumber);

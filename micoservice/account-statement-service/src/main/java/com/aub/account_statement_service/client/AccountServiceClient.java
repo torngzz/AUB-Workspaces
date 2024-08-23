@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.aub.account_statement_service.model.Account;
 
-@FeignClient(name = "account-service") // Ensure this matches the service name in Eureka
+@FeignClient(name ="account-service") // Ensure this matches the service name in Eureka
 public interface AccountServiceClient {
 
     @GetMapping("/accounts")

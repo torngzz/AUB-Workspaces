@@ -7,6 +7,7 @@ public class AccountResponse {
         private Double balance;
         private String accouyntType;
         private String status;
+        private String currency;
     
 
     public Long getId() {
@@ -69,11 +70,17 @@ public class AccountResponse {
         }
 
 
-    @Override
-    public String toString() {
-        return "AccountResponse [id=" + id + ", accountNumber=" + accountNumber + ", accountHolderName="
-                + accountHolderName + ", balance=" + balance + ", accouyntType=" + accouyntType + ", status=" + status
-                + "]";
-    }  
+        public String getCurrency() {
+            return currency;
+        }
+        public void setCurrency(String currency) {
+            this.currency = currency;
+        }
+        @Override
+        public String toString() {
+            return "Account [id=" + id + ", accountNumber=" + accountNumber + ", accountHolderName=" + accountHolderName
+                    + ", balance=" + balance + ", accouyntType=" + accouyntType + ", status=" + status + ", currency="
+                    + currency + "]";
+        }
     
 }
