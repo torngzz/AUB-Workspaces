@@ -10,6 +10,7 @@ public class UserDTO {
     private String updatedByUsername;
     private Date createdDate;
     private Date updatedDate;
+    private String status;
 
     // Getters and Setters
     public Long getId() {
@@ -66,5 +67,13 @@ public class UserDTO {
 
     public void setUpdatedDate(Date updatedDate) {
         this.updatedDate = updatedDate;
+    }    
+    
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 }

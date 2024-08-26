@@ -82,14 +82,14 @@
                                 </div>
                             </div>
                             <!-- Change Password Button -->
-                            <button type="button" class="dropdown-item ml-3" data-toggle="modal" data-target="#changePWDModal">
+                            <button type="button" class="dropdown-item ml-3 btn" data-toggle="modal" data-target="#changePWDModal">
                                 Change Password
                             </button>
 
                             <div class="dropdown-divider"></div>
 
                             <!-- Logout Link -->
-                            <a class="dropdown-item ml-3" th:href="@{/logout}">Logout</a>
+                            <a class="dropdown-item ml-3 btn" th:href="@{/logout}">Logout</a>
                         </div>
                     </div>
                 </div>
@@ -141,6 +141,14 @@
                 <nav id="sidebar" class="col-lg-2 d-none d-lg-block bg-dark text-white">
                     <div class="sidebar-sticky">
                         <div class="mt-5 pt-5">
+                            <button class="w-100 btn btn-sidebar text-left text-white" type="button">
+                                <div class="d-flex align-items-center justify-content-between">
+                                    Dashboard
+                                </div>
+                            </button>
+
+                           <hr style="color: white; background-color: white; border: none; height: 1px;">
+
                             <button class="w-100 btn btn-sidebar text-left text-white" type="button" data-toggle="collapse" data-target="#collapseUser" aria-expanded="false" aria-controls="collapseExample">
                                 <div class="d-flex align-items-center justify-content-between">
                                     User Management
@@ -166,10 +174,10 @@
                             <div class="collapse mt-1" id="collapseProduct">
                                 <ul class="">
                                     <li class="nav-item">
+                                        <li class="nav-item">
+                                            <a class="nav-link rounded-pill w-75" th:href="@{/categorys}">Category</a>
+                                        </li>
                                         <a class="nav-link rounded-pill w-75" th:href="@{/products}">Product</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link rounded-pill w-75" th:href="@{/categorys}">Category</a>
                                     </li>
                                 </ul>
                             </div>

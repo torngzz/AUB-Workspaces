@@ -78,6 +78,51 @@ public class UserController {
         }
     }
 
+    // @PostMapping("/save")
+    // public String saveUser(@ModelAttribute("user") UserModel userModel, HttpServletRequest httpRequest, Model m) {
+    //     boolean hasError = false;
+
+    //     // Validate the username
+    //     try {
+    //         userService.validateUsername(userModel.getUsername());
+    //     } catch (IllegalArgumentException e) {
+    //         m.addAttribute("usernameError", e.getMessage());
+    //         hasError = true;
+    //     }
+
+    //     // Validate the email
+    //     try {
+    //         userService.validateEmail(userModel.getEmail());
+    //     } catch (IllegalArgumentException e) {
+    //         m.addAttribute("emailError", e.getMessage());
+    //         hasError = true;
+    //     }
+
+    //     // Validate the phone number
+    //     try {
+    //         userService.validatePhone(userModel.getPhone());
+    //     } catch (IllegalArgumentException e) {
+    //         m.addAttribute("phoneError", e.getMessage());
+    //         hasError = true;
+    //     }
+
+    //     // If any errors were found, return to the form page
+    //     if (hasError) {
+    //         return "UserManagement/add-user";  // Name of your Thymeleaf template file without the ".html" extension
+    //     }
+
+    //     // Proceed with user creation if no errors
+    //     try {
+    //         userService.create(httpRequest, userModel);
+    //         return "redirect:/users";
+    //     } catch (Exception e) {
+    //         // // Handle any other unexpected exceptions
+    //         m.addAttribute("generalError", "An unexpected error occurred. Please try again.");
+    //         return "UserManagement/add-user";  // Name of your Thymeleaf template file without the ".html" extension
+
+    //     }
+    // }
+
     @GetMapping("/edit/{id}")
     public String UpdateById(@PathVariable("id") Long id, Model m){
         Optional<UserModel> users = userService.findById(id);

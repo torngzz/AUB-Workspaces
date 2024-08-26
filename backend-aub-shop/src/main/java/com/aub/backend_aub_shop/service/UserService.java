@@ -79,41 +79,60 @@ public class UserService implements UserDetailsService {
         
     //     return userRepo.save(user);
     // }
-    private static final Pattern LETTERS_ONLY_PATTERN = Pattern.compile("^[a-zA-Z]+$");
-    // private static final Pattern LETTERS_ONLY_PATTERN = Pattern.compile("^[a-zA-Z]+$");
+        private static final Pattern LETTERS_ONLY_PATTERN = Pattern.compile("^[a-zA-Z]+$");
+    // Matches only numbers (0-9)
+        private static final Pattern NUMBER_ONLY_PATTERN = Pattern.compile("^[0-9]+$");
 
-    @Transactional
-    public UserModel create(HttpServletRequest request, UserModel user) {
-        // Validate the username
-        validateUsername(user.getUsername());
+        // Matches valid email addresses
+        private static final Pattern EMAIL_ONLY_PATTERN = Pattern.compile("^[\\w._%+-]+@[\\w.-]+\\.[a-zA-Z]{2,}$");    // private static final Pattern LETTERS_ONLY_PATTERN = Pattern.compile("^[a-zA-Z]+$");
 
-        checkForDuplicateUser(user);
+        @Transactional
+        public UserModel create(HttpServletRequest request, UserModel user) {
+            // Validate the username
+            validateUsername(user.getUsername());
+            validateEmail(user.getEmail());
+            validatePhone(user.getPhone());
 
-        HttpSession session = request.getSession();
-        Long userId = UserSessionUtils.getUserId(session);
+            checkForDuplicateUser(user);
 
-        if (userId == null) {
-            LOGGER.info("User ID not found in session. Cannot create user.");
+            HttpSession session = request.getSession();
+            Long userId = UserSessionUtils.getUserId(session);
+
+            if (userId == null) {
+                LOGGER.info("User ID not found in session. Cannot create user.");
+            }
+
+            String rawPassword = generateRandomPassword();
+            String encryptedPassword = passwordEncoder.encode(rawPassword);
+            emailService.sendEmail(user.getEmail(), "AUB E-Shop Password", "Your password to login to AUB E-Shop is : " + rawPassword);
+
+            user.setStatus(1);
+            user.setCreatedDate(new Date());
+            user.setUpdatedDate(new Date());
+            user.setPassword(encryptedPassword); 
+            user.setCreatedBy(userId);
+            user.setUpdatedBy(userId);
+
+            return userRepo.save(user);
         }
 
-        String rawPassword = generateRandomPassword();
-        String encryptedPassword = passwordEncoder.encode(rawPassword);
-        emailService.sendEmail(user.getEmail(), "AUB E-Shop Password", "Your password to login to AUB E-Shop is : " + rawPassword);
-
-        user.setCreatedDate(new Date());
-        user.setUpdatedDate(new Date());
-        user.setPassword(encryptedPassword); 
-        user.setCreatedBy(userId);
-        user.setUpdatedBy(userId);
-
-        return userRepo.save(user);
-    }
-
-    private void validateUsername(String username) {
-        if (username == null || !LETTERS_ONLY_PATTERN.matcher(username).matches()) {
-            throw new IllegalArgumentException("Username must only contain letters.");
+        public void validateUsername(String username) {
+            if (username == null || !LETTERS_ONLY_PATTERN.matcher(username).matches()) {
+                throw new IllegalArgumentException("Username must only contain letters.");
+            }
         }
-    }
+
+        public void validateEmail(String email) {
+            if (email == null || !EMAIL_ONLY_PATTERN.matcher(email).matches()) {
+                throw new IllegalArgumentException("Username must only contain letters.");
+            }
+        }
+
+        public void validatePhone(String phone) {
+            if (phone == null || !NUMBER_ONLY_PATTERN.matcher(phone).matches()) {
+                throw new IllegalArgumentException("Username must only contain letters.");
+            }
+        }
     
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -144,7 +163,7 @@ public class UserService implements UserDetailsService {
             if (user.getUpdatedDate() != null) {
                 dto.setUpdatedDate(user.getUpdatedDate());
             }
-            
+            dto.setStatus(getStatus(user.getStatus()));
             dto.setCreatedByUsername(userService.getUsernameById(user.getCreatedBy()));
             dto.setUpdatedByUsername(userService.getUsernameById(user.getUpdatedBy()));
             return dto;
@@ -152,9 +171,20 @@ public class UserService implements UserDetailsService {
     }
 
     public String getUsernameById(Long userId) {
+        LOGGER.info("User ID is : "  + userId);
+        if(userId == 0L){
+            return "System";
+        }
         UserModel user = userRepository.findById(userId)
             .orElseThrow(() -> new RuntimeException("User not found"));
         return user.getUsername();
+    }
+
+    private String getStatus(int statusId){
+        if(statusId == 0){
+            return "Disabled";
+        }
+        return "Enabled";
     }
 
     public List<UserModel> findAll() {
