@@ -26,6 +26,7 @@ import jakarta.servlet.http.HttpSession;
 public class LoginController {
     @Autowired private LoginService loginService;
     private static final Logger log = LoggerFactory.getLogger(UserService.class);
+    
     @GetMapping("/login")
     public String showLoginPage() {
         return "Login/login";

@@ -143,7 +143,9 @@
                         <div class="mt-5 pt-5">
                             <button class="w-100 btn btn-sidebar text-left text-white" type="button">
                                 <div class="d-flex align-items-center justify-content-between">
-                                    Dashboard
+                                    <div class="nav-item text-left d-flex justify-content-start">
+                                        <a class="nav-link rounded-pill w-75" th:href="@{/dashboard/}">Dashboard</a>
+                                    </div>
                                 </div>
                             </button>
 
@@ -212,6 +214,9 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script src="https://kit.fontawesome.com/4000b889e3.js" crossorigin="anonymous"></script>
+    <script src="../static/chart/chart-area-demo.js"></script>
+    <script src="../static/chart/chart-bar-demo.js"></script>
+    <script src="../static/chart/chart-pie-demo.js"></script>
     <script>
         $(document).ready(function () {
                 // Prevent the main dropdown from closing when interacting with the nested dropdown

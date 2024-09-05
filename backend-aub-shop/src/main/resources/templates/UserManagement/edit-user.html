@@ -30,14 +30,6 @@
                 <label for="role">Role</label>
                 <input type="text" class="form-control" id="role" th:field="*{role}"  placeholder="Enter role">
             </div>
-            <div class="form-group">
-                <label for="create">Create By</label>
-                <input readonly type="text" class="form-control" id="create" th:field="*{createdBy}">
-            </div>
-            <!-- <div class="form-group">
-                <label for="cDate">Create Date</label>
-                <input readonly type="text" class="form-control" id="cDate" th:field="*{createdDate}">
-            </div> -->
             <div class="float-right">
                 <button type="submit" class="btn btn-primary">Save</button>
                 <a th:href="@{/users}" class="btn btn-secondary">Cancel</a>
